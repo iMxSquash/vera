@@ -54,8 +54,8 @@ export class LoginComponent {
       next: () => {
         this.router.navigate(['/admin']);
       },
-      error: (error) => {
-        console.error('Login error:', error);
+      error: () => {
+        // L'erreur est déjà gérée par le service et affichée dans le template
       },
     });
   }

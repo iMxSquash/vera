@@ -13,27 +13,18 @@ export class AuthService {
   ) {}
 
   async validateAdmin(email: string, password: string): Promise<Admin | null> {
-    console.log('🔍 Validating admin from Supabase:', email);
-
     // Récupérer l'admin depuis Supabase
     const admin = await this.supabaseService.getAdminByEmail(email);
 
     if (!admin) {
-      console.log('❌ Admin not found in database');
       return null;
     }
-
-    console.log('✅ Admin found in database, checking password...');
 
     const isPasswordValid = await bcrypt.compare(password, admin.password_hash);
-    console.log('   Password valid:', isPasswordValid);
 
     if (!isPasswordValid) {
-      console.log('❌ Invalid password');
       return null;
     }
-
-    console.log('✅ Admin validated successfully');
 
     // Mapper les données Supabase vers l'entité Admin
     return {

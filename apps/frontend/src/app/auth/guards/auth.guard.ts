@@ -20,16 +20,13 @@ export const authGuard: CanActivateFn = async () => {
   }
 
   // Token trouvé, tenter de restaurer la session
-  console.log('🔑 Token found, attempting to restore session...');
   const isValid = await authService.checkExistingToken();
 
   if (isValid && authService.isAuthenticated()) {
-    console.log('✅ Session restored successfully');
     return true;
   }
 
   // Token invalide ou expiré
-  console.log('❌ Token expired or invalid, redirecting to login');
   router.navigate(['/login']);
   return false;
 };

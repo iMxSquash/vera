@@ -84,15 +84,8 @@ export class AuthService {
     return this.http.get<Admin>(`${this.apiUrl}/auth/profile`).pipe(
       tap((admin) => {
         this.currentAdminSignal.set(admin);
-        console.log('✅ Session restaurée:', admin.email);
       }),
-      catchError((error) => {
-        // Ne logger que si c'est une vraie erreur (pas juste un 401 au démarrage)
-        if (error.status === 401) {
-          console.log('ℹ️ Token expiré, reconnexion nécessaire');
-        } else {
-          console.error('❌ Erreur lors du chargement du profil:', error);
-        }
+      catchError(() => {
         this.removeToken();
         this.currentAdminSignal.set(null);
         return throwError(() => new Error('Session expirée'));
@@ -119,7 +112,6 @@ export class AuthService {
       error.error?.message || 'Une erreur est survenue lors de la connexion';
     this.errorSignal.set(errorMessage);
 
-    console.error('Auth error:', error);
     return throwError(() => new Error(errorMessage));
   }
 }
