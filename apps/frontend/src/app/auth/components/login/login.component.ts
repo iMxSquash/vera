@@ -31,6 +31,13 @@ export class LoginComponent {
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
+  constructor() {
+    // Si déjà authentifié, rediriger vers le dashboard
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/admin']);
+    }
+  }
+
   togglePasswordVisibility(): void {
     this.showPassword.set(!this.showPassword());
   }

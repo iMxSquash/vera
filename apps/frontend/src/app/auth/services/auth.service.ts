@@ -28,16 +28,29 @@ export class AuthService {
   // Computed signal pour vérifier si l'utilisateur est authentifié
   readonly isAuthenticated = computed(() => this.currentAdminSignal() !== null);
 
-  constructor() {
-    // Vérifier le token au démarrage
-    this.checkExistingToken();
-  }
-
-  private checkExistingToken(): void {
+  /**
+   * Vérifie si un token existe et charge le profil admin
+   * Retourne une Promise qui se résout quand le profil est chargé (ou échoue)
+   */
+  checkExistingToken(): Promise<boolean> {
     const token = this.getToken();
-    if (token) {
-      this.loadAdminProfile();
+    if (!token) {
+      return Promise.resolve(false);
     }
+
+    this.isLoadingSignal.set(true);
+    return new Promise((resolve) => {
+      this.loadAdminProfile().subscribe({
+        next: () => {
+          this.isLoadingSignal.set(false);
+          resolve(true);
+        },
+        error: () => {
+          this.isLoadingSignal.set(false);
+          resolve(false);
+        },
+      });
+    });
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -62,20 +75,29 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  private loadAdminProfile(): void {
+  private loadAdminProfile(): Observable<Admin> {
     const token = this.getToken();
-    if (!token) return;
+    if (!token) {
+      return throwError(() => new Error('No token found'));
+    }
 
-    this.http
-      .get<Admin>(`${this.apiUrl}/auth/profile`)
-      .pipe(
-        tap((admin) => this.currentAdminSignal.set(admin)),
-        catchError(() => {
-          this.removeToken();
-          return throwError(() => new Error('Session expirée'));
-        })
-      )
-      .subscribe();
+    return this.http.get<Admin>(`${this.apiUrl}/auth/profile`).pipe(
+      tap((admin) => {
+        this.currentAdminSignal.set(admin);
+        console.log('✅ Session restaurée:', admin.email);
+      }),
+      catchError((error) => {
+        // Ne logger que si c'est une vraie erreur (pas juste un 401 au démarrage)
+        if (error.status === 401) {
+          console.log('ℹ️ Token expiré, reconnexion nécessaire');
+        } else {
+          console.error('❌ Erreur lors du chargement du profil:', error);
+        }
+        this.removeToken();
+        this.currentAdminSignal.set(null);
+        return throwError(() => new Error('Session expirée'));
+      })
+    );
   }
 
   private saveToken(token: string): void {
