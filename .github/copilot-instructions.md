@@ -48,6 +48,57 @@ vera/
 
 ## 🎨 Conventions Angular (Frontend)
 
+### Variables d'Environnement
+
+**IMPORTANT**: Toujours utiliser les fichiers d'environnement Angular pour les configurations.
+
+#### Structure des environnements
+
+```
+apps/frontend/src/environments/
+├── environment.ts
+```
+
+#### Exemple de configuration
+
+```typescript
+// environment.ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api',
+  tokenKey: 'vera_admin_token',
+  supabaseUrl: 'https://xyz.supabase.co',
+  supabaseKey: 'your-key',
+};
+```
+
+#### Utilisation dans les services
+
+```typescript
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '@env'; // ✅ Utiliser l'alias @env
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl; // ✅ Bon
+
+  // ❌ Éviter les valeurs en dur
+  // private readonly apiUrl = 'http://localhost:3000/api';
+}
+```
+
+#### Bonnes pratiques
+
+- ✅ **Toujours** utiliser `environment.*` pour les URLs, clés API, tokens
+- ✅ Angular résout automatiquement le bon fichier selon le mode (dev/prod)
+- ✅ Ne jamais commiter de clés sensibles (utiliser `.env` pour le backend)
+- ❌ **Jamais** de valeurs en dur dans le code (`'http://localhost:3000'`)
+- ❌ **Éviter** les chemins relatifs (`'../../environments/environment'`)
+
 ### Nomenclature des Fichiers
 
 ```
@@ -258,6 +309,81 @@ export class FeatureService {
 - **Sélecteurs**: `app-` prefix → `app-user-profile`
 
 ## 🔧 Conventions NestJS (Backend)
+
+### Variables d'Environnement Backend
+
+**IMPORTANT**: Utiliser `@nestjs/config` pour gérer les variables d'environnement.
+
+#### Configuration du module
+
+```typescript
+// app.module.ts
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      // ❌ JAMAIS de fallback - si une variable est manquante, l'app doit crasher
+      ignoreEnvFile: false,
+    }),
+    // ... autres modules
+  ],
+})
+export class AppModule {}
+```
+
+#### Utilisation dans les services
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class FeatureService {
+  constructor(private readonly configService: ConfigService) {}
+
+  someMethod() {
+    // ✅ Bon - Lecture depuis ConfigService
+    const dbUrl = this.configService.get<string>('DATABASE_URL');
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+
+    // ❌ Éviter - Accès direct à process.env
+    // const dbUrl = process.env.DATABASE_URL;
+  }
+}
+```
+
+#### Bonnes pratiques Backend
+
+- ✅ **Toujours** utiliser `ConfigService` pour accéder aux variables
+- ✅ **Typer** les variables avec `get<Type>('KEY')`
+- ✅ Valider les variables d'environnement au démarrage (avec Joi ou class-validator)
+- ❌ **JAMAIS** de valeurs par défaut/fallback dans `get()` (ex: `.get('KEY', 'default')`)
+- ❌ **JAMAIS** d'accès direct à `process.env` dans le code applicatif
+- ❌ Si une variable est manquante, l'application **doit échouer au démarrage**
+
+#### Validation des variables (recommandé)
+
+```typescript
+// app.module.ts
+import * as Joi from 'joi';
+
+ConfigModule.forRoot({
+  isGlobal: true,
+  validationSchema: Joi.object({
+    DATABASE_URL: Joi.string().required(),
+    JWT_SECRET: Joi.string().required(),
+    BACKEND_URL: Joi.string().required(),
+    FRONTEND_URL: Joi.string().required(),
+    // ... autres variables obligatoires
+  }),
+  validationOptions: {
+    abortEarly: true, // Arrêter à la première erreur
+  },
+}),
+```
 
 ### Structure des Modules
 
