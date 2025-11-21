@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,4 +8,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './ui.component.html',
   styleUrl: './ui.component.css',
 })
-export class UiComponent {}
+export class UiComponent {
+  title = input<string>('Composant UI');
+  description = input<string>(
+    'Ceci est un composant réutilisable avec Tailwind CSS'
+  );
+}
