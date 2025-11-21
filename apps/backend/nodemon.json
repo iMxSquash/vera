@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "src"
+    ],
+    "ext": "ts",
+    "ignore": [
+        "src/**/*.spec.ts"
+    ],
+    "exec": "cd ../.. && nx build backend && node dist/apps/backend/main.js",
+    "legacyWatch": true
+}
