@@ -19,16 +19,45 @@ Vera est une plateforme de fact-checking en 3 phases :
 - **Monorepo**: Nx Workspace
 - **Package Manager**: pnpm
 
-### Structure du Monorepo
+### Structure du Monorepo (Meilleure Pratique Nx)
+
+La structure respecte les principes Nx : **apps fines + libs riches par domaines**.
 
 ```
 vera/
 ├── apps/
-│   ├── frontend/     # Application Angular
-│   └── backend/      # API NestJS
-├── libs/             # Bibliothèques partagées (à créer si nécessaire)
-└── context/          # Documentation projet
+│   ├── web/          # Application Angular (frontend)
+│   └── api/          # API NestJS (backend)
+│
+├── libs/
+│   ├── shared/
+│   │   ├── models/          # DTOs, interfaces, enums partagés (pur TS)
+│   │   ├── util/            # Validation, parsing, constantes communes
+│   │   └── types/           # Types TypeScript communs
+│   │
+│   ├── client/              # Libs consommées par apps/web
+│   │   ├── shared/
+│   │   │   ├── ui/          # Composants UI réutilisables (boutons, modals, etc.)
+│   │   │   └── util/        # Helpers front, pipes, directives
+│   │   └── feature-xxx/     # Features Angular (modules, pages, composants containers)
+│   │
+│   └── api/                 # Libs consommées par apps/api
+│       ├── shared/
+│       │   ├── data-access/ # Repositories, DB access, Prisma/TypeORM
+│       │   └── util/        # Guards génériques, decorators custom
+│       └── feature-xxx/     # Modules Nest pour chaque domaine
+│
+└── context/                 # Documentation projet
 ```
+
+**Principes essentiels :**
+
+- ✅ Les apps ne s'importent JAMAIS entre elles
+- ✅ Tous les domaines partagent via `libs/`
+- ✅ Petits libs cohésifs par domaine plutôt qu'un énorme `libs/shared`
+- ✅ Organisation par **domaine métier** (bounded contexts) plutôt que par couche technique
+- ✅ Libs partagées Front/Back en pur TypeScript dans `libs/shared/`
+- ✅ Chaque app reste "fine" : bootstrap, config root, imports depuis libs
 
 ## 📐 Principes de Développement
 
@@ -55,14 +84,24 @@ vera/
 #### Structure des environnements
 
 ```
-apps/frontend/src/environments/
+apps/web/src/environments/
 ├── environment.ts
+└── environment.development.ts
 ```
 
 #### Exemple de configuration
 
 ```typescript
 // environment.ts
+export const environment = {
+  production: true,
+  apiUrl: 'https://api.vera.app/api',
+  tokenKey: 'vera_admin_token',
+  supabaseUrl: 'https://xyz.supabase.co',
+  supabaseKey: 'your-key',
+};
+
+// environment.development.ts
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:3000/api',
@@ -77,7 +116,7 @@ export const environment = {
 ```typescript
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@env'; // ✅ Utiliser l'alias @env
+import { environment } from '@env'; // ✅ Alias depuis tsconfig.base.json
 
 @Injectable({
   providedIn: 'root',
@@ -99,9 +138,20 @@ export class ApiService {
 - ❌ **Jamais** de valeurs en dur dans le code (`'http://localhost:3000'`)
 - ❌ **Éviter** les chemins relatifs (`'../../environments/environment'`)
 
+```
+
+#### Bonnes pratiques
+
+- ✅ **Toujours** utiliser `environment.*` pour les URLs, clés API, tokens
+- ✅ Angular résout automatiquement le bon fichier selon le mode (dev/prod)
+- ✅ Ne jamais commiter de clés sensibles (utiliser `.env` pour le backend)
+- ❌ **Jamais** de valeurs en dur dans le code (`'http://localhost:3000'`)
+- ❌ **Éviter** les chemins relatifs (`'../../environments/environment'`)
+
 ### Nomenclature des Fichiers
 
 ```
+
 feature.component.ts
 feature.component.html
 feature.component.css
@@ -109,7 +159,8 @@ feature.component.spec.ts
 feature.service.ts
 feature.model.ts
 feature.module.ts
-```
+
+````
 
 ### Structure des Composants (Moderne - Angular 14+)
 
@@ -182,7 +233,7 @@ export class FeatureComponent {
     });
   }
 }
-```
+````
 
 ### Bonnes Pratiques Angular Modernes
 
@@ -375,8 +426,8 @@ ConfigModule.forRoot({
   validationSchema: Joi.object({
     DATABASE_URL: Joi.string().required(),
     JWT_SECRET: Joi.string().required(),
-    BACKEND_URL: Joi.string().required(),
-    FRONTEND_URL: Joi.string().required(),
+    SERVER_URL: Joi.string().required(),
+    CLIENT_URL: Joi.string().required(),
     // ... autres variables obligatoires
   }),
   validationOptions: {
@@ -719,7 +770,7 @@ describe('FeatureService', () => {
 
 - Utiliser Supabase Auth ou JWT
 - Implémenter des guards NestJS pour protéger les routes
-- Utiliser des guards Angular pour protéger les routes frontend
+- Utiliser des guards Angular pour protéger les routes client
 
 ## ♿ Accessibilité (WAI, ARIA, WCAG)
 
@@ -746,25 +797,25 @@ describe('FeatureService', () => {
 
 ```bash
 # Développement
-pnpm nx serve frontend          # Lance le frontend (port 4200)
-pnpm nx serve:dev backend       # Lance le backend avec nodemon (port 3000)
+pnpm nx serve client          # Lance le client (port 4200)
+pnpm nx serve:dev server       # Lance le server avec nodemon (port 3000)
 
 # Build
-pnpm nx build frontend --prod
-pnpm nx build backend
+pnpm nx build client --prod
+pnpm nx build server
 
 # Tests
-pnpm nx test frontend
-pnpm nx test backend
+pnpm nx test client
+pnpm nx test server
 pnpm nx test --all              # Tous les tests
 
 # Lint
-pnpm nx lint frontend
-pnpm nx lint backend
+pnpm nx lint client
+pnpm nx lint server
 
 # Générer des composants/services
-pnpm nx g @nx/angular:component my-component --project=frontend
-pnpm nx g @nestjs/schematics:service my-service --project=backend
+pnpm nx g @nx/angular:component my-component --project=client
+pnpm nx g @nestjs/schematics:service my-service --project=server
 ```
 
 ## 📝 Git Workflow
@@ -784,10 +835,10 @@ chore: tâches de maintenance
 Exemples:
 
 ```
-feat(frontend): add user authentication form
-fix(backend): resolve database connection issue
+feat(client): add user authentication form
+fix(server): resolve database connection issue
 docs: update API documentation
-refactor(frontend): extract auth logic to service
+refactor(client): extract auth logic to service
 ```
 
 ## 🎯 Priorités de Développement
@@ -796,7 +847,7 @@ refactor(frontend): extract auth logic to service
 
 - ✅ Setup environnement (Angular, NestJS, Nx, Tailwind)
 - ✅ Système d'authentification JWT
-- ✅ Structure de base backend (API REST)
+- ✅ Structure de base server (API REST)
 - ✅ Connexion Supabase PostgreSQL
 - ✅ CORS configuré
 - ✅ Documentation API avec Swagger
@@ -840,7 +891,7 @@ refactor(frontend): extract auth logic to service
 - [class-validator Documentation](https://github.com/typestack/class-validator)
 - API Vera: voir `context/app.md`
 - **Documentation locale** :
-  - `apps/backend/API.md` - Documentation complète des endpoints
+  - `apps/server/API.md` - Documentation complète des endpoints
   - `SWAGGER_GUIDE.md` - Guide d'utilisation de Swagger UI
   - `http://localhost:3000/api/docs` - Interface Swagger interactive
 

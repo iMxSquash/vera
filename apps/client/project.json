@@ -1,9 +1,9 @@
 {
-  "name": "frontend",
+  "name": "client",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/frontend/src",
+  "sourceRoot": "apps/client/src",
   "tags": [],
   "targets": {
     "build": {
@@ -12,21 +12,21 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/apps/frontend",
-        "index": "apps/frontend/src/index.html",
-        "browser": "apps/frontend/src/main.ts",
+        "outputPath": "dist/apps/client",
+        "index": "apps/client/src/index.html",
+        "browser": "apps/client/src/main.ts",
         "polyfills": [
           "zone.js"
         ],
-        "tsConfig": "apps/frontend/tsconfig.app.json",
+        "tsConfig": "apps/client/tsconfig.app.json",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/frontend/public"
+            "input": "apps/client/public"
           }
         ],
         "styles": [
-          "apps/frontend/src/styles.css"
+          "apps/client/src/styles.css"
         ],
         "scripts": []
       },
@@ -47,11 +47,11 @@
           "outputHashing": "all",
           "fileReplacements": [
             {
-              "replace": "apps/frontend/src/environments/environment.ts",
-              "with": "apps/frontend/src/environments/environment.ts"
+              "replace": "apps/client/src/environments/environment.ts",
+              "with": "apps/client/src/environments/environment.ts"
             }
           ],
-          "serviceWorker": "apps/frontend/ngsw-config.json"
+          "serviceWorker": "apps/client/ngsw-config.json"
         },
         "development": {
           "optimization": false,
@@ -59,8 +59,8 @@
           "sourceMap": true,
           "fileReplacements": [
             {
-              "replace": "apps/frontend/src/environments/environment.ts",
-              "with": "apps/frontend/src/environments/environment.development.ts"
+              "replace": "apps/client/src/environments/environment.ts",
+              "with": "apps/client/src/environments/environment.development.ts"
             }
           ]
         }
@@ -71,10 +71,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "frontend:build:production"
+          "buildTarget": "client:build:production"
         },
         "development": {
-          "buildTarget": "frontend:build:development"
+          "buildTarget": "client:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "frontend:build"
+        "buildTarget": "client:build"
       }
     },
     "lint": {
@@ -94,14 +94,14 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "apps/frontend/jest.config.ts"
+        "jestConfig": "apps/client/jest.config.ts"
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "frontend:build",
-        "staticFilePath": "dist/apps/frontend/browser",
+        "buildTarget": "client:build",
+        "staticFilePath": "dist/apps/client/browser",
         "spa": true
       }
     }

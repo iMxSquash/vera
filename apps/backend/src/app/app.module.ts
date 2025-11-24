@@ -17,8 +17,8 @@ import { SupabaseModule } from './supabase/supabase.module';
       expandVariables: true,
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
-        BACKEND_URL: Joi.string().required(),
-        FRONTEND_URL: Joi.string().required(),
+        SERVER_URL: Joi.string().required(),
+        CLIENT_URL: Joi.string().required(),
         SUPABASE_URL: Joi.string().required(),
         SUPABASE_API_KEY: Joi.string().required(),
         PORT: Joi.number().default(3000),

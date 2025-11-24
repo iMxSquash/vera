@@ -5,7 +5,7 @@
 export const environment = {
   production: true,
   apiUrl: '/api',
-  backendUrl: 'http://localhost:3000',
+  serverUrl: 'http://localhost:3000',
   frontendUrl: 'http://localhost:4200',
   supabaseApiKey: 'ysb_publishable_19GBrMHjDEKSeaEMxP8eRg_pMOSuKrT',
   supabaseUrl: 'https://xyz.supabase.co',

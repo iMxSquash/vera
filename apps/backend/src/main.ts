@@ -10,13 +10,13 @@ async function bootstrap() {
 
   // Récupérer ConfigService
   const configService = app.get(ConfigService);
-  const frontendUrl = configService.get<string>('FRONTEND_URL');
-  const backendUrl = configService.get<string>('BACKEND_URL');
+  const clientUrl = configService.get<string>('CLIENT_URL');
+  const serverUrl = configService.get<string>('SERVER_URL');
   const port = configService.get<number>('PORT');
 
   // Configuration CORS
   app.enableCors({
-    origin: frontendUrl,
+    origin: clientUrl,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -32,7 +32,7 @@ async function bootstrap() {
       'API REST pour la plateforme Vera - Fact-checking, sondages Instagram et extraction de contenus TikTok/Telegram'
     )
     .setVersion('1.0.0')
-    .addServer(backendUrl, 'Production')
+    .addServer(serverUrl, 'Production')
     .addServer('http://localhost:3000', 'Développement')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -61,7 +61,7 @@ async function bootstrap() {
   Logger.log(
     `📚 Swagger documentation available at: http://localhost:${port}/${globalPrefix}/docs`
   );
-  Logger.log(`🌐 CORS enabled for: ${frontendUrl}`);
+  Logger.log(`🌐 CORS enabled for: ${clientUrl}`);
 }
 
 bootstrap();

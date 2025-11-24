@@ -22,7 +22,7 @@ if (envConfig.error) {
 // Déterminer le mode (production ou développement)
 const isProduction = process.argv.includes('--production') || process.env.PRODUCTION === 'true';
 
-// Variables sensibles à exclure du frontend (ne doivent jamais être exposées au navigateur)
+// Variables sensibles à exclure du client (ne doivent jamais être exposées au navigateur)
 const SENSITIVE_VARS = [
     'DATABASE_URL',
     'JWT_SECRET',
@@ -31,7 +31,7 @@ const SENSITIVE_VARS = [
 ];
 
 // Variables spécifiques au backend uniquement
-const BACKEND_ONLY_VARS = [
+const SERVER_ONLY_VARS = [
     ...SENSITIVE_VARS,
     'PORT',
     'NODE_ENV',
@@ -69,7 +69,7 @@ let excludedVars = [];
 
 Object.keys(process.env).forEach((key) => {
     // Ignorer les variables système et les variables sensibles
-    if (BACKEND_ONLY_VARS.includes(key)) {
+    if (SERVER_ONLY_VARS.includes(key)) {
         excludedVars.push(key);
         return;
     }
@@ -87,8 +87,8 @@ Object.keys(process.env).forEach((key) => {
 envVars.production = isProduction;
 
 // Ajuster certaines URLs selon l'environnement
-if (!isProduction && envVars.backendUrl) {
-    envVars.apiUrl = `${envVars.backendUrl}/api`;
+if (!isProduction && envVars.serverUrl) {
+    envVars.apiUrl = `${envVars.serverUrl}/api`;
 } else if (isProduction) {
     envVars.apiUrl = '/api'; // En production, utiliser un chemin relatif
 }
@@ -121,8 +121,8 @@ ${envProperties},
 
 // Déterminer le chemin du fichier à générer
 const targetPath = isProduction
-    ? path.resolve(__dirname, '../apps/frontend/src/environments/environment.ts')
-    : path.resolve(__dirname, '../apps/frontend/src/environments/environment.development.ts');
+    ? path.resolve(__dirname, '../apps/client/src/environments/environment.ts')
+    : path.resolve(__dirname, '../apps/client/src/environments/environment.development.ts');
 
 // Écrire le fichier
 try {

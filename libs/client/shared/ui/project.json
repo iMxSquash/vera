@@ -1,7 +1,7 @@
 {
-  "name": "ui",
+  "name": "client-shared-ui",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/ui/src",
+  "sourceRoot": "libs/client/shared/ui/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
@@ -12,14 +12,14 @@
         "{workspaceRoot}/dist/{projectRoot}"
       ],
       "options": {
-        "project": "libs/ui/ng-package.json"
+        "project": "libs/client/shared/ui/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/ui/tsconfig.lib.prod.json"
+          "tsConfig": "libs/client/shared/ui/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/ui/tsconfig.lib.json"
+          "tsConfig": "libs/client/shared/ui/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
@@ -30,7 +30,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "libs/ui/jest.config.ts"
+        "jestConfig": "libs/client/shared/ui/jest.config.ts"
       }
     },
     "lint": {
@@ -40,11 +40,11 @@
       "executor": "@storybook/angular:start-storybook",
       "options": {
         "port": 4400,
-        "configDir": "libs/ui/.storybook",
-        "browserTarget": "ui:build-storybook",
+        "configDir": "libs/client/shared/ui/.storybook",
+        "browserTarget": "client-shared-ui:build-storybook",
         "compodoc": false,
         "styles": [
-          "libs/ui/.storybook/storybook.scss"
+          "libs/client/shared/ui/.storybook/storybook.scss"
         ]
       },
       "configurations": {
@@ -60,11 +60,11 @@
       ],
       "options": {
         "outputDir": "dist/storybook/ui",
-        "configDir": "libs/ui/.storybook",
-        "browserTarget": "ui:build-storybook",
+        "configDir": "libs/client/shared/ui/.storybook",
+        "browserTarget": "client-shared-ui:build-storybook",
         "compodoc": false,
         "styles": [
-          "libs/ui/.storybook/storybook.scss"
+          "libs/client/shared/ui/.storybook/storybook.scss"
         ]
       },
       "configurations": {

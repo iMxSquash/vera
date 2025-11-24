@@ -10,7 +10,7 @@
 1. ~~[Phase 0 - Préparation & Organisation](#phase-0---préparation--organisation)~~ ✅ **TERMINÉE**
 2. ~~[Phase 1 - Backend Fondations](#phase-1---backend-fondations)~~ ✅ **TERMINÉE**
 3. [Phase 2 - Backend Avancé](#phase-2---backend-avancé) 🔄 **EN COURS**
-4. [Phase 3 - Frontend Vera Web](#phase-3---frontend-vera-web) ⏳ **En attente maquettes**
+4. [Phase 3 - Client Vera Web](#phase-3---client-vera-web) ⏳ **En attente maquettes**
 5. [Phase 4 - Bots d'Extraction & Vérification](#phase-4---bots-dextraction--vérification-automatique)
 6. [Phase 5 - Tests & Déploiement](#phase-5---tests--déploiement)
 
@@ -51,8 +51,8 @@ Chaque développeur doit avoir un environnement de travail identique et fonction
 - [x] Installer Node.js (v20+)
 - [x] Installer pnpm (`npm install -g pnpm`)
 - [x] Installer les dépendances: `pnpm install`
-- [x] Vérifier que le frontend démarre: `pnpm nx serve frontend`
-- [x] Vérifier que le backend démarre: `pnpm nx serve:dev backend`
+- [x] Vérifier que le client démarre: `pnpm nx serve client`
+- [x] Vérifier que le backend démarre: `pnpm nx serve:dev server`
 - [x] Installer les extensions VSCode recommandées (Angular, Prettier, ESLint)
 
 **Temps estimé**: 1h par développeur
@@ -221,9 +221,9 @@ Créer un module pour communiquer avec l'API Vera et vérifier des informations.
 - [ ] Créer le module `fact-check`:
 
 ```bash
-pnpm nx g @nestjs/schematics:module fact-check --project=backend
-pnpm nx g @nestjs/schematics:service fact-check --project=backend
-pnpm nx g @nestjs/schematics:controller fact-check --project=backend
+pnpm nx g @nestjs/schematics:module fact-check --project=server
+pnpm nx g @nestjs/schematics:service fact-check --project=server
+pnpm nx g @nestjs/schematics:controller fact-check --project=server
 ```
 
 - [ ] Créer l'entité `FactCheck`:
@@ -255,7 +255,7 @@ Créer un système complet de gestion des sondages Instagram (stockage + API Ins
 - [ ] Créer le module `instagram-polls`:
 
 ```bash
-pnpm nx g @nestjs/schematics:resource instagram-polls --project=backend
+pnpm nx g @nestjs/schematics:resource instagram-polls --project=server
 ```
 
 - [ ] Installer les dépendances:
@@ -299,7 +299,7 @@ Gérer les contenus extraits de TikTok/Telegram pour le fact-checking.
 - [ ] Créer le module `contents`:
 
 ```bash
-pnpm nx g @nestjs/schematics:resource contents --project=backend
+pnpm nx g @nestjs/schematics:resource contents --project=server
 ```
 
 - [ ] Créer l'entité `Content`:
@@ -359,7 +359,7 @@ Configurer les variables d'environnement pour communiquer avec le backend.
 
 **Livrables**:
 
-- [x] Mettre à jour `apps/frontend/src/environments/environment.ts`
+- [x] Mettre à jour `apps/client/src/environments/environment.ts`
 - [x] Créer `environment.production.ts` avec les URLs de production
 - [x] Créer un alias `@env` dans `tsconfig.json` pour faciliter les imports
 
@@ -443,7 +443,7 @@ Créer la page d'accueil publique présentant Vera et ses valeurs.
 - [ ] Créer le composant:
 
 ```bash
-pnpm nx g @nx/angular:component landing --project=frontend --standalone
+pnpm nx g @nx/angular:component landing --project=client --standalone
 ```
 
 - [ ] Créer les sections (structure de base, à affiner avec les maquettes):
@@ -473,7 +473,7 @@ Créer la structure du dashboard admin avec navigation et layout.
 - [ ] Créer le composant:
 
 ```bash
-pnpm nx g @nx/angular:component admin/dashboard --project=frontend --standalone
+pnpm nx g @nx/angular:component admin/dashboard --project=client --standalone
 ```
 
 - [ ] Créer la structure de base:
@@ -761,8 +761,8 @@ Développer un service capable d'extraire vidéos et métadonnées TikTok.
 - [ ] Créer le module `tiktok-bot`:
 
 ```bash
-pnpm nx g @nestjs/schematics:module tiktok-bot --project=backend
-pnpm nx g @nestjs/schematics:service tiktok-bot --project=backend
+pnpm nx g @nestjs/schematics:module tiktok-bot --project=server
+pnpm nx g @nestjs/schematics:service tiktok-bot --project=server
 ```
 
 - [ ] Installer les dépendances:
@@ -795,8 +795,8 @@ Créer un bot Telegram pour recevoir des messages/liens et vérifier automatique
 - [ ] Créer le module `telegram-bot`:
 
 ```bash
-pnpm nx g @nestjs/schematics:module telegram-bot --project=backend
-pnpm nx g @nestjs/schematics:service telegram-bot --project=backend
+pnpm nx g @nestjs/schematics:module telegram-bot --project=server
+pnpm nx g @nestjs/schematics:service telegram-bot --project=server
 ```
 
 - [ ] Installer les dépendances:
@@ -911,7 +911,7 @@ pnpm add -D cypress
   - Visualisation des statistiques
   - Extraction TikTok + vérification
   - Utilisation du bot Telegram
-- [ ] Lancer les tests E2E: `pnpm nx e2e frontend-e2e`
+- [ ] Lancer les tests E2E: `pnpm nx e2e client-e2e`
 - [ ] Corriger les bugs identifiés
 - [ ] Atteindre une couverture de 80%+ pour les flux critiques
 
@@ -993,8 +993,8 @@ Configurer les environnements de production et préparer le déploiement.
 - [ ] Configurer HTTPS (certificats SSL)
 - [ ] Configurer CORS pour les URLs de production
 - [ ] Créer les scripts de déploiement:
-  - `pnpm run deploy:frontend`
-  - `pnpm run deploy:backend`
+  - `pnpm run deploy:client`
+  - `pnpm run deploy:server`
 - [ ] Tester le déploiement en staging d'abord
 
 **Temps estimé**: 3-4h
@@ -1011,7 +1011,7 @@ Déployer l'API NestJS en production.
 - [ ] Build de production:
 
 ```bash
-pnpm nx build backend --prod
+pnpm nx build server --prod
 ```
 
 - [ ] Créer un `Dockerfile` (si nécessaire):
@@ -1019,7 +1019,7 @@ pnpm nx build backend --prod
 ```dockerfile
 FROM node:20-alpine
 WORKDIR /app
-COPY dist/apps/backend .
+COPY dist/apps/server .
 RUN npm install --production
 CMD ["node", "main.js"]
 ```
@@ -1045,13 +1045,13 @@ Déployer l'application Angular en production.
 - [ ] Build de production:
 
 ```bash
-pnpm nx build frontend --prod
+pnpm nx build client --prod
 ```
 
 - [ ] Tester le build localement:
 
 ```bash
-npx http-server dist/apps/frontend
+npx http-server dist/apps/client
 ```
 
 - [ ] Déployer sur l'hébergeur choisi (Vercel recommandé)

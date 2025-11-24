@@ -667,7 +667,7 @@ TIKTOK_API_KEY=xxx
 
 # URLs
 FRONTEND_URL=http://localhost:4200
-BACKEND_URL=http://localhost:3000
+SERVER_URL=http://localhost:3000
 ```
 
 #### Frontend `environment.ts`
@@ -950,10 +950,10 @@ POST /webhook/message
 #### Développement (local)
 ```bash
 # Frontend
-pnpm nx serve frontend  # → http://localhost:4200
+pnpm nx serve client  # → http://localhost:4200
 
 # Backend
-pnpm nx serve:dev backend  # → http://localhost:3000
+pnpm nx serve:dev server  # → http://localhost:3000
 ```
 
 #### Production
@@ -992,19 +992,19 @@ jobs:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
       - run: pnpm install
-      - run: pnpm nx test frontend
-      - run: pnpm nx test backend
-      - run: pnpm nx lint frontend
-      - run: pnpm nx lint backend
+      - run: pnpm nx test client
+      - run: pnpm nx test server
+      - run: pnpm nx lint client
+      - run: pnpm nx lint server
 
   build:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - run: pnpm nx build frontend --prod
-      - run: pnpm nx build backend --prod
+      - run: pnpm nx build client --prod
+      - run: pnpm nx build server --prod
 
-  deploy-frontend:
+  deploy-client:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -1012,7 +1012,7 @@ jobs:
       - name: Deploy to Vercel
         run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-  deploy-backend:
+  deploy-server:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -1072,10 +1072,10 @@ NG_APP_PRODUCTION=true
 ```typescript
 // jest.config.ts
 export default {
-  displayName: 'frontend',
+  displayName: 'client',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/apps/frontend',
+  coverageDirectory: '../../coverage/apps/client',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -1087,15 +1087,15 @@ export default {
 
 #### Commandes
 ```bash
-# Frontend
-pnpm nx test frontend
-pnpm nx test frontend --watch
-pnpm nx test frontend --coverage
+# client
+pnpm nx test client
+pnpm nx test client --watch
+pnpm nx test client --coverage
 
-# Backend
-pnpm nx test backend
-pnpm nx test backend --watch
-pnpm nx test backend --coverage
+# server
+pnpm nx test server
+pnpm nx test server --watch
+pnpm nx test server --coverage
 ```
 
 #### Couverture atteinte
@@ -1134,9 +1134,9 @@ test('TikTok video verification', async ({ page }) => {
 
 #### ESLint
 ```bash
-pnpm nx lint frontend
-pnpm nx lint backend
-pnpm nx lint frontend --fix
+pnpm nx lint client
+pnpm nx lint server
+pnpm nx lint client --fix
 ```
 
 #### Prettier (optionnel)

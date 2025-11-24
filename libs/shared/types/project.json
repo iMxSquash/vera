@@ -1,0 +1,24 @@
+{
+    "name": "shared-types",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "sourceRoot": "libs/shared/types/src",
+    "prefix": "vera",
+    "targets": {
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/shared/types/**/*.ts"
+                ]
+            }
+        }
+    },
+    "tags": [
+        "type:shared",
+        "scope:shared"
+    ]
+}

@@ -10,13 +10,45 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@vera/ui": ["libs/ui/src/index.ts"]
+      "@vera/shared/models": [
+        "libs/shared/models/src/index.ts"
+      ],
+      "@vera/shared/util": [
+        "libs/shared/util/src/index.ts"
+      ],
+      "@vera/shared/types": [
+        "libs/shared/types/src/index.ts"
+      ],
+      "@vera/client/shared/ui": [
+        "libs/client/shared/ui/src/index.ts"
+      ],
+      "@vera/client/shared/util": [
+        "libs/client/shared/util/src/index.ts"
+      ],
+      "@vera/api/shared/data-access": [
+        "libs/api/shared/data-access/src/index.ts"
+      ],
+      "@vera/api/shared/util": [
+        "libs/api/shared/util/src/index.ts"
+      ],
+      "@vera/api/feature-fact-check": [
+        "libs/api/feature-fact-check/src/index.ts"
+      ],
+      "@env": [
+        "apps/web/src/environments/environment.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }
