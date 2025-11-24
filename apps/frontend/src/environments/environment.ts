@@ -9,4 +9,5 @@ export const environment = {
   frontendUrl: 'http://localhost:4200',
   supabaseApiKey: 'ysb_publishable_19GBrMHjDEKSeaEMxP8eRg_pMOSuKrT',
   supabaseUrl: 'https://xyz.supabase.co',
+  tokenKey: 'vera_admin_token',
 };

@@ -50,7 +50,8 @@
               "replace": "apps/frontend/src/environments/environment.ts",
               "with": "apps/frontend/src/environments/environment.ts"
             }
-          ]
+          ],
+          "serviceWorker": "apps/frontend/ngsw-config.json"
         },
         "development": {
           "optimization": false,
