@@ -32,6 +32,9 @@ vera/
 ├── libs/
 │   ├── shared/
 │   │   ├── models/          # DTOs, interfaces, enums partagés (pur TS)
+│   │   │   ├── auth/        # Modèles d'authentification (un fichier par interface)
+│   │   │   ├── fact-check/  # Modèles fact-checking
+│   │   │   └── [domain]/    # Modèles par domaine métier
 │   │   ├── util/            # Validation, parsing, constantes communes
 │   │   └── types/           # Types TypeScript communs
 │   │
@@ -58,6 +61,41 @@ vera/
 - ✅ Organisation par **domaine métier** (bounded contexts) plutôt que par couche technique
 - ✅ Libs partagées Front/Back en pur TypeScript dans `libs/shared/`
 - ✅ Chaque app reste "fine" : bootstrap, config root, imports depuis libs
+
+### Organisation de `libs/shared/models` (IMPORTANT)
+
+**Structure recommandée** : Un fichier par interface/DTO, organisés par domaine métier.
+
+```
+libs/shared/models/src/lib/
+├── auth/
+│   ├── admin.model.ts           # Interface Admin
+│   ├── login-request.model.ts   # Interface LoginRequest
+│   ├── login-response.model.ts  # Interface LoginResponse
+│   └── index.ts                 # Exports consolidés: export * from './admin.model'
+├── fact-check/
+│   ├── fact-check.model.ts
+│   ├── verification.model.ts
+│   └── index.ts
+├── survey/
+│   ├── survey.model.ts
+│   ├── survey-response.model.ts
+│   └── index.ts
+├── index.ts                     # Exports finaux: export * from './auth'
+└── [autres domaines]/
+```
+
+**Bonnes pratiques** :
+
+- ✅ Un fichier = une interface/DTO unique
+- ✅ Dossiers par domaine métier (`auth/`, `fact-check/`, `survey/`, etc.)
+- ✅ Fichier `index.ts` pour chaque domaine avec `export *`
+- ✅ Fichier `index.ts` racine du lib avec `export * from './auth'`, etc.
+- ✅ Imports inter-domaines acceptés (ex: LoginResponse importe Admin)
+- ❌ Ne pas mélanger plusieurs interfaces dans un seul fichier
+- ❌ Ne pas créer de fichiers génériques comme `common.model.ts`
+- ❌ Ne pas utiliser des paths absolues: `import { Admin } from '@vera/shared/models'`
+  - À la place: `import { Admin } from './admin.model'` (imports relatifs dans le même domaine)
 
 ## 📐 Principes de Développement
 

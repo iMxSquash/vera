@@ -1,67 +1,54 @@
+/**
+ * This is not a production server yet!
+ * This is only a minimal backend to get started.
+ */
+
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // Récupérer ConfigService
   const configService = app.get(ConfigService);
-  const clientUrl = configService.get<string>('CLIENT_URL');
-  const serverUrl = configService.get<string>('SERVER_URL');
-  const port = configService.get<number>('PORT');
 
-  // Configuration CORS
+  const port = configService.get<number>('PORT') || 3000;
+  const clientUrl =
+    configService.get<string>('CLIENT_URL') || 'http://localhost:4200';
+
+  // Enable CORS for development
   app.enableCors({
     origin: clientUrl,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  // Set global route prefix
+  app.setGlobalPrefix('api');
 
-  // Configuration Swagger
+  // Swagger setup
   const config = new DocumentBuilder()
     .setTitle('Vera API')
-    .setDescription(
-      'API REST pour la plateforme Vera - Fact-checking, sondages Instagram et extraction de contenus TikTok/Telegram'
-    )
+    .setDescription('API de vérification de faits - Plateforme Vera')
     .setVersion('1.0.0')
-    .addServer(serverUrl, 'Production')
-    .addServer('http://localhost:3000', 'Développement')
     .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
       'JWT'
     )
-    .addTag('general', 'Endpoints généraux')
-    .addTag('auth', 'Authentification des administrateurs')
-    .addTag('fact-check', 'Module de fact-checking avec API Vera')
-    .addTag('instagram-polls', 'Gestion des sondages Instagram')
-    .addTag('contents', 'Gestion des contenus TikTok/Telegram')
+    .addTag('auth', 'Authentification')
+    .addTag('fact-check', 'Vérification de faits')
+    .addTag('surveys', 'Sondages')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
-      displayOperationId: false,
-      docExpansion: 'list',
-    },
-  });
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
-  Logger.log(
-    `📚 Swagger documentation available at: http://localhost:${port}/${globalPrefix}/docs`
-  );
-  Logger.log(`🌐 CORS enabled for: ${clientUrl}`);
+  Logger.log(`🚀 Application is running on: http://localhost:${port}/api/docs`);
 }
 
 bootstrap();

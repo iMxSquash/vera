@@ -33,17 +33,44 @@
       "@vera/client/shared/util": [
         "libs/client/shared/util/src/index.ts"
       ],
+      "@vera/client/shared/guards": [
+        "libs/client/shared/guards/src/index.ts"
+      ],
+      "@vera/client/shared/interceptors": [
+        "libs/client/shared/interceptors/src/index.ts"
+      ],
+      "@vera/client/shared/environments": [
+        "libs/client/shared/environments/src/index.ts"
+      ],
+      "@vera/client/features/auth": [
+        "libs/client/features/auth/src/index.ts"
+      ],
+      "@vera/client/features/admin": [
+        "libs/client/features/admin/src/index.ts"
+      ],
+      "@vera/client/features/public": [
+        "libs/client/features/public/src/index.ts"
+      ],
+      "@vera/client/feature-auth": [
+        "libs/client/features/auth/src/index.ts"
+      ],
+      "@vera/client/feature-admin": [
+        "libs/client/features/admin/src/index.ts"
+      ],
       "@vera/api/shared/data-access": [
         "libs/api/shared/data-access/src/index.ts"
       ],
       "@vera/api/shared/util": [
         "libs/api/shared/util/src/index.ts"
       ],
-      "@vera/api/feature-fact-check": [
-        "libs/api/feature-fact-check/src/index.ts"
+      "@vera/api/features/auth": [
+        "libs/api/features/auth/src/index.ts"
+      ],
+      "@vera/api/features/fact-check": [
+        "libs/api/features/fact-check/src/index.ts"
       ],
       "@env": [
-        "apps/web/src/environments/environment.ts"
+        "libs/client/shared/environments/src/lib/environment.ts"
       ]
     }
   },

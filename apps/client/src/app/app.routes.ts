@@ -1,25 +1,23 @@
 import { Route } from '@angular/router';
-import { authGuard } from './auth/guards/auth.guard';
+import { authGuard, guestGuard } from '@vera/client/shared/guards';
 
 export const appRoutes: Route[] = [
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./auth/components/login/login.component').then(
-        (m) => m.LoginComponent
-      ),
+    path: '',
+    loadChildren: () =>
+      import('@vera/client/features/public').then((m) => m.routes),
+  },
+  {
+    path: 'auth',
+    canActivate: [guestGuard],
+    loadChildren: () =>
+      import('@vera/client/features/auth').then((m) => m.routes),
   },
   {
     path: 'admin',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./admin/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent
-      ),
+    loadChildren: () =>
+      import('@vera/client/features/admin').then((m) => m.routes),
   },
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

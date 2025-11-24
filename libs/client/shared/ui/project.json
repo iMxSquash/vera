@@ -1,8 +1,8 @@
 {
-  "name": "client-shared-ui",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/client/shared/ui/src",
-  "prefix": "lib",
+  "prefix": "ui",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -41,7 +41,7 @@
       "options": {
         "port": 4400,
         "configDir": "libs/client/shared/ui/.storybook",
-        "browserTarget": "client-shared-ui:build-storybook",
+        "browserTarget": "ui:build-storybook",
         "compodoc": false,
         "styles": [
           "libs/client/shared/ui/.storybook/storybook.scss"
@@ -61,7 +61,7 @@
       "options": {
         "outputDir": "dist/storybook/ui",
         "configDir": "libs/client/shared/ui/.storybook",
-        "browserTarget": "client-shared-ui:build-storybook",
+        "browserTarget": "ui:build-storybook",
         "compodoc": false,
         "styles": [
           "libs/client/shared/ui/.storybook/storybook.scss"

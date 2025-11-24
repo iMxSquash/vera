@@ -121,8 +121,8 @@ ${envProperties},
 
 // Déterminer le chemin du fichier à générer
 const targetPath = isProduction
-    ? path.resolve(__dirname, '../apps/client/src/environments/environment.ts')
-    : path.resolve(__dirname, '../apps/client/src/environments/environment.development.ts');
+    ? path.resolve(__dirname, '../libs/client/shared/environments/src/lib/environment.ts')
+    : path.resolve(__dirname, '../libs/client/shared/environments/src/lib/environment.development.ts');
 
 // Écrire le fichier
 try {

@@ -1,2 +1,3 @@
-// Re-export repositories and database access
-// Prisma/TypeORM entities and repositories
+// Data access layer - services and repositories
+export * from './supabase.module';
+export * from './services/supabase.service';

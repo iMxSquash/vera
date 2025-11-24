@@ -1,0 +1,35 @@
+{
+    "name": "client-feature-admin",
+    "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "sourceRoot": "libs/client/features/admin/src",
+    "prefix": "app",
+    "tags": [
+        "type:feature",
+        "scope:web"
+    ],
+    "targets": {
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/client/features/admin/**/*.ts",
+                    "libs/client/features/admin/**/*.html"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+            ],
+            "options": {
+                "jestConfig": "libs/client/features/admin/jest.config.ts",
+                "passWithNoTests": true
+            }
+        }
+    }
+}
