@@ -490,17 +490,115 @@ import { IsString, IsNotEmpty, IsOptional, IsEmail } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateFeatureDto {
-  @ApiProperty({ description: 'Feature name' })
+  @ApiProperty({
+    description: 'Feature name',
+    example: 'My Feature',
+    type: String,
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: 'Feature description', required: false })
+  @ApiProperty({
+    description: 'Feature description',
+    required: false,
+    example: 'A detailed description',
+  })
   @IsString()
   @IsOptional()
   description?: string;
 }
+
+// DTOs Response pour les réponses
+export class FeatureResponseDto {
+  @ApiProperty({ description: 'Feature ID', example: '550e8400-e29b-41d4-a716-446655440000' })
+  id: string;
+
+  @ApiProperty({ description: 'Feature name', example: 'My Feature' })
+  name: string;
+
+  @ApiProperty({ description: 'Feature description', example: 'A detailed description' })
+  description: string;
+
+  @ApiProperty({ description: 'Creation date', example: '2025-11-24T10:00:00.000Z' })
+  created_at: string;
+}
 ```
+
+### Bonnes pratiques DTOs
+
+- ✅ Toujours ajouter `@ApiProperty` sur chaque champ pour Swagger
+- ✅ Inclure des `example` concrets pour chaque champ
+- ✅ Typer les champs avec `type` si nécessaire pour Swagger
+- ✅ Marquer les champs optionnels avec `required: false`
+- ✅ Créer des DTOs de réponse séparés (`ResponseDto`) des DTOs de création (`CreateDto`)
+- ✅ Exporter les DTOs dans un `index.ts` pour simplifier les imports
+- ❌ Ne pas oublier les messages de validation custom
+
+### Swagger - Documentation API Interactive
+
+**IMPORTANT**: Tous les endpoints doivent être documentés avec Swagger pour l'API REST.
+
+#### Décorateurs Swagger sur les controllers
+
+```typescript
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+
+@ApiTags('features')
+@Controller('features')
+export class FeatureController {
+  @Get()
+  @ApiOperation({
+    summary: 'Récupérer toutes les features',
+    description: 'Retourne une liste de toutes les features disponibles',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste récupérée avec succès',
+    type: [FeatureResponseDto],
+  })
+  async findAll(): Promise<FeatureResponseDto[]> {
+    return this.featureService.findAll();
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Créer une feature',
+    description: 'Crée une nouvelle feature et la retourne',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Feature créée avec succès',
+    type: FeatureResponseDto,
+  })
+  @ApiResponse({ status: 400, description: 'Données invalides' })
+  async create(@Body() createDto: CreateFeatureDto): Promise<FeatureResponseDto> {
+    return this.featureService.create(createDto);
+  }
+
+  @Get(':id')
+  @ApiBearerAuth('JWT')
+  @ApiOperation({ summary: 'Récupérer une feature' })
+  @ApiResponse({ status: 200, description: 'Feature trouvée', type: FeatureResponseDto })
+  @ApiResponse({ status: 401, description: 'Non authentifié' })
+  @ApiResponse({ status: 404, description: 'Feature non trouvée' })
+  async findOne(@Param('id') id: string): Promise<FeatureResponseDto> {
+    return this.featureService.findOne(id);
+  }
+}
+```
+
+#### Bonnes pratiques Swagger
+
+- ✅ **Toujours** documenter les endpoints publics avec `@ApiTags`, `@ApiOperation`, `@ApiResponse`
+- ✅ Inclure des `description` claires et concises
+- ✅ Fournir des `example` réalistes dans les DTOs
+- ✅ Lister tous les codes d'erreur possibles avec `@ApiResponse`
+- ✅ Utiliser `@ApiBearerAuth('JWT')` pour les endpoints protégés
+- ✅ Créer des fichiers `API.md` pour documenter les endpoints en Markdown
+- ✅ Tester régulièrement l'interface Swagger UI
+- ❌ Ne pas oublier les messages d'erreur dans les réponses (400, 401, 404, etc.)
+- ❌ Ne pas créer des endpoints non documentés (la documentation c'est du code)
 
 ### Naming Conventions NestJS
 
@@ -694,34 +792,57 @@ refactor(frontend): extract auth logic to service
 
 ## 🎯 Priorités de Développement
 
-### Phase 1 - Fondations (En cours)
+### Phase 1 - Fondations ✅ (TERMINÉE)
 
 - ✅ Setup environnement (Angular, NestJS, Nx, Tailwind)
-- ⏳ Système d'authentification
-- ⏳ Structure de base frontend (Landing Page)
-- ⏳ Structure de base backend (API REST)
-- ⏳ Connexion Supabase PostgreSQL
+- ✅ Système d'authentification JWT
+- ✅ Structure de base backend (API REST)
+- ✅ Connexion Supabase PostgreSQL
+- ✅ CORS configuré
+- ✅ Documentation API avec Swagger
 
-### Phase 2 - Sondages Instagram
+### Phase 2 - Backend Avancé (EN COURS)
 
-- Intégration API Instagram
-- Dashboard de visualisation temps réel
-- Stockage et analyse des réponses
+- ⏳ Module Fact-Checking (Intégration API Vera)
+- ⏳ Module Sondages Instagram (Backend complet)
+- ⏳ Module Contenus TikTok/Telegram
+- ✅ Documentation API avec Swagger
+- ⏳ Tests unitaires Backend
 
-### Phase 3 - Bot TikTok & Fact-checking
+### Phase 3 - Frontend Vera Web
+
+- ⏳ Landing Page Vera Web (après réception maquettes)
+- ⏳ Dashboard Admin (structure)
+- ⏳ Intégration des maquettes
+- ⏳ Pages Admin (Stats, Sondages, Fact-check, Contenus)
+
+### Phase 4 - Bots d'Extraction & Vérification
 
 - Bot d'extraction TikTok
-- Intégration API Vera
-- Interface de vérification
+- Bot Telegram interactif
+- Vérification automatique avec Vera
+
+### Phase 5 - Tests & Déploiement
+
+- Tests End-to-End (E2E)
+- Tests de performance
+- Documentation complète
+- Déploiement production
 
 ## 📚 Ressources
 
 - [Angular Style Guide](https://angular.io/guide/styleguide)
 - [NestJS Documentation](https://docs.nestjs.com/)
+- [NestJS Swagger Module](https://docs.nestjs.com/openapi/introduction)
 - [Tailwind CSS](https://tailwindcss.com/docs)
 - [Nx Documentation](https://nx.dev)
 - [Supabase Documentation](https://supabase.com/docs)
+- [class-validator Documentation](https://github.com/typestack/class-validator)
 - API Vera: voir `context/app.md`
+- **Documentation locale** :
+  - `apps/backend/API.md` - Documentation complète des endpoints
+  - `SWAGGER_GUIDE.md` - Guide d'utilisation de Swagger UI
+  - `http://localhost:3000/api/docs` - Interface Swagger interactive
 
 ---
 

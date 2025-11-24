@@ -19,15 +19,18 @@
 ## ~~PHASE 0 - Préparation & Organisation~~ ✅ **TERMINÉE**
 
 ### 📌 Objectif
+
 Mettre en place l'organisation du projet et attendre les maquettes avant de commencer le frontend.
 
 ---
 
 ### ✅ ~~Étape 0.1 - Organisation de l'équipe~~ **TERMINÉE**
+
 **Description**:  
 Définir les rôles et responsabilités de chaque développeur.
 
 **Livrables**:
+
 - [x] Définir un lead technique (coordination, revue de code)
 - [x] Définir les spécialités de chacun (Backend API, Backend Auth, Fullstack)
 - [x] Mettre en place un système de communication (Discord, Slack)
@@ -38,10 +41,12 @@ Définir les rôles et responsabilités de chaque développeur.
 ---
 
 ### ✅ ~~Étape 0.2 - Configuration de l'environnement de développement~~ **TERMINÉE**
+
 **Description**:  
 Chaque développeur doit avoir un environnement de travail identique et fonctionnel.
 
 **Livrables**:
+
 - [x] Cloner le repo Git
 - [x] Installer Node.js (v20+)
 - [x] Installer pnpm (`npm install -g pnpm`)
@@ -55,10 +60,12 @@ Chaque développeur doit avoir un environnement de travail identique et fonction
 ---
 
 ### ✅ ~~Étape 0.3 - Configuration Supabase~~ **TERMINÉE**
+
 **Description**:  
 Créer et configurer le projet Supabase pour la base de données PostgreSQL.
 
 **Livrables**:
+
 - [x] Créer un compte Supabase
 - [x] Créer un nouveau projet
 - [x] Récupérer l'URL et la clé API (anon key)
@@ -71,10 +78,12 @@ Créer et configurer le projet Supabase pour la base de données PostgreSQL.
 ---
 
 ### ✅ ~~Étape 0.4 - Récupération de la clé API Vera~~ **TERMINÉE**
+
 **Description**:  
 Contacter le référent pour obtenir la clé API de Vera pour le fact-checking.
 
 **Livrables**:
+
 - [x] Contacter le référent projet
 - [x] Récupérer la clé API Vera
 - [x] Ajouter `VERA_API_KEY=xxx` dans le `.env`
@@ -85,10 +94,12 @@ Contacter le référent pour obtenir la clé API de Vera pour le fact-checking.
 ---
 
 ### ✅ ~~Étape 0.5 - Attente des maquettes~~ **TERMINÉE**
+
 **Description**:  
 Pendant que l'équipe UX/UI travaille sur les maquettes, se concentrer sur le backend.
 
 **Livrables**:
+
 - [x] Demander les maquettes à l'équipe design
 - [x] Définir une deadline pour la réception des maquettes
 - [x] Lister les pages nécessaires:
@@ -105,15 +116,18 @@ Pendant que l'équipe UX/UI travaille sur les maquettes, se concentrer sur le ba
 ## ~~PHASE 1 - Backend Fondations~~ ✅ **TERMINÉE**
 
 ### 📌 Objectif
+
 Créer l'API REST de base avec authentification et structure modulaire.
 
 ---
 
 ### ✅ ~~Étape 1.1 - Configuration TypeORM & Base de données~~ **TERMINÉE**
+
 **Description**:  
 Connecter NestJS à la base de données Supabase PostgreSQL via TypeORM.
 
 **Livrables**:
+
 - [x] Installer les dépendances
 - [x] Configurer `TypeOrmModule` dans `app.module.ts`
 - [x] Créer la configuration avec validation Joi des variables d'environnement
@@ -124,10 +138,12 @@ Connecter NestJS à la base de données Supabase PostgreSQL via TypeORM.
 ---
 
 ### ✅ ~~Étape 1.2 - Module Admin & Authentification JWT~~ **TERMINÉE**
+
 **Description**:  
 Mettre en place le système d'authentification sécurisé pour les administrateurs.
 
 **Livrables**:
+
 - [x] Installer les dépendances
 - [x] Créer l'entité `Admin` (table `admins` dans Supabase)
 - [x] Créer la migration pour la table `admins`
@@ -143,10 +159,12 @@ Mettre en place le système d'authentification sécurisé pour les administrateu
 ---
 
 ### ✅ ~~Étape 1.3 - Module Supabase Service~~ **TERMINÉE**
+
 **Description**:  
 Créer un service centralisé pour les interactions avec Supabase.
 
 **Livrables**:
+
 - [x] Installer Supabase client
 - [x] Compléter `SupabaseService`
 - [x] Rendre le service injectable globalement
@@ -157,10 +175,12 @@ Créer un service centralisé pour les interactions avec Supabase.
 ---
 
 ### ✅ ~~Étape 1.4 - Tests des endpoints d'authentification~~ **TERMINÉE**
+
 **Description**:  
 Valider que l'authentification fonctionne correctement.
 
 **Livrables**:
+
 - [x] Tester avec Postman/Insomnia/cURL
 - [x] Documenter les endpoints dans un fichier `API.md` ou via Swagger
 - [x] Corriger les bugs identifiés
@@ -170,10 +190,12 @@ Valider que l'authentification fonctionne correctement.
 ---
 
 ### ✅ ~~Étape 1.5 - Configuration CORS~~ **TERMINÉE**
+
 **Description**:  
 Permettre au frontend Angular de communiquer avec le backend.
 
 **Livrables**:
+
 - [x] Configurer CORS dans `main.ts`
 - [x] Tester avec une requête depuis le frontend
 
@@ -184,21 +206,26 @@ Permettre au frontend Angular de communiquer avec le backend.
 ## PHASE 2 - Backend Avancé
 
 ### 📌 Objectif
+
 Développer les modules métier (fact-checking, sondages Instagram, contenus TikTok/Telegram).
 
 ---
 
 ### ✅ Étape 2.1 - Module Fact-Checking (Intégration API Vera)
+
 **Description**:  
 Créer un module pour communiquer avec l'API Vera et vérifier des informations.
 
 **Livrables**:
+
 - [ ] Créer le module `fact-check`:
+
 ```bash
 pnpm nx g @nestjs/schematics:module fact-check --project=backend
 pnpm nx g @nestjs/schematics:service fact-check --project=backend
 pnpm nx g @nestjs/schematics:controller fact-check --project=backend
 ```
+
 - [ ] Créer l'entité `FactCheck`:
   - `id`, `user_id`, `query`, `response`, `status`, `created_at`
 - [ ] Implémenter `FactCheckService`:
@@ -219,18 +246,24 @@ pnpm nx g @nestjs/schematics:controller fact-check --project=backend
 ---
 
 ### ✅ Étape 2.2 - Module Sondages Instagram (Backend)
+
 **Description**:  
 Créer un système complet de gestion des sondages Instagram (stockage + API Instagram).
 
 **Livrables**:
+
 - [ ] Créer le module `instagram-polls`:
+
 ```bash
 pnpm nx g @nestjs/schematics:resource instagram-polls --project=backend
 ```
+
 - [ ] Installer les dépendances:
+
 ```bash
 pnpm add axios
 ```
+
 - [ ] Créer les entités:
   - `Poll`: `id`, `question`, `options[]`, `platform`, `instagram_story_id`, `status`, `created_at`
   - `PollResponse`: `id`, `poll_id`, `user_instagram_id`, `selected_option`, `created_at`
@@ -257,14 +290,18 @@ pnpm add axios
 ---
 
 ### ✅ Étape 2.3 - Module Contenus TikTok/Telegram (Backend)
+
 **Description**:  
 Gérer les contenus extraits de TikTok/Telegram pour le fact-checking.
 
 **Livrables**:
+
 - [ ] Créer le module `contents`:
+
 ```bash
 pnpm nx g @nestjs/schematics:resource contents --project=backend
 ```
+
 - [ ] Créer l'entité `Content`:
   - `id`, `platform` (tiktok/telegram), `content_url`, `metadata`, `extracted_at`, `verified`, `verification_result`, `fact_check_id`
 - [ ] Implémenter `ContentsService`:
@@ -286,18 +323,22 @@ pnpm nx g @nestjs/schematics:resource contents --project=backend
 ---
 
 ### ✅ Étape 2.4 - Documentation API avec Swagger
+
 **Description**:  
 Générer une documentation interactive de l'API.
 
 **Livrables**:
-- [ ] Installer Swagger:
+
+- [x] Installer Swagger:
+
 ```bash
 pnpm add @nestjs/swagger
 ```
-- [ ] Configurer Swagger dans `main.ts`
-- [ ] Ajouter les décorateurs `@ApiTags`, `@ApiOperation`, `@ApiResponse` sur tous les endpoints
-- [ ] Tester l'interface Swagger: `http://localhost:3000/api/docs`
-- [ ] Documenter les schémas des DTOs avec `@ApiProperty`
+
+- [x] Configurer Swagger dans `main.ts`
+- [x] Ajouter les décorateurs `@ApiTags`, `@ApiOperation`, `@ApiResponse` sur tous les endpoints
+- [x] Tester l'interface Swagger: `http://localhost:3000/api/docs`
+- [x] Documenter les schémas des DTOs avec `@ApiProperty`
 
 **Temps estimé**: 2h
 
@@ -306,15 +347,18 @@ pnpm add @nestjs/swagger
 ## PHASE 3 - Frontend Vera Web
 
 ### 📌 Objectif
+
 Développer l'interface utilisateur complète : Landing Page publique + Dashboard Admin (une fois les maquettes reçues).
 
 ---
 
 ### ✅ ~~Étape 3.1 - Configuration des environnements Angular~~ **TERMINÉE**
+
 **Description**:  
 Configurer les variables d'environnement pour communiquer avec le backend.
 
 **Livrables**:
+
 - [x] Mettre à jour `apps/frontend/src/environments/environment.ts`
 - [x] Créer `environment.production.ts` avec les URLs de production
 - [x] Créer un alias `@env` dans `tsconfig.json` pour faciliter les imports
@@ -324,10 +368,12 @@ Configurer les variables d'environnement pour communiquer avec le backend.
 ---
 
 ### ✅ ~~Étape 3.2 - Service d'authentification Angular~~ **TERMINÉE**
+
 **Description**:  
 Créer un service pour gérer l'authentification côté frontend.
 
 **Livrables**:
+
 - [x] Générer le service
 - [x] Implémenter `AuthService`:
   - `login(email, password)`: appel à `POST /api/auth/login`
@@ -345,10 +391,12 @@ Créer un service pour gérer l'authentification côté frontend.
 ---
 
 ### ✅ ~~Étape 3.3 - Auth Guard & Interceptor~~ **TERMINÉE**
+
 **Description**:  
 Protéger les routes et ajouter automatiquement le token JWT aux requêtes HTTP.
 
 **Livrables**:
+
 - [x] Compléter `auth.guard.ts`:
   - Rediriger vers `/login` si non authentifié
   - Utiliser `inject(AuthService)` et `inject(Router)`
@@ -362,10 +410,12 @@ Protéger les routes et ajouter automatiquement le token JWT aux requêtes HTTP.
 ---
 
 ### ✅ ~~Étape 3.4 - Composant Login~~ **TERMINÉE**
+
 **Description**:  
 Créer le formulaire de connexion pour les administrateurs.
 
 **Livrables**:
+
 - [x] Créer le composant (standalone)
 - [x] Implémenter le formulaire:
   - Utiliser `ReactiveFormsModule`
@@ -384,14 +434,18 @@ Créer le formulaire de connexion pour les administrateurs.
 ---
 
 ### ✅ Étape 3.5 - Landing Page Vera Web (à voir avec les maquettes)
+
 **Description**:  
 Créer la page d'accueil publique présentant Vera et ses valeurs.
 
 **Livrables**:
+
 - [ ] Créer le composant:
+
 ```bash
 pnpm nx g @nx/angular:component landing --project=frontend --standalone
 ```
+
 - [ ] Créer les sections (structure de base, à affiner avec les maquettes):
   - **Hero**: titre accrocheur, sous-titre, CTA vers module fact-checking
   - **Présentation Vera**: valeurs, mission, objectifs
@@ -410,14 +464,18 @@ pnpm nx g @nx/angular:component landing --project=frontend --standalone
 ---
 
 ### ✅ Étape 3.6 - Structure Dashboard Admin (structure)
+
 **Description**:  
 Créer la structure du dashboard admin avec navigation et layout.
 
 **Livrables**:
+
 - [ ] Créer le composant:
+
 ```bash
 pnpm nx g @nx/angular:component admin/dashboard --project=frontend --standalone
 ```
+
 - [ ] Créer la structure de base:
   - **Header**: logo Vera + nom de l'admin + bouton logout
   - **Sidebar** avec menu de navigation:
@@ -427,6 +485,7 @@ pnpm nx g @nx/angular:component admin/dashboard --project=frontend --standalone
     - 📹 Contenus extraits (TikTok/Telegram)
   - **Zone de contenu** principal (router-outlet)
 - [ ] Configurer les routes dans `app.routes.ts`:
+
 ```typescript
 {
   path: 'dashboard',
@@ -441,6 +500,7 @@ pnpm nx g @nx/angular:component admin/dashboard --project=frontend --standalone
   ]
 }
 ```
+
 - [ ] Styliser avec Tailwind (responsive, mobile-first)
 - [ ] Maximiser l'utilisation de `<ng-content>` pour la réutilisabilité
 
@@ -449,10 +509,12 @@ pnpm nx g @nx/angular:component admin/dashboard --project=frontend --standalone
 ---
 
 ### ✅ Étape 3.7 - Intégration des maquettes (Landing + Dashboard)
+
 **Description**:  
 Affiner le design de tous les composants selon les maquettes reçues de l'équipe UX/UI.
 
 **Livrables**:
+
 - [ ] **Recevoir les maquettes** de l'équipe design:
   - Landing Page Vera Web
   - Page Login
@@ -482,10 +544,12 @@ Affiner le design de tous les composants selon les maquettes reçues de l'équip
 ---
 
 ### ✅ Étape 3.8 - Page Statistiques Dashboard
+
 **Description**:  
 Afficher un tableau de bord avec les statistiques globales du projet.
 
 **Livrables**:
+
 - [ ] Créer le composant `StatsComponent`
 - [ ] Créer un service `StatsService`:
   - `getGlobalStats()`: agrégation de toutes les données
@@ -506,10 +570,12 @@ Afficher un tableau de bord avec les statistiques globales du projet.
 ---
 
 ### ✅ Étape 3.9 - Page Gestion des Sondages Instagram
+
 **Description**:  
 Interface pour créer, publier, modifier et visualiser les sondages Instagram avec résultats temps réel.
 
 **Livrables**:
+
 - [ ] Créer le composant `PollsComponent`
 - [ ] Créer un service `InstagramPollsService`:
   - `getPolls()`: liste des sondages
@@ -540,10 +606,12 @@ Interface pour créer, publier, modifier et visualiser les sondages Instagram av
 ---
 
 ### ✅ Étape 3.10 - Page Fact-Checking (Historique + Nouveau)
+
 **Description**:  
 Interface pour utiliser le module de fact-checking Vera et consulter l'historique.
 
 **Livrables**:
+
 - [ ] Créer le composant `FactCheckComponent`
 - [ ] Créer un service `FactCheckService`:
   - `verifyFact(query)`: appel streaming à l'API
@@ -568,10 +636,12 @@ Interface pour utiliser le module de fact-checking Vera et consulter l'historiqu
 ---
 
 ### ✅ Étape 3.11 - Page Contenus Extraits (TikTok/Telegram)
+
 **Description**:  
 Interface pour visualiser et vérifier les contenus extraits par les bots.
 
 **Livrables**:
+
 - [ ] Créer le composant `ContentsComponent`
 - [ ] Créer un service `ContentsService`:
   - `getContents(filters)`: liste avec filtres
@@ -601,10 +671,12 @@ Interface pour visualiser et vérifier les contenus extraits par les bots.
 ---
 
 ### ✅ Étape 3.12 - Accessibilité (WCAG, ARIA, WAI)
+
 **Description**:  
 Rendre l'application accessible à tous les utilisateurs.
 
 **Livrables**:
+
 - [ ] Utiliser des balises sémantiques HTML5 (`<nav>`, `<main>`, `<section>`, etc.)
 - [ ] Ajouter des attributs ARIA:
   - `aria-label` pour les boutons sans texte
@@ -626,10 +698,12 @@ Rendre l'application accessible à tous les utilisateurs.
 ---
 
 ### ✅ Étape 3.13 - Conformité RGPD & CNIL
+
 **Description**:  
 Mettre en place les mécanismes de conformité pour la protection des données.
 
 **Livrables**:
+
 - [ ] Créer une page "Politique de confidentialité"
 - [ ] Créer une page "Mentions légales"
 - [ ] Implémenter un bandeau de consentement cookies:
@@ -648,15 +722,18 @@ Mettre en place les mécanismes de conformité pour la protection des données.
 ## PHASE 4 - Bots d'Extraction & Vérification Automatique
 
 ### 📌 Objectif
+
 Créer des bots pour extraire automatiquement des contenus TikTok et Telegram, et les vérifier avec Vera.
 
 ---
 
 ### ✅ Étape 4.1 - Préparation : Choix de la plateforme secondaire + Comptes
+
 **Description**:  
 Analyser les options, créer les comptes nécessaires et justifier les choix.
 
 **Livrables**:
+
 - [ ] **Analyser** Telegram vs Signal:
   - **Telegram**: ✅ API riche, bots faciles, grande communauté, doc complète
   - **Signal**: ❌ Chiffrement E2E mais API limitée, complexe pour les bots
@@ -675,20 +752,26 @@ Analyser les options, créer les comptes nécessaires et justifier les choix.
 ---
 
 ### ✅ Étape 4.2 - Bot d'extraction TikTok (Backend)
+
 **Description**:  
 Développer un service capable d'extraire vidéos et métadonnées TikTok.
 
 **Livrables**:
+
 - [ ] Créer le module `tiktok-bot`:
+
 ```bash
 pnpm nx g @nestjs/schematics:module tiktok-bot --project=backend
 pnpm nx g @nestjs/schematics:service tiktok-bot --project=backend
 ```
+
 - [ ] Installer les dépendances:
+
 ```bash
 pnpm add tiktok-scraper
 # Ou: pnpm add yt-dlp-wrap (si scraper indisponible)
 ```
+
 - [ ] Implémenter `TikTokBotService`:
   - `extractFromUrl(url)`: extraire vidéo + métadonnées
   - `getMetadata(url)`: auteur, date, likes, commentaires, description, hashtags
@@ -703,19 +786,25 @@ pnpm add tiktok-scraper
 ---
 
 ### ✅ Étape 4.3 - Bot Telegram interactif (Backend)
+
 **Description**:  
 Créer un bot Telegram pour recevoir des messages/liens et vérifier automatiquement avec Vera.
 
 **Livrables**:
+
 - [ ] Créer le module `telegram-bot`:
+
 ```bash
 pnpm nx g @nestjs/schematics:module telegram-bot --project=backend
 pnpm nx g @nestjs/schematics:service telegram-bot --project=backend
 ```
+
 - [ ] Installer les dépendances:
+
 ```bash
 pnpm add telegraf
 ```
+
 - [ ] Implémenter `TelegramBotService`:
   - **Écouter les messages** entrants
   - **Extraire** le texte, les médias (photos, vidéos)
@@ -737,10 +826,12 @@ pnpm add telegraf
 ---
 
 ### ✅ Étape 4.4 - Vérification automatique avec Vera
+
 **Description**:  
 Automatiser complètement le flux d'extraction → vérification → stockage → réponse.
 
 **Livrables**:
+
 - [ ] Améliorer `FactCheckService.autoVerify(contentId)`:
   - Récupérer le contenu depuis la DB
   - Extraire le texte pertinent (description TikTok, message Telegram)
@@ -762,10 +853,12 @@ Automatiser complètement le flux d'extraction → vérification → stockage �
 ---
 
 ### ✅ Étape 4.5 - Tests et validation complète des bots
+
 **Description**:  
 Valider le fonctionnement de bout en bout des deux bots.
 
 **Livrables**:
+
 - [ ] **Tests Bot TikTok**:
   - Extraire 5+ vidéos différentes
   - Vérifier les métadonnées complètes
@@ -793,19 +886,24 @@ Valider le fonctionnement de bout en bout des deux bots.
 ## PHASE 5 - Tests & Déploiement
 
 ### 📌 Objectif
+
 Finaliser le projet avec des tests complets et déployer en production.
 
 ---
 
 ### ✅ Étape 5.1 - Tests End-to-End (E2E)
+
 **Description**:  
 Tester l'application complète de bout en bout.
 
 **Livrables**:
+
 - [ ] Installer Cypress ou Playwright:
+
 ```bash
 pnpm add -D cypress
 ```
+
 - [ ] Créer des scénarios de test:
   - Connexion admin
   - Création d'un sondage
@@ -822,10 +920,12 @@ pnpm add -D cypress
 ---
 
 ### ✅ Étape 5.2 - Tests de performance
+
 **Description**:  
 Vérifier que l'application est performante et optimisée.
 
 **Livrables**:
+
 - [ ] Tester avec Lighthouse (Google Chrome DevTools):
   - Performance
   - Accessibilité
@@ -843,10 +943,12 @@ Vérifier que l'application est performante et optimisée.
 ---
 
 ### ✅ Étape 5.3 - Documentation complète
+
 **Description**:  
 Rédiger une documentation technique et utilisateur complète.
 
 **Livrables**:
+
 - [ ] Mettre à jour le `README.md`:
   - Description du projet
   - Installation
@@ -872,10 +974,12 @@ Rédiger une documentation technique et utilisateur complète.
 ---
 
 ### ✅ Étape 5.4 - Préparation au déploiement
+
 **Description**:  
 Configurer les environnements de production et préparer le déploiement.
 
 **Livrables**:
+
 - [ ] Choisir un hébergeur:
   - **Frontend**: Vercel, Netlify, ou VPS
   - **Backend**: Heroku, Railway, Render, ou VPS
@@ -898,15 +1002,20 @@ Configurer les environnements de production et préparer le déploiement.
 ---
 
 ### ✅ Étape 5.5 - Déploiement Backend
+
 **Description**:  
 Déployer l'API NestJS en production.
 
 **Livrables**:
+
 - [ ] Build de production:
+
 ```bash
 pnpm nx build backend --prod
 ```
+
 - [ ] Créer un `Dockerfile` (si nécessaire):
+
 ```dockerfile
 FROM node:20-alpine
 WORKDIR /app
@@ -914,6 +1023,7 @@ COPY dist/apps/backend .
 RUN npm install --production
 CMD ["node", "main.js"]
 ```
+
 - [ ] Déployer sur l'hébergeur choisi
 - [ ] Configurer les variables d'environnement
 - [ ] Lancer les migrations de base de données
@@ -926,18 +1036,24 @@ CMD ["node", "main.js"]
 ---
 
 ### ✅ Étape 5.6 - Déploiement Frontend
+
 **Description**:  
 Déployer l'application Angular en production.
 
 **Livrables**:
+
 - [ ] Build de production:
+
 ```bash
 pnpm nx build frontend --prod
 ```
+
 - [ ] Tester le build localement:
+
 ```bash
 npx http-server dist/apps/frontend
 ```
+
 - [ ] Déployer sur l'hébergeur choisi (Vercel recommandé)
 - [ ] Configurer les variables d'environnement (URLs de prod)
 - [ ] Vérifier que l'application fonctionne: `https://vera-factcheck.com`
@@ -950,10 +1066,12 @@ npx http-server dist/apps/frontend
 ---
 
 ### ✅ Étape 5.7 - Tests post-déploiement
+
 **Description**:  
 Valider que tout fonctionne correctement en production.
 
 **Livrables**:
+
 - [ ] Tester tous les flux utilisateur en production:
   - Connexion admin
   - Création d'un sondage
@@ -972,10 +1090,12 @@ Valider que tout fonctionne correctement en production.
 ---
 
 ### ✅ Étape 5.8 - Monitoring et maintenance
+
 **Description**:  
 Mettre en place des outils de monitoring pour suivre la santé de l'application.
 
 **Livrables**:
+
 - [ ] Configurer un outil de monitoring:
   - **Backend**: Sentry, LogRocket, New Relic
   - **Frontend**: Google Analytics, Sentry
@@ -996,10 +1116,12 @@ Mettre en place des outils de monitoring pour suivre la santé de l'application.
 ---
 
 ### ✅ Étape 5.9 - Présentation du projet
+
 **Description**:  
 Préparer une présentation pour démontrer le projet.
 
 **Livrables**:
+
 - [ ] Créer une présentation (slides):
   - Contexte et objectifs
   - Architecture technique
@@ -1021,22 +1143,24 @@ Préparer une présentation pour démontrer le projet.
 
 ## 📊 RÉCAPITULATIF DES PHASES
 
-| Phase       | Description                                     | Temps estimé | Priorité   | Quand ?                           |
-| ----------- | ----------------------------------------------- | ------------ | ---------- | --------------------------------- |
+| Phase       | Description                                     | Temps estimé | Priorité    | Quand ?                           |
+| ----------- | ----------------------------------------------- | ------------ | ----------- | --------------------------------- |
 | **Phase 0** | Préparation & Organisation                      | ~5h          | 🔴 Critique | Semaine 1                         |
 | **Phase 1** | Backend Fondations (Auth, DB, CORS)             | ~10h         | 🔴 Critique | Semaine 1                         |
 | **Phase 2** | Backend Avancé (Fact-check, Sondages, Contents) | ~18h         | 🔴 Critique | Semaine 1-2                       |
 | **Phase 3** | Frontend Vera Web (Landing + Dashboard Admin)   | ~50h         | 🟠 Haute    | Semaine 2-3 (après maquettes)     |
 | **Phase 4** | Bots TikTok & Telegram + Vérification auto      | ~18h         | 🟡 Moyenne  | Semaine 3-4                       |
 | **Phase 5** | Tests, Optimisation & Déploiement               | ~18h         | 🟠 Haute    | Semaine 4                         |
-| **TOTAL**   |                                                 | **~119h**    |            | **4 semaines** (30h/sem pour 3+1) |
+| **TOTAL**   |                                                 | **~119h**    |             | **4 semaines** (30h/sem pour 3+1) |
 
 **Répartition optimale** (3 devs):
+
 - **Dev 1** (Backend): Auth, Supabase, FactCheck, TelegramBot, Déploiement (~40h)
 - **Dev 2** (Backend): Sondages Instagram (Backend complet), Contents, TikTokBot (~38h)
 - **Dev 3** (Fullstack): Tout le frontend (Landing + Dashboard + 4 pages), Tests E2E (~41h)
 
 **Ordre chronologique recommandé**:
+
 1. ✅ **Phases 0-1-2 en priorité** (backend complet) → **~33h** → Objectif: backend fini avant réception maquettes
 2. ⏳ **Attente maquettes** (en parallèle: Phase 4 - Bots)
 3. 🎨 **Phase 3** (frontend complet avec les maquettes finales)
@@ -1051,7 +1175,7 @@ Préparer une présentation pour démontrer le projet.
 **Objectif**: Finir tout le backend avant de recevoir les maquettes
 
 1. ✅ **Phase 0** - TERMINÉE
-2. ✅ **Phase 1** - TERMINÉE  
+2. ✅ **Phase 1** - TERMINÉE
 3. 🔄 **Phase 2 - EN COURS**:
    - Étape 2.1: Module Fact-Checking
    - Étape 2.2: Module Sondages Instagram (Backend complet)

@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
 import { Admin, JwtPayload } from './entities/admin.entity';
 import { SupabaseService } from '../supabase/supabase.service';
 
@@ -37,9 +38,7 @@ export class AuthService {
     };
   }
 
-  async login(
-    loginDto: LoginDto
-  ): Promise<{ accessToken: string; admin: Omit<Admin, 'passwordHash'> }> {
+  async login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const admin = await this.validateAdmin(loginDto.email, loginDto.password);
 
     if (!admin) {
@@ -52,15 +51,19 @@ export class AuthService {
       role: admin.role,
     };
 
-    const accessToken = await this.jwtService.signAsync(payload);
+    const access_token = await this.jwtService.signAsync(payload);
 
     // Retourner l'admin sans le hash du mot de passe
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { passwordHash, ...adminData } = admin;
+    const user = {
+      id: admin.id,
+      email: admin.email,
+      fullname: admin.email.split('@')[0], // À améliorer si on a un champ fullname en DB
+      created_at: admin.createdAt.toISOString(),
+    };
 
     return {
-      accessToken,
-      admin: adminData,
+      access_token,
+      user,
     };
   }
 

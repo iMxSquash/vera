@@ -16,6 +16,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { LoginResponseDto, AdminDto } from './dto/login-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('auth')
@@ -25,20 +26,46 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Connexion administrateur' })
-  @ApiResponse({ status: 200, description: 'Connexion réussie' })
-  @ApiResponse({ status: 401, description: 'Identifiants invalides' })
-  async login(@Body() loginDto: LoginDto) {
+  @ApiOperation({
+    summary: 'Connexion administrateur',
+    description:
+      'Authentifie un administrateur avec email et mot de passe. Retourne un token JWT.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Connexion réussie',
+    type: LoginResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Identifiants invalides (email ou mot de passe incorrect)',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Données de requête invalides',
+  })
+  async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
     return this.authService.login(loginDto);
   }
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Récupérer le profil admin' })
-  @ApiResponse({ status: 200, description: 'Profil récupéré' })
-  @ApiResponse({ status: 401, description: 'Non authentifié' })
-  async getProfile(@Request() req) {
+  @ApiBearerAuth('JWT')
+  @ApiOperation({
+    summary: 'Récupérer le profil admin',
+    description:
+      "Récupère les informations du profil de l'administrateur connecté.",
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Profil récupéré avec succès',
+    type: AdminDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Non authentifié ou token expiré. Veuillez vous reconnecter.',
+  })
+  async getProfile(@Request() req): Promise<AdminDto> {
     return req.user;
   }
 }
