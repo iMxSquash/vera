@@ -20,7 +20,6 @@
     "@angular/pwa": "^18.2.21",
     "@angular/router": "~18.2.0",
     "@angular/service-worker": "~18.2.0",
-    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^10.0.2",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^10.0.2",
