@@ -40,8 +40,6 @@ async function bootstrap() {
       'JWT'
     )
     .addTag('auth', 'Authentification')
-    .addTag('fact-check', 'Vérification de faits')
-    .addTag('surveys', 'Sondages')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

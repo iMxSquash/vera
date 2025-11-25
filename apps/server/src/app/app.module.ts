@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from '@vera/api/features/auth';
 import { SupabaseModule } from '@vera/api/shared/data-access';
+import { FactCheckModule } from '@vera/api/features/fact-check';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -9,8 +11,20 @@ import { SupabaseModule } from '@vera/api/shared/data-access';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get('DATABASE_URL'),
+        autoLoadEntities: true,
+        synchronize: true, // Development only
+        ssl: { rejectUnauthorized: false },
+      }),
+    }),
     SupabaseModule,
     AuthModule,
+    FactCheckModule,
   ],
   controllers: [],
   providers: [],

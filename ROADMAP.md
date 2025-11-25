@@ -218,28 +218,22 @@ Créer un module pour communiquer avec l'API Vera et vérifier des informations.
 
 **Livrables**:
 
-- [ ] Créer le module `fact-check`:
+- [x] Créer le module `fact-check`:
 
-```bash
-pnpm nx g @nestjs/schematics:module fact-check --project=server
-pnpm nx g @nestjs/schematics:service fact-check --project=server
-pnpm nx g @nestjs/schematics:controller fact-check --project=server
-```
-
-- [ ] Créer l'entité `FactCheck`:
+- [x] Créer l'entité `FactCheck`:
   - `id`, `user_id`, `query`, `response`, `status`, `created_at`
-- [ ] Implémenter `FactCheckService`:
+- [x] Implémenter `FactCheckService`:
   - `verifyFact(userId, query)`: appel streaming à l'API Vera
   - `autoVerify(contentId)`: vérification automatique depuis un contenu
   - Stocker les requêtes et réponses dans la DB
-- [ ] Créer les DTOs:
+- [x] Créer les DTOs:
   - `CreateFactCheckDto`: `{ userId: string, query: string }`
-- [ ] Implémenter `FactCheckController`:
+- [x] Implémenter `FactCheckController`:
   - `POST /api/fact-check` (protégé)
   - `GET /api/fact-check` (historique, protégé)
   - `GET /api/fact-check/:id` (détail, protégé)
-- [ ] Gérer le streaming de la réponse Vera
-- [ ] Tester avec cURL/Postman
+- [x] Gérer le streaming de la réponse Vera
+- [x] Tester avec cURL/Postman
 
 **Temps estimé**: 5-6h
 
