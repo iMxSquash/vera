@@ -745,41 +745,7 @@ Analyser les options, créer les comptes nécessaires et justifier les choix.
 
 ---
 
-### ✅ Étape 4.2 - Bot d'extraction TikTok (Backend)
-
-**Description**:  
-Développer un service capable d'extraire vidéos et métadonnées TikTok.
-
-**Livrables**:
-
-- [ ] Créer le module `tiktok-bot`:
-
-```bash
-pnpm nx g @nestjs/schematics:module tiktok-bot --project=server
-pnpm nx g @nestjs/schematics:service tiktok-bot --project=server
-```
-
-- [ ] Installer les dépendances:
-
-```bash
-pnpm add tiktok-scraper
-# Ou: pnpm add yt-dlp-wrap (si scraper indisponible)
-```
-
-- [ ] Implémenter `TikTokBotService`:
-  - `extractFromUrl(url)`: extraire vidéo + métadonnées
-  - `getMetadata(url)`: auteur, date, likes, commentaires, description, hashtags
-  - `saveContent(data)`: créer un `Content` dans la DB (via `ContentsService`)
-- [ ] Ajouter un endpoint dans `ContentsController`:
-  - `POST /api/contents/extract-tiktok` (body: `{ url }`)
-- [ ] Gérer les erreurs (vidéo privée, supprimée, URL invalide)
-- [ ] Tester avec plusieurs vidéos TikTok
-
-**Temps estimé**: 5-6h
-
----
-
-### ✅ Étape 4.3 - Bot Telegram interactif (Backend)
+### ✅ Étape 4.2 - Bot Telegram interactif (Backend)
 
 **Description**:  
 Créer un bot Telegram pour recevoir des messages/liens et vérifier automatiquement avec Vera.
@@ -819,7 +785,7 @@ pnpm add telegraf
 
 ---
 
-### ✅ Étape 4.4 - Vérification automatique avec Vera
+### ✅ Étape 4.3 - Vérification automatique avec Vera
 
 **Description**:  
 Automatiser complètement le flux d'extraction → vérification → stockage → réponse.
@@ -846,7 +812,7 @@ Automatiser complètement le flux d'extraction → vérification → stockage �
 
 ---
 
-### ✅ Étape 4.5 - Tests et validation complète des bots
+### ✅ Étape 4.4 - Tests et validation complète des bots
 
 **Description**:  
 Valider le fonctionnement de bout en bout des deux bots.
