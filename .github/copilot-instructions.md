@@ -12,7 +12,7 @@ Vera est une plateforme de fact-checking en 3 phases :
 
 ### Stack Technologique
 
-- **Frontend**: Angular 18 + TypeScript
+- **Frontend**: Angular 18 + TypeScript + Signals API
 - **Backend**: NestJS + TypeScript
 - **Base de données**: PostgreSQL (Supabase)
 - **Styling**: Tailwind CSS v3
@@ -26,41 +26,68 @@ La structure respecte les principes Nx : **apps fines + libs riches par domaines
 ```
 vera/
 ├── apps/
-│   ├── web/          # Application Angular (frontend)
-│   └── api/          # API NestJS (backend)
+│   ├── client/       # Application Angular (frontend)
+│   └── server/       # API NestJS (backend)
 │
 ├── libs/
-│   ├── shared/
-│   │   ├── models/          # DTOs, interfaces, enums partagés (pur TS)
-│   │   │   ├── auth/        # Modèles d'authentification (un fichier par interface)
+│   ├── shared/       # Code partagé Front/Back
+│   │   ├── models/          # DTOs, interfaces, enums (pur TS)
+│   │   │   ├── auth/        # Modèles d'authentification
 │   │   │   ├── fact-check/  # Modèles fact-checking
-│   │   │   └── [domain]/    # Modèles par domaine métier
-│   │   ├── util/            # Validation, parsing, constantes communes
+│   │   │   └── [domain]/    # Modèles par domaine
+│   │   ├── util/            # Validation, parsing, constantes
 │   │   └── types/           # Types TypeScript communs
 │   │
-│   ├── client/              # Libs consommées par apps/web
-│   │   ├── shared/
-│   │   │   ├── ui/          # Composants UI réutilisables (boutons, modals, etc.)
-│   │   │   └── util/        # Helpers front, pipes, directives
-│   │   └── feature-xxx/     # Features Angular (modules, pages, composants containers)
+│   ├── client/              # Libs consommées par apps/client
+│   │   ├── features/        # Features Angular lazy-loaded
+│   │   │   ├── public/      # Landing page (route par défaut, sans auth)
+│   │   │   │   ├── shell/   # PublicShellComponent (layout public avec nav)
+│   │   │   │   ├── pages/   # Pages publiques (LandingComponent, etc.)
+│   │   │   │   └── public.routes.ts
+│   │   │   ├── auth/        # Feature authentification (statique, non-lazy)
+│   │   │   │   ├── services/    # AuthService avec token persistence
+│   │   │   │   ├── components/  # LoginComponent
+│   │   │   │   └── auth.routes.ts
+│   │   │   ├── admin/       # Feature admin (lazy, avec authGuard)
+│   │   │   │   ├── shell/   # AdminShellComponent (layout avec header + logout)
+│   │   │   │   ├── pages/   # Pages admin (DashboardComponent, etc.)
+│   │   │   │   └── admin.routes.ts
+│   │   │   └── [other]/     # Autres features futures
+│   │   │
+│   │   └── shared/
+│   │       ├── ui/              # Composants UI réutilisables
+│   │       ├── util/            # Helpers front, pipes
+│   │       ├── guards/          # authGuard, guestGuard
+│   │       ├── interceptors/    # authInterceptor
+│   │       ├── environments/    # Configuration (centralisée)
+│   │       ├── theme/           # Tailwind custom colors
+│   │       └── [shared libs]/
 │   │
-│   └── api/                 # Libs consommées par apps/api
-│       ├── shared/
-│       │   ├── data-access/ # Repositories, DB access, Prisma/TypeORM
-│       │   └── util/        # Guards génériques, decorators custom
-│       └── feature-xxx/     # Modules Nest pour chaque domaine
+│   └── api/                 # Libs consommées par apps/server
+│       ├── features/        # Modules NestJS par domaine
+│       │   ├── auth/        # Feature auth (login, JWT, Passport)
+│       │   ├── fact-check/  # Feature fact-checking
+│       │   └── [domain]/    # Autres domaines
+│       │
+│       └── shared/
+│           ├── data-access/ # Repositories, DB access
+│           └── util/        # Guards, decorators, helpers
 │
 └── context/                 # Documentation projet
 ```
 
 **Principes essentiels :**
 
+- ✅ **Routes**: Public (lazy) → Auth (statique) → Admin (lazy + guard)
+- ✅ **Shells**: PublicShellComponent, AuthComponent (implicite), AdminShellComponent
+- ✅ **Session**: Persistée en localStorage + vérifiée au démarrage via `app.component` constructor
+- ✅ **Sécurité**: guestGuard empêche accès login si connecté, authGuard protège admin
+- ✅ **Code splitting**: Toutes les features en lazy loading sauf auth
+- ✅ **Styling**: Tailwind CSS uniformisé, pas de fichiers CSS (sauf configs)
+- ✅ **Composants**: Standalone, signals API, injection moderne avec `inject()`
 - ✅ Les apps ne s'importent JAMAIS entre elles
-- ✅ Tous les domaines partagent via `libs/`
-- ✅ Petits libs cohésifs par domaine plutôt qu'un énorme `libs/shared`
-- ✅ Organisation par **domaine métier** (bounded contexts) plutôt que par couche technique
-- ✅ Libs partagées Front/Back en pur TypeScript dans `libs/shared/`
-- ✅ Chaque app reste "fine" : bootstrap, config root, imports depuis libs
+- ✅ Petits libs cohésifs par domaine plutôt qu'énormes libs génériques
+
 
 ### Organisation de `libs/shared/models` (IMPORTANT)
 
@@ -836,7 +863,7 @@ describe('FeatureService', () => {
 ```bash
 # Développement
 pnpm nx serve client          # Lance le client (port 4200)
-pnpm nx serve:dev server       # Lance le server avec nodemon (port 3000)
+pnpm nx serve:dev server      # Lance le server avec nodemon (port 3000)
 
 # Build
 pnpm nx build client --prod
@@ -845,7 +872,7 @@ pnpm nx build server
 # Tests
 pnpm nx test client
 pnpm nx test server
-pnpm nx test --all              # Tous les tests
+pnpm nx test --all            # Tous les tests
 
 # Lint
 pnpm nx lint client
@@ -883,33 +910,36 @@ refactor(client): extract auth logic to service
 
 ### Phase 1 - Fondations ✅ (TERMINÉE)
 
-- ✅ Setup environnement (Angular, NestJS, Nx, Tailwind)
-- ✅ Système d'authentification JWT
-- ✅ Structure de base server (API REST)
+- ✅ Setup environnement (Angular 18, NestJS, Nx, Tailwind)
+- ✅ Système d'authentification JWT avec persistence localStorage
+- ✅ Structure Nx monorepo feature-based
+- ✅ Guards (authGuard, guestGuard) et interceptor auth
+- ✅ Landing page publique avec shell
+- ✅ Dashboard admin avec shell et logout
 - ✅ Connexion Supabase PostgreSQL
-- ✅ CORS configuré
 - ✅ Documentation API avec Swagger
 
-### Phase 2 - Backend Avancé (EN COURS)
+### Phase 2 - Routes et Features
+
+- ✅ Public feature (lazy): Landing page
+- ✅ Auth feature (statique): Login + persistance session
+- ✅ Admin feature (lazy + guard): Dashboard
+- ✅ Session restauration au démarrage de l'app
+- ⏳ Pages admin additionnelles (Stats, Sondages, Fact-check, Contenus)
+
+### Phase 3 - Backend Avancé
 
 - ⏳ Module Fact-Checking (Intégration API Vera)
 - ⏳ Module Sondages Instagram (Backend complet)
 - ⏳ Module Contenus TikTok/Telegram
-- ✅ Documentation API avec Swagger
 - ⏳ Tests unitaires Backend
-
-### Phase 3 - Frontend Vera Web
-
-- ⏳ Landing Page Vera Web (après réception maquettes)
-- ⏳ Dashboard Admin (structure)
-- ⏳ Intégration des maquettes
-- ⏳ Pages Admin (Stats, Sondages, Fact-check, Contenus)
 
 ### Phase 4 - Bots d'Extraction & Vérification
 
-- Bot d'extraction TikTok
-- Bot Telegram interactif
-- Vérification automatique avec Vera
+- ⏳ Bot d'extraction TikTok
+- ⏳ Bot Telegram interactif
+- ⏳ Vérification automatique avec Vera
+
 
 ### Phase 5 - Tests & Déploiement
 
