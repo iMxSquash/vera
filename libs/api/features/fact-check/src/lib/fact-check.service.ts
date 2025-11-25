@@ -39,7 +39,7 @@ export class FactCheckService {
     try {
       // 2. Call Vera API
       const response = await firstValueFrom(
-        this.httpService.post(
+        this.httpService.post<Readable>(
           this.veraApiUrl,
           { userId, query },
           {
