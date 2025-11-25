@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@vera/api/features/auth';
-import { SupabaseModule } from '@vera/api/shared/data-access';
+import { FactCheckModule } from '@vera/api/features/fact-check';
+import { SupabaseModule, TypeOrmConfigModule } from '@vera/api/shared/data-access';
 
 @Module({
   imports: [
@@ -9,8 +10,10 @@ import { SupabaseModule } from '@vera/api/shared/data-access';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    TypeOrmConfigModule,
     SupabaseModule,
     AuthModule,
+    FactCheckModule,
   ],
   controllers: [],
   providers: [],
