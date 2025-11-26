@@ -211,7 +211,7 @@ Développer les modules métier (fact-checking, sondages Instagram, contenus Tik
 
 ---
 
-### ✅ Étape 2.1 - Module Fact-Checking (Intégration API Vera)
+### ~~✅ Étape 2.1 - Module Fact-Checking (Intégration API Vera)~~
 
 **Description**:  
 Créer un module pour communiquer avec l'API Vera et vérifier des informations.
