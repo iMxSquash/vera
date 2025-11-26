@@ -283,40 +283,7 @@ pnpm add axios
 
 ---
 
-### ✅ Étape 2.3 - Module Contenus TikTok/Telegram (Backend)
-
-**Description**:  
-Gérer les contenus extraits de TikTok/Telegram pour le fact-checking.
-
-**Livrables**:
-
-- [ ] Créer le module `contents`:
-
-```bash
-pnpm nx g @nestjs/schematics:resource contents --project=server
-```
-
-- [ ] Créer l'entité `Content`:
-  - `id`, `platform` (tiktok/telegram), `content_url`, `metadata`, `extracted_at`, `verified`, `verification_result`, `fact_check_id`
-- [ ] Implémenter `ContentsService`:
-  - CRUD des contenus
-  - `extractFromUrl(url, platform)`: extraire métadonnées
-  - `markAsVerified(id, result)`: marquer comme vérifié
-  - Stocker les métadonnées (auteur, date, likes, commentaires, texte, hashtags)
-- [ ] Créer les DTOs:
-  - `CreateContentDto`, `UpdateContentDto`, `ContentMetadataDto`
-- [ ] Implémenter `ContentsController`:
-  - `POST /api/contents` (ajouter un contenu, protégé)
-  - `GET /api/contents` (liste avec filtres, protégé)
-  - `GET /api/contents/:id` (détail, protégé)
-  - `POST /api/contents/:id/verify` (envoyer à Vera, protégé)
-- [ ] Tester les endpoints
-
-**Temps estimé**: 3-4h
-
----
-
-### ✅ Étape 2.4 - Documentation API avec Swagger
+### ✅ Étape 2.3 - Documentation API avec Swagger
 
 **Description**:  
 Générer une documentation interactive de l'API.
