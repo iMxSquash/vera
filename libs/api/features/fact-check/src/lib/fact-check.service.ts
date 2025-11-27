@@ -29,6 +29,14 @@ export class FactCheckService {
   }
 
   async verifyFactExternal(userId: string, query: string): Promise<{ result: string }> {
+    // 1. Create pending record
+    const factCheck = this.factCheckRepository.create({
+      userId,
+      query,
+      status: FactCheckStatus.PENDING,
+    });
+    await this.factCheckRepository.save(factCheck);
+
     try {
       this.logger.log(`Verifying external fact: ${query}`);
       
@@ -50,12 +58,26 @@ export class FactCheckService {
       this.logger.log(`Response data type: ${typeof response.data}`);
       this.logger.log(`Response data: ${JSON.stringify(response.data)}`);
 
+      let result: string;
       if (typeof response.data === 'string') {
-        return { result: response.data };
+        result = response.data;
+      } else {
+        result = response.data?.result || 'No data received';
       }
-      return response.data || { result: 'No data received' };
+
+      // 2. Update record on completion
+      factCheck.response = result;
+      factCheck.status = FactCheckStatus.COMPLETED;
+      await this.factCheckRepository.save(factCheck);
+      this.logger.log(`Fact check ${factCheck.id} completed`);
+
+      return { result };
 
     } catch (error) {
+      // 3. Update record on failure
+      factCheck.status = FactCheckStatus.FAILED;
+      await this.factCheckRepository.save(factCheck);
+      this.logger.error(`Fact check ${factCheck.id} failed`, error);
       this.logger.error('Error calling external Vera API', error);
       throw new Error(`Failed to verify fact: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }

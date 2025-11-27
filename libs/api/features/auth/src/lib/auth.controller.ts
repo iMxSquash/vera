@@ -1,4 +1,5 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { LoginRequest, LoginResponse, Admin } from '@vera/shared/models';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -24,8 +25,14 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get admin profile' })
   @ApiResponse({ status: 200, description: 'Admin profile', type: Admin })
-  async getProfile(): Promise<Admin> {
-    // In a real app, extract user ID from JWT
-    return this.authService.getProfile('1');
+  async getProfile(@Req() req: Request): Promise<Admin> {
+    const user = req.user as Admin;
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   }
 }
