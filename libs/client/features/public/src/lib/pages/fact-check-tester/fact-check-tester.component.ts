@@ -21,6 +21,7 @@ export class FactCheckTesterComponent {
   isLoading = signal<boolean>(false);
   response = signal<string>('');
   error = signal<string | null>(null);
+  extractedLinks = signal<string[]>([]);
 
   canSubmit = computed(() => this.query().trim().length > 0 && !this.isLoading());
 
@@ -44,7 +45,9 @@ export class FactCheckTesterComponent {
 
       try {
         const json = JSON.parse(response || '{}');
-        this.response.set(json.result || response);
+        const resultText = json.result || response;
+        this.response.set(resultText);
+        this.extractedLinks.set(this.extractLinks(resultText));
       } catch (e) {
         this.response.set(e instanceof Error ? e.message : 'Erreur lors de la conversion de la réponse');
       }
@@ -63,6 +66,25 @@ export class FactCheckTesterComponent {
     this.query.set('');
     this.response.set('');
     this.error.set(null);
+    this.extractedLinks.set([]);
+  }
+
+  // Méthode pour extraire les liens d'un texte
+  private extractLinks(text: string): string[] {
+    if (!text) return [];
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const links: string[] = [];
+    let match;
+
+    while ((match = urlRegex.exec(text)) !== null) {
+      const url = match[0].replace(/[.,;!?()]+$/, '');
+      if (!links.includes(url)) {
+        links.push(url);
+      }
+    }
+
+    return links;
   }
 
   // Méthode pour convertir les URLs en liens HTML cliquables
@@ -79,5 +101,33 @@ export class FactCheckTesterComponent {
 
       return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${cleanUrl}</a>${punctuation}`;
     });
+  }
+
+  // Méthode pour obtenir l'URL du favicon d'un domaine
+  getFaviconUrl(url: string): string {
+    try {
+      const urlObj = new URL(url);
+      return `${urlObj.protocol}//${urlObj.hostname}/favicon.ico`;
+    } catch {
+      return '';
+    }
+  }
+
+  // Méthode pour extraire le domaine d'une URL
+  getDomain(url: string): string {
+    try {
+      const urlObj = new URL(url);
+      return urlObj.hostname;
+    } catch {
+      return url;
+    }
+  }
+
+  // Méthode pour gérer l'erreur de chargement d'une image
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.style.display = 'none';
+    }
   }
 }

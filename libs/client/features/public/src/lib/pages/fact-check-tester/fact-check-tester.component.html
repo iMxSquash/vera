@@ -58,12 +58,37 @@
         <div class="bg-white rounded-xl shadow-lg p-6">
             <h2 class="text-lg font-bold text-slate-900 mb-4">Résultat de la vérification</h2>
             <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                <p class="text-slate-700 whitespace-pre-wrap leading-relaxed" [innerHTML]="formatResponseWithLinks(response())"></p>
+                <p class="text-slate-700 whitespace-pre-wrap leading-relaxed"
+                    [innerHTML]="formatResponseWithLinks(response())"></p>
             </div>
         </div>
         }
 
-        <!-- Info Section -->
+        <!-- Links Preview -->
+        @if (extractedLinks().length > 0) {
+        <div class="bg-white rounded-xl shadow-lg p-6 mt-8">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">Liens trouvés</h2>
+            <div class="space-y-3">
+                @for (link of extractedLinks(); track link) {
+                <div class="border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors">
+                    <div class="flex items-start gap-3">
+                        <img [src]="getFaviconUrl(link)" [alt]="getDomain(link) + ' favicon'"
+                            class="w-6 h-6 flex-shrink-0 rounded" (error)="onImageError($event)" />
+                        <div class="flex-1 min-w-0">
+                            <a [href]="link" target="_blank" rel="noopener noreferrer"
+                                class="text-blue-600 hover:text-blue-800 font-medium break-all block">
+                                {{ link }}
+                            </a>
+                            <div class="mt-1 text-sm text-slate-600">
+                                {{ getDomain(link) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        } <!-- Info Section -->
         <div class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
             <h3 class="font-semibold text-blue-900 mb-2">ℹ️ À propos</h3>
             <p class="text-sm text-blue-800">
