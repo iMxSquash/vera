@@ -5,6 +5,7 @@ import { SupabaseModule } from '@vera/api/shared/data-access';
 import { FactCheckModule } from '@vera/api/features/fact-check';
 import { FeaturesInstagramPollsModule } from '@vera/api/features/instagram-polls';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SurveyModule } from '@vera/api/features/survey';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     AuthModule,
     FactCheckModule,
     FeaturesInstagramPollsModule,
+    SurveyModule,
   ],
   controllers: [],
   providers: [],

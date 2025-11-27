@@ -30,6 +30,9 @@
       "@vera/api/features/instagram-polls": [
         "libs/api/features/instagram-polls/src/index.ts"
       ],
+      "@vera/api/features/survey" : [ 
+        "libs/api/features/survey/src/index.ts"
+      ],
       "@vera/api/shared/data-access": [
         "libs/api/shared/data-access/src/index.ts"
       ],
