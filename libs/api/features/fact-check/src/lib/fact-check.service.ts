@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+// Trigger rebuild
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
@@ -24,6 +25,39 @@ export class FactCheckService {
     
     if (!this.veraApiKey) {
       this.logger.warn('VERA_API_KEY is not set');
+    }
+  }
+
+  async verifyFactExternal(userId: string, query: string): Promise<{ result: string }> {
+    try {
+      this.logger.log(`Verifying external fact: ${query}`);
+      
+      const response = await firstValueFrom(
+        this.httpService.post<{ result: string }>(
+          this.veraApiUrl,
+          { userId, query },
+          {
+            headers: {
+              'X-API-Key': this.veraApiKey,
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+      );
+
+      this.logger.log(`External fact verification completed for userId: ${userId}`);
+      this.logger.log(`Response headers: ${JSON.stringify(response.headers)}`);
+      this.logger.log(`Response data type: ${typeof response.data}`);
+      this.logger.log(`Response data: ${JSON.stringify(response.data)}`);
+
+      if (typeof response.data === 'string') {
+        return { result: response.data };
+      }
+      return response.data || { result: 'No data received' };
+
+    } catch (error) {
+      this.logger.error('Error calling external Vera API', error);
+      throw new Error(`Failed to verify fact: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

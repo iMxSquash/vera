@@ -27,8 +27,7 @@
         "serve": {
             "executor": "@nx/js:node",
             "options": {
-                "buildTarget": "server:build",
-                "runInBand": true
+                "buildTarget": "server:build"
             },
             "configurations": {
                 "development": {

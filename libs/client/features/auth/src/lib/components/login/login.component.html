@@ -16,9 +16,11 @@
                 class="px-3 py-2 bg-brand-2 text-white rounded-md font-semibold cursor-pointer transition hover:bg-brand-1 disabled:opacity-60 disabled:cursor-not-allowed">
                 {{ isLoading() ? 'Connexion en cours...' : 'Se connecter' }}
             </button>
-            <div *ngIf="error() as error" class="px-3 py-2 bg-alert-3 text-alert-1 rounded-md text-sm">
+            @if (error(); as error) {
+            <div class="px-3 py-2 bg-alert-3 text-alert-1 rounded-md text-sm">
                 {{ error }}
             </div>
+            }
         </form>
     </div>
 </div>

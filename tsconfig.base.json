@@ -18,50 +18,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@vera/shared/models": [
-        "libs/shared/models/src/index.ts"
-      ],
-      "@vera/shared/util": [
-        "libs/shared/util/src/index.ts"
-      ],
-      "@vera/shared/types": [
-        "libs/shared/types/src/index.ts"
-      ],
-      "@vera/client/shared/ui": [
-        "libs/client/shared/ui/src/index.ts"
-      ],
-      "@vera/client/shared/util": [
-        "libs/client/shared/util/src/index.ts"
-      ],
-      "@vera/client/shared/guards": [
-        "libs/client/shared/guards/src/index.ts"
-      ],
-      "@vera/client/shared/interceptors": [
-        "libs/client/shared/interceptors/src/index.ts"
-      ],
-      "@vera/client/shared/environments": [
-        "libs/client/shared/environments/src/index.ts"
-      ],
-      "@vera/client/features/auth": [
-        "libs/client/features/auth/src/index.ts"
-      ],
-      "@vera/client/features/admin": [
-        "libs/client/features/admin/src/index.ts"
-      ],
-      "@vera/client/features/public": [
-        "libs/client/features/public/src/index.ts"
-      ],
-      "@vera/client/feature-auth": [
-        "libs/client/features/auth/src/index.ts"
-      ],
-      "@vera/client/feature-admin": [
-        "libs/client/features/admin/src/index.ts"
-      ],
-      "@vera/api/shared/data-access": [
-        "libs/api/shared/data-access/src/index.ts"
-      ],
-      "@vera/api/shared/util": [
-        "libs/api/shared/util/src/index.ts"
+      "@env": [
+        "libs/client/shared/environments/src/lib/environment.ts"
       ],
       "@vera/api/features/auth": [
         "libs/api/features/auth/src/index.ts"
@@ -69,8 +27,53 @@
       "@vera/api/features/fact-check": [
         "libs/api/features/fact-check/src/index.ts"
       ],
-      "@env": [
-        "libs/client/shared/environments/src/lib/environment.ts"
+      "@vera/api/features/instagram-polls": [
+        "libs/api/features/instagram-polls/src/index.ts"
+      ],
+      "@vera/api/shared/data-access": [
+        "libs/api/shared/data-access/src/index.ts"
+      ],
+      "@vera/api/shared/util": [
+        "libs/api/shared/util/src/index.ts"
+      ],
+      "@vera/client/feature-admin": [
+        "libs/client/features/admin/src/index.ts"
+      ],
+      "@vera/client/feature-auth": [
+        "libs/client/features/auth/src/index.ts"
+      ],
+      "@vera/client/features/admin": [
+        "libs/client/features/admin/src/index.ts"
+      ],
+      "@vera/client/features/auth": [
+        "libs/client/features/auth/src/index.ts"
+      ],
+      "@vera/client/features/public": [
+        "libs/client/features/public/src/index.ts"
+      ],
+      "@vera/client/shared/environments": [
+        "libs/client/shared/environments/src/index.ts"
+      ],
+      "@vera/client/shared/guards": [
+        "libs/client/shared/guards/src/index.ts"
+      ],
+      "@vera/client/shared/interceptors": [
+        "libs/client/shared/interceptors/src/index.ts"
+      ],
+      "@vera/client/shared/ui": [
+        "libs/client/shared/ui/src/index.ts"
+      ],
+      "@vera/client/shared/util": [
+        "libs/client/shared/util/src/index.ts"
+      ],
+      "@vera/shared/models": [
+        "libs/shared/models/src/index.ts"
+      ],
+      "@vera/shared/types": [
+        "libs/shared/types/src/index.ts"
+      ],
+      "@vera/shared/util": [
+        "libs/shared/util/src/index.ts"
       ]
     }
   },
