@@ -6,21 +6,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  role: string;
-}
-
-export interface Admin {
-  id: string;
-  email: string;
-  passwordHash: string;
-  role: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 @Entity('admins')
 export class AdminEntity {
   @PrimaryGeneratedColumn('uuid')

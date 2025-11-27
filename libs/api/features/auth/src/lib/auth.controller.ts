@@ -26,13 +26,13 @@ export class AuthController {
   @ApiOperation({ summary: 'Get admin profile' })
   @ApiResponse({ status: 200, description: 'Admin profile', type: Admin })
   async getProfile(@Req() req: Request): Promise<Admin> {
-    const user = req.user as any;
+    const user = req.user as Admin;
     return {
-      id: user.userId,
+      id: user.id,
       email: user.email,
       role: user.role,
-      createdAt: new Date(), // Placeholder, could be stored in DB later
-      updatedAt: new Date(),
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
   }
 }
