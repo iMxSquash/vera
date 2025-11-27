@@ -2,7 +2,7 @@
     "name": "api-feature-auth",
     "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
     "projectType": "library",
-    "sourceRoot": "libs/api/feature-auth/src",
+    "sourceRoot": "libs/api/features/auth/src",
     "prefix": "api",
     "tags": [
         "type:feature",
@@ -16,7 +16,7 @@
             ],
             "options": {
                 "lintFilePatterns": [
-                    "libs/api/feature-auth/**/*.ts"
+                    "libs/api/features/auth/**/*.ts"
                 ]
             }
         },
@@ -26,7 +26,7 @@
                 "{workspaceRoot}/coverage/{projectRoot}"
             ],
             "options": {
-                "jestConfig": "libs/api/feature-auth/jest.config.ts",
+                "jestConfig": "libs/api/features/auth/jest.config.ts",
                 "passWithNoTests": true
             }
         }
