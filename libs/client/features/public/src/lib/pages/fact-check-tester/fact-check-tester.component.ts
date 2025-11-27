@@ -2,6 +2,7 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '@env';
 
 @Component({
@@ -35,19 +36,17 @@ export class FactCheckTesterComponent {
         userId: this.userId(),
         query: this.query(),
       };
-
+      
       // Appel au backend local (qui fera un appel à l'API Vera)
-      // Appel au backend local (qui fera un appel à l'API Vera)
-      const response = await this.http
-        .post(`${this.apiUrl}/fact-check/verify-external`, payload, { responseType: 'text' })
-        .toPromise();
+      const response = await firstValueFrom(
+        this.http.post(`${this.apiUrl}/fact-check/verify-external`, payload, { responseType: 'text' })
+      );
 
       try {
         const json = JSON.parse(response || '{}');
         this.response.set(json.result || response);
       } catch (e) {
-        // Si ce n'est pas du JSON, on affiche la réponse brute
-        this.response.set(response || '');
+        this.response.set(e instanceof Error ? e.message : 'Erreur lors de la conversion de la réponse');
       }
     } catch (err: unknown) {
       const error = err as { error?: { message?: string }; message?: string };
@@ -64,5 +63,21 @@ export class FactCheckTesterComponent {
     this.query.set('');
     this.response.set('');
     this.error.set(null);
+  }
+
+  // Méthode pour convertir les URLs en liens HTML cliquables
+  formatResponseWithLinks(text: string): string {
+    if (!text) return '';
+
+    // Expression régulière pour détecter les URLs (http/https)
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    // Remplacer les URLs par des liens HTML
+    return text.replace(urlRegex, (url) => {
+      const cleanUrl = url.replace(/[.,;!?()]+$/, '');
+      const punctuation = url.slice(cleanUrl.length);
+
+      return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">${cleanUrl}</a>${punctuation}`;
+    });
   }
 }
