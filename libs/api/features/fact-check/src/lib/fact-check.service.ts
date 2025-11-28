@@ -15,6 +15,7 @@ export class FactCheckService {
   private readonly veraApiUrl: string;
   private readonly veraApiKey: string;
   private readonly geminiApiKey: string;
+  private readonly perplexityApiKey: string;
 
   constructor(
     @InjectRepository(ImageEntity)
@@ -26,12 +27,16 @@ export class FactCheckService {
     this.veraApiUrl = this.configService.get<string>('VERA_API_URL', 'https://api.vera.example/api/v1/chat');
     this.veraApiKey = this.configService.get<string>('VERA_API_KEY', '');
     this.geminiApiKey = this.configService.get<string>('GEMINI_API_KEY', '');
+    this.perplexityApiKey = this.configService.get<string>('PERPLEXITY_API_KEY', '');
     
     if (!this.veraApiKey) {
       this.logger.warn('VERA_API_KEY is not set');
     }
     if (!this.geminiApiKey) {
       this.logger.warn('GEMINI_API_KEY is not set');
+    }
+    if (!this.perplexityApiKey) {
+      this.logger.warn('PERPLEXITY_API_KEY is not set');
     }
   }
 
@@ -260,6 +265,47 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
       this.logger.error('Error analyzing image with Gemini:', error);
       // Fallback en cas d'erreur
       return `Erreur lors de l'analyse de l'image (${imageUrl}). Description temporaire: Contenu visuel nécessitant vérification factuelle.`;
+    }
+  }
+
+  async analyzeUrlWithPerplexity(url: string): Promise<string> {
+    try {
+      this.logger.log(`Analyzing URL with Perplexity. URL: ${url}`);
+
+      const requestBody = {
+        model: "sonar",
+        messages: [
+          {
+            role: "user",
+            content: `Analyse le contenu de cette page web et fournis un résumé concis des informations principales, en te concentrant sur les faits vérifiables: ${url}`
+          }
+        ],
+        max_tokens: 300,
+        temperature: 0.1
+      };
+
+      const response = await firstValueFrom(
+        this.httpService.post(
+          'https://api.perplexity.ai/chat/completions',
+          requestBody,
+          {
+            headers: {
+              'Authorization': `Bearer ${this.perplexityApiKey}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+      );
+
+      this.logger.log(`Perplexity response received`);
+
+      const analysis = response.data?.choices?.[0]?.message?.content || "Analyse non disponible";
+      return analysis;
+
+    } catch (error) {
+      this.logger.error('Error analyzing URL with Perplexity:', error);
+      // Fallback en cas d'erreur
+      return `Erreur lors de l'analyse de l'URL (${url}). Contenu nécessitant vérification factuelle.`;
     }
   }
 

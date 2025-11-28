@@ -66,14 +66,45 @@ QUESTION À VÉRIFIER: ${description} ${body.query}`;
 QUESTION À VÉRIFIER: ${description}`;
       }
     } else {
-      // Si pas d'image, ajouter quand même l'instruction pour le texte seul
-      factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+      // Si pas d'image, vérifier s'il y a des URLs dans le texte
+      const urls = this.extractUrlsFromText(body.query);
+      
+      if (urls.length > 0) {
+        // Analyser la première URL trouvée avec Perplexity
+        const urlAnalysis = await this.factCheckService.analyzeUrlWithPerplexity(urls[0]);
+        
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+
+URL ANALYSIS: ${urlAnalysis}
+
+ORIGINAL QUERY: ${body.query}`;
+      } else {
+        // Si pas d'image et pas d'URL, ajouter quand même l'instruction pour le texte seul
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
 
 QUESTION À VÉRIFIER: ${body.query}`;
+      }
     }
 
     // Vérifier le fait avec Vera
     return this.factCheckService.verifyFactExternal(body.userId, factToCheck);
+  }
+
+  private extractUrlsFromText(text: string): string[] {
+    if (!text) return [];
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urls: string[] = [];
+    let match;
+
+    while ((match = urlRegex.exec(text)) !== null) {
+      const url = match[0].replace(/[.,;!?()]+$/, ''); // Supprimer la ponctuation à la fin
+      if (!urls.includes(url)) {
+        urls.push(url);
+      }
+    }
+
+    return urls;
   }
 }
 
