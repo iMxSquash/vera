@@ -5,9 +5,12 @@ import {
   Res,
   UseGuards,
   HttpCode,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { FactCheckService } from './fact-check.service';
 import { VerifyExternalFactDto } from './dto/verify-external-fact.dto';
 import { JwtAuthGuard } from '@vera/api/features/auth';
@@ -44,6 +47,35 @@ export class FactCheckController {
     });
 
     stream.pipe(res);
+  }
+
+  @Post('verify-with-image')
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Verify fact with optional image analysis' })
+  @ApiResponse({ status: 200, description: 'Verification completed' })
+  @ApiResponse({ status: 400, description: 'Invalid request' })
+  async verifyWithImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: { userId: string; query: string }
+  ) {
+    let factToCheck = body.query;
+
+    // Si une image est fournie, l'analyser avec Gemini
+    if (file) {
+      const { description } = await this.factCheckService.uploadAndAnalyzeImage(file);
+      
+      if (body.query.trim()) {
+        // Si on a du texte et une image, les combiner
+        factToCheck = `Image analysis: ${description}\n\nUser query: ${body.query}`;
+      } else {
+        // Si seule l'image est présente, utiliser seulement l'analyse d'image
+        factToCheck = `Image analysis: ${description}`;
+      }
+    }
+
+    // Vérifier le fait avec Vera
+    return this.factCheckService.verifyFactExternal(body.userId, factToCheck);
   }
 }
 

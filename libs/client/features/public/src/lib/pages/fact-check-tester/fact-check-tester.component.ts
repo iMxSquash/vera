@@ -31,8 +31,11 @@ export class FactCheckTesterComponent implements OnInit {
   error = signal<string | null>(null);
   extractedLinks = signal<string[]>([]);
   factChecksHistory = signal<FactCheckRecord[]>([]);
+  selectedImage = signal<File | null>(null);
+  imagePreview = signal<string>('');
+  isDragOver = signal<boolean>(false);
 
-  canSubmit = computed(() => this.query().trim().length > 0 && !this.isLoading());
+  canSubmit = computed(() => (this.query().trim().length > 0 || this.selectedImage() !== null) && !this.isLoading());
 
   ngOnInit(): void {
     this.loadFactChecksFromStorage();
@@ -46,23 +49,27 @@ export class FactCheckTesterComponent implements OnInit {
     this.error.set(null);
 
     try {
-      const payload = {
-        userId: this.userId(),
-        query: this.query(),
-      };
+      const formData = new FormData();
+      formData.append('userId', this.userId());
+      formData.append('query', this.query());
       
-      // Appel au backend local (qui fera un appel à l'API Vera)
+      // Si une image est sélectionnée, l'ajouter aux données
+      const selectedImage = this.selectedImage();
+      if (selectedImage) {
+        formData.append('image', selectedImage);
+      }
+      
+      // Appel au backend qui gère tout (upload image + analyse Gemini + vérification Vera)
       const response = await firstValueFrom(
-        this.http.post(`${this.apiUrl}/fact-check/verify-external`, payload, { responseType: 'text' })
+        this.http.post(`${this.apiUrl}/fact-check/verify-with-image`, formData)
       );
 
       let resultText: string;
-      try {
-        const json = JSON.parse(response || '{}');
-        resultText = json.result || response;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (_) {
-        resultText = response || 'Réponse reçue';
+      if (typeof response === 'string') {
+        resultText = response;
+      } else {
+        const responseObj = response as { result?: string };
+        resultText = responseObj?.result || 'Réponse reçue';
       }
 
       this.response.set(resultText);
@@ -87,12 +94,64 @@ export class FactCheckTesterComponent implements OnInit {
     this.response.set('');
     this.error.set(null);
     this.extractedLinks.set([]);
+    this.removeImage();
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.selectedImage.set(file);
+      this.createImagePreview(file);
+    }
+  }
+
+  private createImagePreview(file: File): void {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.imagePreview.set(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeImage(): void {
+    this.selectedImage.set(null);
+    this.imagePreview.set('');
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver.set(true);
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver.set(false);
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver.set(false);
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        this.selectedImage.set(file);
+        this.createImagePreview(file);
+      } else {
+        this.error.set('Veuillez sélectionner un fichier image valide.');
+      }
+    }
   }
 
   private saveFactCheckToStorage(response: string): void {
     const factCheck: FactCheckRecord = {
       id: Date.now().toString(),
-      query: this.query(),
+      query: this.query() || (this.selectedImage() ? `[Image: ${this.selectedImage()?.name}]` : ''),
       response,
       timestamp: Date.now(),
     };
