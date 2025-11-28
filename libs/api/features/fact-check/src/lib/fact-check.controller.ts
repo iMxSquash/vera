@@ -15,6 +15,15 @@ import { FactCheckService } from './fact-check.service';
 import { VerifyExternalFactDto } from './dto/verify-external-fact.dto';
 import { JwtAuthGuard } from '@vera/api/features/auth';
 
+interface FactCheckResult {
+  id: string;
+  userId: string;
+  query: string;
+  response?: string;
+  status: string;
+  createdAt: Date;
+}
+
 @ApiTags('Fact Check')
 @Controller('fact-check')
 export class FactCheckController {
@@ -54,7 +63,7 @@ export class FactCheckController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get fact check history' })
   @ApiResponse({ status: 200, description: 'List of fact checks' })
-  async findAll() {
+  async findAll(): Promise<FactCheckResult[]> {
     return this.factCheckService.findAll();
   }
 
@@ -64,7 +73,7 @@ export class FactCheckController {
   @ApiOperation({ summary: 'Get fact check details' })
   @ApiResponse({ status: 200, description: 'Fact check details' })
   @ApiResponse({ status: 404, description: 'Fact check not found' })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<FactCheckResult | null> {
     const factCheck = await this.factCheckService.findOne(id);
     if (!factCheck) {
       throw new NotFoundException(`Fact check with ID ${id} not found`);

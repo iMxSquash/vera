@@ -1,9 +1,16 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@env';
+
+interface FactCheckRecord {
+  id: string;
+  query: string;
+  response: string;
+  timestamp: number;
+}
 
 @Component({
   selector: 'app-fact-check-tester',
@@ -12,9 +19,10 @@ import { environment } from '@env';
   templateUrl: './fact-check-tester.component.html',
   styleUrl: './fact-check-tester.component.css',
 })
-export class FactCheckTesterComponent {
+export class FactCheckTesterComponent implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
+  private readonly STORAGE_KEY = 'vera_fact_checks';
 
   query = signal<string>('');
   userId = signal<string>('test-user-' + Math.random().toString(36).substr(2, 9));
@@ -22,8 +30,13 @@ export class FactCheckTesterComponent {
   response = signal<string>('');
   error = signal<string | null>(null);
   extractedLinks = signal<string[]>([]);
+  factChecksHistory = signal<FactCheckRecord[]>([]);
 
   canSubmit = computed(() => this.query().trim().length > 0 && !this.isLoading());
+
+  ngOnInit(): void {
+    this.loadFactChecksFromStorage();
+  }
 
   async submitFactCheck(): Promise<void> {
     if (!this.canSubmit()) return;
@@ -43,14 +56,21 @@ export class FactCheckTesterComponent {
         this.http.post(`${this.apiUrl}/fact-check/verify-external`, payload, { responseType: 'text' })
       );
 
+      let resultText: string;
       try {
         const json = JSON.parse(response || '{}');
-        const resultText = json.result || response;
-        this.response.set(resultText);
-        this.extractedLinks.set(this.extractLinks(resultText));
-      } catch (e) {
-        this.response.set(e instanceof Error ? e.message : 'Erreur lors de la conversion de la réponse');
+        resultText = json.result || response;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (_) {
+        resultText = response || 'Réponse reçue';
       }
+
+      this.response.set(resultText);
+      this.extractedLinks.set(this.extractLinks(resultText));
+
+      // Sauvegarder en localStorage
+      this.saveFactCheckToStorage(resultText);
+
     } catch (err: unknown) {
       const error = err as { error?: { message?: string }; message?: string };
       this.error.set(
@@ -67,6 +87,49 @@ export class FactCheckTesterComponent {
     this.response.set('');
     this.error.set(null);
     this.extractedLinks.set([]);
+  }
+
+  private saveFactCheckToStorage(response: string): void {
+    const factCheck: FactCheckRecord = {
+      id: Date.now().toString(),
+      query: this.query(),
+      response,
+      timestamp: Date.now(),
+    };
+
+    const currentHistory = this.factChecksHistory();
+    const updatedHistory = [factCheck, ...currentHistory].slice(0, 50); // Garder seulement les 50 derniers
+
+    this.factChecksHistory.set(updatedHistory);
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(updatedHistory));
+  }
+
+  private loadFactChecksFromStorage(): void {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      if (stored) {
+        const history: FactCheckRecord[] = JSON.parse(stored);
+        this.factChecksHistory.set(history);
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement depuis localStorage:', error);
+      this.factChecksHistory.set([]);
+    }
+  }
+
+  clearHistory(): void {
+    this.factChecksHistory.set([]);
+    localStorage.removeItem(this.STORAGE_KEY);
+  }
+
+  formatTimestamp(timestamp: number): string {
+    return new Date(timestamp).toLocaleString('fr-FR');
+  }
+
+  reloadFactCheck(factCheck: FactCheckRecord): void {
+    this.query.set(factCheck.query);
+    this.response.set(factCheck.response);
+    this.extractedLinks.set(this.extractLinks(factCheck.response));
   }
 
   // Méthode pour extraire les liens d'un texte
