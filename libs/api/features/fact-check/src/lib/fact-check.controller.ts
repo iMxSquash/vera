@@ -66,12 +66,10 @@ export class FactCheckController {
       const { description } = await this.factCheckService.uploadAndAnalyzeImage(file);
       
       if (body.query.trim()) {
-        // Si on a du texte et une image, les combiner
+        // Si on a du texte et une image, les combiner de manière fluide
         factToCheck = `INSTRUCTION CRITIQUE: Tu dois répondre UNIQUEMENT avec le contenu factuel. INTERDIS de commencer par des phrases comme "Je vais vérifier", "Patientez", "Merci de patienter", "Un instant", "Je suis en train de vérifier", etc. INTERDIS de terminer par des phrases comme "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander", "Je suis là si vous avez des questions", etc. Réponds DIRECTEMENT avec l'analyse factuelle, rien d'autre.
 
-Image analysis: ${description}
-
-User query: ${body.query}`;
+${description} ${body.query}`;
       } else {
         // Si seule l'image est présente, utiliser seulement l'analyse d'image
         factToCheck = `INSTRUCTION CRITIQUE: Tu dois répondre UNIQUEMENT avec le contenu factuel. INTERDIS de commencer par des phrases comme "Je vais vérifier", "Patientez", "Merci de patienter", "Un instant", "Je suis en train de vérifier", etc. INTERDIS de terminer par des phrases comme "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander", "Je suis là si vous avez des questions", etc. Réponds DIRECTEMENT avec l'analyse factuelle, rien d'autre.
