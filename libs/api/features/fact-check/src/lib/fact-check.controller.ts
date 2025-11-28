@@ -67,20 +67,20 @@ export class FactCheckController {
       
       if (body.query.trim()) {
         // Si on a du texte et une image, les combiner de manière fluide
-        factToCheck = `INSTRUCTION CRITIQUE: Tu dois répondre UNIQUEMENT avec le contenu factuel. INTERDIS de commencer par des phrases comme "Je vais vérifier", "Patientez", "Merci de patienter", "Un instant", "Je suis en train de vérifier", etc. INTERDIS de terminer par des phrases comme "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander", "Je suis là si vous avez des questions", etc. Réponds DIRECTEMENT avec l'analyse factuelle, rien d'autre.
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
 
-${description} ${body.query}`;
+QUESTION À VÉRIFIER: ${description} ${body.query}`;
       } else {
         // Si seule l'image est présente, utiliser seulement l'analyse d'image
-        factToCheck = `INSTRUCTION CRITIQUE: Tu dois répondre UNIQUEMENT avec le contenu factuel. INTERDIS de commencer par des phrases comme "Je vais vérifier", "Patientez", "Merci de patienter", "Un instant", "Je suis en train de vérifier", etc. INTERDIS de terminer par des phrases comme "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander", "Je suis là si vous avez des questions", etc. Réponds DIRECTEMENT avec l'analyse factuelle, rien d'autre.
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
 
-Image analysis: ${description}`;
+QUESTION À VÉRIFIER: ${description}`;
       }
     } else {
       // Si pas d'image, ajouter quand même l'instruction pour le texte seul
-      factToCheck = `INSTRUCTION CRITIQUE: Tu dois répondre UNIQUEMENT avec le contenu factuel. INTERDIS de commencer par des phrases comme "Je vais vérifier", "Patientez", "Merci de patienter", "Un instant", "Je suis en train de vérifier", etc. INTERDIS de terminer par des phrases comme "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander", "Je suis là si vous avez des questions", etc. Réponds DIRECTEMENT avec l'analyse factuelle, rien d'autre.
+      factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
 
-${body.query}`;
+QUESTION À VÉRIFIER: ${body.query}`;
     }
 
     // Vérifier le fait avec Vera

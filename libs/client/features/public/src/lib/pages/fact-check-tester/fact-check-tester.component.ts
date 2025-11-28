@@ -72,6 +72,9 @@ export class FactCheckTesterComponent implements OnInit {
         resultText = responseObj?.result || 'Réponse reçue';
       }
 
+      // Nettoyer la réponse des messages indésirables
+      resultText = this.cleanResponse(resultText);
+
       this.response.set(resultText);
       this.extractedLinks.set(this.extractLinks(resultText));
 
@@ -251,5 +254,18 @@ export class FactCheckTesterComponent implements OnInit {
     if (img) {
       img.style.display = 'none';
     }
+  }
+
+  // Méthode pour nettoyer la réponse (supprimer lignes vides et espaces)
+  private cleanResponse(response: string): string {
+    if (!response) return response;
+
+    return response
+      .split('\n') // Diviser en lignes
+      .map(line => line.trim()) // Supprimer les espaces de chaque ligne
+      .filter(line => line.length > 0) // Supprimer les lignes vides
+      .join('\n') // Rejoindre les lignes
+      .replace(/\n{3,}/g, '\n\n') // Maximum 2 sauts de ligne consécutifs
+      .trim(); // Supprimer les espaces au début et à la fin
   }
 }
