@@ -24,6 +24,12 @@
       "@vera/api/features/auth": [
         "libs/api/features/auth/src/index.ts"
       ],
+      "@vera/api/features/bot": [
+        "libs/api/features/bot/src/index.ts"
+      ],
+      "@vera/api/features/contents": [
+        "libs/api/features/contents/src/index.ts"
+      ],
       "@vera/api/features/fact-check": [
         "libs/api/features/fact-check/src/index.ts"
       ],

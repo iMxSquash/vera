@@ -4,6 +4,8 @@ import { AuthModule } from '@vera/api/features/auth';
 import { SupabaseModule } from '@vera/api/shared/data-access';
 import { FactCheckModule } from '@vera/api/features/fact-check';
 import { FeaturesInstagramPollsModule } from '@vera/api/features/instagram-polls';
+import { ContentsModule } from '@vera/api/features/contents';
+import { TelegramModule } from '@vera/api/features/bot';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -27,6 +29,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     AuthModule,
     FactCheckModule,
     FeaturesInstagramPollsModule,
+    ContentsModule,
+    TelegramModule,
   ],
   controllers: [],
   providers: [],
