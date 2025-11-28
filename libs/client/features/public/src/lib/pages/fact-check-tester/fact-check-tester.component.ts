@@ -34,7 +34,7 @@ export class FactCheckTesterComponent implements OnInit {
   selectedImage = signal<File | null>(null);
   imagePreview = signal<string>('');
   isDragOver = signal<boolean>(false);
-  selectedMediaType = signal<'image' | 'video' | null>(null);
+  selectedMediaType = signal<'image' | 'video' | 'audio' | null>(null);
 
   canSubmit = computed(() => (this.query().trim().length > 0 || this.selectedImage() !== null) && !this.isLoading());
 
@@ -112,6 +112,9 @@ export class FactCheckTesterComponent implements OnInit {
       } else if (file.type.startsWith('video/')) {
         this.selectedMediaType.set('video');
         this.createVideoPreview(file);
+      } else if (file.type.startsWith('audio/')) {
+        this.selectedMediaType.set('audio');
+        this.createAudioPreview();
       }
     }
   }
@@ -130,6 +133,11 @@ export class FactCheckTesterComponent implements OnInit {
       this.imagePreview.set(e.target?.result as string);
     };
     reader.readAsDataURL(file);
+  }
+
+  private createAudioPreview(): void {
+    // Pour l'audio, on ne peut pas créer un aperçu visuel, mais on peut définir une valeur par défaut
+    this.imagePreview.set('audio-placeholder');
   }
 
   removeImage(): void {
@@ -166,8 +174,12 @@ export class FactCheckTesterComponent implements OnInit {
         this.selectedImage.set(file);
         this.selectedMediaType.set('video');
         this.createVideoPreview(file);
+      } else if (file.type.startsWith('audio/')) {
+        this.selectedImage.set(file);
+        this.selectedMediaType.set('audio');
+        this.createAudioPreview();
       } else {
-        this.error.set('Veuillez sélectionner un fichier image ou vidéo valide.');
+        this.error.set('Veuillez sélectionner un fichier image, vidéo ou audio valide.');
       }
     }
   }

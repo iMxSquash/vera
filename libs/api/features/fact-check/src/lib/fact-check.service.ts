@@ -137,11 +137,13 @@ export class FactCheckService {
   }
 
   // ----------------------------------------------------
-  // 🔥 MEDIA UPLOAD & ANALYSIS (Images + Vidéos)
+  // 🔥 MEDIA UPLOAD & ANALYSIS (Images + Vidéos + Audio)
   // ----------------------------------------------------
-  async uploadAndAnalyzeMedia(file: Express.Multer.File): Promise<{ mediaId: string; description: string; mediaType: 'image' | 'video' }> {
+  async uploadAndAnalyzeMedia(file: Express.Multer.File): Promise<{ mediaId: string; description: string; mediaType: 'image' | 'video' | 'audio' }> {
     try {
       const isVideo = file.mimetype.startsWith('video/');
+      const isAudio = file.mimetype.startsWith('audio/');
+      const mediaType = isAudio ? 'audio' : isVideo ? 'video' : 'image';
       const bucketName = 'fact-check-media';
 
       // 1. Uploader le média vers Supabase Storage
@@ -163,9 +165,9 @@ export class FactCheckService {
       // 2. Construire l'URL publique manuellement
       const supabaseUrl = this.configService.get<string>('SUPABASE_URL', '');
       const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${filePath}`;
-      
+
       this.logger.log(`Media uploaded successfully. Public URL: ${publicUrl}`);
-      
+
       // Vérifier que l'URL est accessible
       try {
         await firstValueFrom(
@@ -186,8 +188,13 @@ export class FactCheckService {
       });
       const savedMedia = await this.imageRepository.save(media);
 
-      // 4. Analyser avec Gemini en utilisant l'URL publique
-      const description = await this.analyzeImageWithGemini(publicUrl);
+      // 4. Analyser/Transcrire avec Gemini en utilisant l'URL publique
+      let description: string;
+      if (isAudio) {
+        description = await this.transcribeAudioWithGemini(publicUrl);
+      } else {
+        description = await this.analyzeImageWithGemini(publicUrl);
+      }
 
       // 5. Mettre à jour la description dans la BDD
       savedMedia.geminiDescription = description;
@@ -196,7 +203,7 @@ export class FactCheckService {
       return {
         mediaId: savedMedia.id,
         description,
-        mediaType: isVideo ? 'video' : 'image',
+        mediaType,
       };
     } catch (error) {
       this.logger.error('Error uploading and analyzing media:', error);
@@ -302,6 +309,71 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
     }
   }
 
+  private async transcribeAudioWithGemini(audioUrl: string): Promise<string> {
+    try {
+      // Détecter le type MIME depuis l'URL
+      const mimeType = this.getMimeTypeFromUrl(audioUrl, 'audio');
+
+      this.logger.log(`Transcribing audio with Gemini. URL: ${audioUrl}, MIME: ${mimeType}`);
+
+      const requestBody = {
+        contents: [{
+          parts: [
+            {
+              text: `Tu es un module de préparation pour une IA de vérification de faits.
+On te fournit un fichier audio. Tu dois produire UNE SEULE phrase, très courte, qui résume la revendication factuelle principale liée à ce contenu audio.
+
+Règles:
+
+Ta sortie doit être soit une QUESTION factuelle, soit une AFFIRMATION factuelle, mais jamais une explication.
+
+Maximum 1 phrase, 20 mots.
+
+Pas d'analyse, pas de conseil, pas de justification.
+
+Pas de transcription complète de l'audio.
+
+Si l'audio ne permet pas de formuler une revendication vérifiable, réponds exactement : 'Aucune revendication vérifiable'.
+
+Format de sortie attendu (exemples):
+
+'Emmanuel Macron a annoncé une nouvelle réforme fiscale hier.'
+
+'Cette déclaration affirme qu'Emmanuel Macron va supprimer l'impôt sur le revenu, est-ce vrai?'
+
+Analyse ce contenu audio et applique les règles ci-dessus pour produire une seule question ou affirmation factuelle courte, prête pour une vérification de faits.`
+            },
+            {
+              inline_data: {
+                mime_type: mimeType,
+                data: await this.getMediaAsBase64(audioUrl)
+              }
+            }
+          ]
+        }]
+      };
+
+      this.logger.log(`Gemini transcription request body prepared`);
+
+      const response = await firstValueFrom(
+        this.httpService.post(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${this.geminiApiKey}`,
+          requestBody
+        )
+      );
+
+      this.logger.log(`Gemini transcription response received:`, response.data);
+
+      const transcription = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Transcription non disponible";
+      return transcription;
+
+    } catch (error) {
+      this.logger.error('Error transcribing audio with Gemini:', error);
+      // Fallback en cas d'erreur
+      return `Erreur lors de la transcription de l'audio (${audioUrl}). Contenu vocal nécessitant vérification factuelle.`;
+    }
+  }
+
   async analyzeUrlWithPerplexity(url: string): Promise<string> {
     try {
       this.logger.log(`Analyzing URL with Perplexity. URL: ${url}`);
@@ -343,7 +415,7 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
     }
   }
 
-  private getMimeTypeFromUrl(mediaUrl: string, mediaType: 'image' | 'video' = 'image'): string {
+  private getMimeTypeFromUrl(mediaUrl: string, mediaType: 'image' | 'video' | 'audio' = 'image'): string {
     const extension = mediaUrl.split('.').pop()?.toLowerCase();
     switch (extension) {
       case 'jpg':
@@ -363,8 +435,20 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
         return 'video/quicktime';
       case 'webm':
         return 'video/webm';
+      case 'mp3':
+        return 'audio/mpeg';
+      case 'wav':
+        return 'audio/wav';
+      case 'm4a':
+        return 'audio/mp4';
+      case 'ogg':
+        return 'audio/ogg';
+      case 'flac':
+        return 'audio/flac';
       default:
-        return mediaType === 'video' ? 'video/mp4' : 'image/jpeg'; // fallback
+        if (mediaType === 'audio') return 'audio/mpeg';
+        if (mediaType === 'video') return 'video/mp4';
+        return 'image/jpeg'; // fallback
     }
   }
 
@@ -399,9 +483,9 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
       if (!bucketExists) {
         // Créer le bucket s'il n'existe pas
         const { error: createError } = await this.supabaseService.getAdminClient().storage.createBucket(bucketName, {
-          public: true, // Rendre le bucket public pour accéder aux images
-          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-          fileSizeLimit: 5242880, // 5MB
+          public: true, // Rendre le bucket public pour accéder aux médias
+          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/avi', 'video/quicktime', 'video/webm', 'audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/ogg', 'audio/flac'],
+          fileSizeLimit: 52428800, // 50MB pour supporter les vidéos et audios
         });
 
         if (createError) {
