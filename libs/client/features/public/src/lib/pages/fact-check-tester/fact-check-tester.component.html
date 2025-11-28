@@ -5,7 +5,7 @@
             <h1 class="text-4xl font-bold text-slate-900 mb-2">Testeur Fact-Check Vera</h1>
             <p class="text-slate-600">
                 Testez l'API de vérification de faits. Entrez un fait ou une affirmation à vérifier, ou sélectionnez une
-                image à analyser.
+                image/vidéo à analyser.
             </p>
         </div>
 
@@ -25,7 +25,7 @@
             <!-- Image Upload Section -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-slate-900 mb-2">
-                    Image à analyser (peut être utilisée seule pour vérification)
+                    Média à analyser (image ou vidéo - peut être utilisé seul pour vérification)
                 </label>
                 <div class="border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors cursor-pointer"
                     (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
@@ -40,19 +40,25 @@
                             </svg>
                         </div>
                         <div class="text-sm text-slate-600">
-                            Cliquez pour sélectionner une image ou glissez-déposez
+                            Cliquez pour sélectionner une image ou vidéo ou glissez-déposez
                         </div>
-                        <input type="file" accept="image/*" (change)="onImageSelected($event)" class="hidden"
+                        <input type="file" accept="image/*,video/*" (change)="onImageSelected($event)" class="hidden"
                             id="imageInput">
                         <label for="imageInput"
                             class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer transition-colors">
-                            Sélectionner une image
+                            Sélectionner un média
                         </label>
                     </div>
                     } @else {
                     <div class="space-y-2">
+                        @if (selectedMediaType() === 'image') {
                         <img [src]="imagePreview()" [alt]="selectedImage()?.name"
                             class="mx-auto max-h-32 rounded-lg shadow-sm">
+                        } @else if (selectedMediaType() === 'video') {
+                        <video [src]="imagePreview()" controls class="mx-auto max-h-32 rounded-lg shadow-sm">
+                            Votre navigateur ne supporte pas la lecture de vidéos.
+                        </video>
+                        }
                         <div class="text-sm text-slate-700 font-medium">{{ selectedImage()?.name }}</div>
                         <div class="text-xs text-slate-500">{{ ((selectedImage()?.size || 0) / 1024 / 1024).toFixed(2)
                             }} MB</div>

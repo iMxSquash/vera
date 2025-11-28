@@ -137,14 +137,14 @@ export class FactCheckService {
   }
 
   // ----------------------------------------------------
-  // 🔥 IMAGE UPLOAD & ANALYSIS
+  // 🔥 MEDIA UPLOAD & ANALYSIS (Images + Vidéos)
   // ----------------------------------------------------
-  async uploadAndAnalyzeImage(file: Express.Multer.File): Promise<{ imageId: string; description: string }> {
+  async uploadAndAnalyzeMedia(file: Express.Multer.File): Promise<{ mediaId: string; description: string; mediaType: 'image' | 'video' }> {
     try {
-      // Utiliser un bucket existant au lieu d'en créer un nouveau
-      const bucketName = 'fact-check-images';
+      const isVideo = file.mimetype.startsWith('video/');
+      const bucketName = 'fact-check-media';
 
-      // 1. Uploader l'image vers Supabase Storage
+      // 1. Uploader le média vers Supabase Storage
       const fileExt = file.originalname.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
       const filePath = `${fileName}`;
@@ -157,64 +157,98 @@ export class FactCheckService {
         });
 
       if (uploadError) {
-        throw new Error(`Failed to upload image to Supabase: ${uploadError.message}`);
+        throw new Error(`Failed to upload media to Supabase: ${uploadError.message}`);
       }
 
       // 2. Construire l'URL publique manuellement
       const supabaseUrl = this.configService.get<string>('SUPABASE_URL', '');
       const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${filePath}`;
       
-      this.logger.log(`Image uploaded successfully. Public URL: ${publicUrl}`);
+      this.logger.log(`Media uploaded successfully. Public URL: ${publicUrl}`);
       
       // Vérifier que l'URL est accessible
       try {
         await firstValueFrom(
           this.httpService.get(publicUrl, { responseType: 'arraybuffer', timeout: 5000 })
         );
-        this.logger.log('Image URL is accessible');
+        this.logger.log('Media URL is accessible');
       } catch (urlError) {
-        this.logger.error('Image URL is not accessible:', urlError);
-        throw new Error('Uploaded image is not accessible via public URL');
+        this.logger.error('Media URL is not accessible:', urlError);
+        throw new Error('Uploaded media is not accessible via public URL');
       }
 
       // 3. Sauvegarder les métadonnées en BDD
-      const image = this.imageRepository.create({
+      const media = this.imageRepository.create({
         filename: fileName,
-        path: publicUrl, // Stocker l'URL publique au lieu du chemin local
+        path: publicUrl, // Stocker l'URL publique
         mimetype: file.mimetype,
         size: file.size,
       });
-      const savedImage = await this.imageRepository.save(image);
+      const savedMedia = await this.imageRepository.save(media);
 
       // 4. Analyser avec Gemini en utilisant l'URL publique
       const description = await this.analyzeImageWithGemini(publicUrl);
 
       // 5. Mettre à jour la description dans la BDD
-      savedImage.geminiDescription = description;
-      await this.imageRepository.save(savedImage);
+      savedMedia.geminiDescription = description;
+      await this.imageRepository.save(savedMedia);
 
       return {
-        imageId: savedImage.id,
+        mediaId: savedMedia.id,
         description,
+        mediaType: isVideo ? 'video' : 'image',
       };
     } catch (error) {
-      this.logger.error('Error uploading and analyzing image:', error);
+      this.logger.error('Error uploading and analyzing media:', error);
       throw error;
     }
   }
 
-  private async analyzeImageWithGemini(imageUrl: string): Promise<string> {
-    try {
-      // Détecter le type MIME depuis l'URL ou utiliser image/jpeg par défaut
-      const mimeType = this.getMimeTypeFromUrl(imageUrl);
+  private isVideoUrl(url: string): boolean {
+    const videoExtensions = ['.mp4', '.avi', '.mov', '.webm', '.mkv', '.flv', '.wmv'];
+    const lowerUrl = url.toLowerCase();
+    return videoExtensions.some(ext => lowerUrl.endsWith(ext));
+  }
 
-      this.logger.log(`Analyzing image with Gemini. URL: ${imageUrl}, MIME: ${mimeType}`);
+  private async analyzeImageWithGemini(mediaUrl: string): Promise<string> {
+    try {
+      // Détecter automatiquement le type de média depuis l'URL
+      const isVideo = this.isVideoUrl(mediaUrl);
+      const mediaType = isVideo ? 'video' : 'image';
+
+      // Détecter le type MIME depuis l'URL ou utiliser image/jpeg par défaut
+      const mimeType = this.getMimeTypeFromUrl(mediaUrl, mediaType);
+
+      this.logger.log(`Analyzing ${mediaType} with Gemini. URL: ${mediaUrl}, MIME: ${mimeType}`);
 
       const requestBody = {
         contents: [{
           parts: [
             {
-              text: `Tu es un module de préparation pour une IA de vérification de faits.
+              text: isVideo
+                ? `Tu es un module de préparation pour une IA de vérification de faits.
+On te fournit une vidéo. Tu dois produire UNE SEULE phrase, très courte, qui résume la revendication factuelle principale liée à cette vidéo.
+
+Règles:
+
+Ta sortie doit être soit une QUESTION factuelle, soit une AFFIRMATION factuelle, mais jamais une explication.
+
+Maximum 1 phrase, 20 mots.
+
+Pas d'analyse, pas de conseil, pas de justification.
+
+Pas de description détaillée de la vidéo.
+
+Si la vidéo ne permet pas de formuler une revendication vérifiable, réponds exactement : 'Aucune revendication vérifiable'.
+
+Format de sortie attendu (exemples):
+
+'Cette vidéo montre Emmanuel Macron en train de ramasser des déchets dans une rue de Paris.'
+
+'Cette vidéo montre Emmanuel Macron ramassant des déchets dans une rue de Paris, est-ce vrai?'
+
+Analyse cette vidéo et applique les règles ci-dessus pour produire une seule question ou affirmation factuelle courte, prête pour une vérification de faits.`
+                : `Tu es un module de préparation pour une IA de vérification de faits.
 On te fournit une image. Tu dois produire UNE SEULE phrase, très courte, qui résume la revendication factuelle principale liée à cette image.
 
 Règles:
@@ -223,31 +257,31 @@ Ta sortie doit être soit une QUESTION factuelle, soit une AFFIRMATION factuelle
 
 Maximum 1 phrase, 20 mots.
 
-Pas d’analyse, pas de conseil, pas de justification.
+Pas d'analyse, pas de conseil, pas de justification.
 
-Pas de description détaillée de l’image.
+Pas de description détaillée de l'image.
 
-Si l’image ne permet pas de formuler une revendication vérifiable, réponds exactement : ‘Aucune revendication vérifiable’.
+Si l'image ne permet pas de formuler une revendication vérifiable, réponds exactement : 'Aucune revendication vérifiable'.
 
 Format de sortie attendu (exemples):
 
-‘Emmanuel Macron ramasse des déchets dans une rue de Paris.’
+'Emmanuel Macron ramasse des déchets dans une rue de Paris.'
 
-‘Cette image montre Emmanuel Macron en train de ramasser des déchets dans une rue de Paris, est-ce vrai?’ ”
+'Cette image montre Emmanuel Macron en train de ramasser des déchets dans une rue de Paris, est-ce vrai?'
 
 Analyse cette image et applique les règles ci-dessus pour produire une seule question ou affirmation factuelle courte, prête pour une vérification de faits.`
             },
             {
               inline_data: {
                 mime_type: mimeType,
-                data: await this.getImageAsBase64(imageUrl)
+                data: await this.getMediaAsBase64(mediaUrl)
               }
             }
           ]
         }]
       };
 
-      this.logger.log(`Gemini request body prepared`);
+      this.logger.log(`Gemini request body prepared for ${mediaType}`);
 
       const response = await firstValueFrom(
         this.httpService.post(
@@ -256,15 +290,15 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
         )
       );
 
-      this.logger.log(`Gemini response received:`, response.data);
+      this.logger.log(`Gemini response received for ${mediaType}:`, response.data);
 
       const description = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Description non disponible";
       return description;
 
     } catch (error) {
-      this.logger.error('Error analyzing image with Gemini:', error);
+      this.logger.error('Error analyzing media with Gemini:', error);
       // Fallback en cas d'erreur
-      return `Erreur lors de l'analyse de l'image (${imageUrl}). Description temporaire: Contenu visuel nécessitant vérification factuelle.`;
+      return `Erreur lors de l'analyse du média (${mediaUrl}). Description temporaire: Contenu visuel nécessitant vérification factuelle.`;
     }
   }
 
@@ -309,8 +343,8 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
     }
   }
 
-  private getMimeTypeFromUrl(imageUrl: string): string {
-    const extension = imageUrl.split('.').pop()?.toLowerCase();
+  private getMimeTypeFromUrl(mediaUrl: string, mediaType: 'image' | 'video' = 'image'): string {
+    const extension = mediaUrl.split('.').pop()?.toLowerCase();
     switch (extension) {
       case 'jpg':
       case 'jpeg':
@@ -321,20 +355,28 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
         return 'image/gif';
       case 'webp':
         return 'image/webp';
+      case 'mp4':
+        return 'video/mp4';
+      case 'avi':
+        return 'video/avi';
+      case 'mov':
+        return 'video/quicktime';
+      case 'webm':
+        return 'video/webm';
       default:
-        return 'image/jpeg'; // fallback
+        return mediaType === 'video' ? 'video/mp4' : 'image/jpeg'; // fallback
     }
   }
 
-  private async getImageAsBase64(imageUrl: string): Promise<string> {
+  private async getMediaAsBase64(mediaUrl: string): Promise<string> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(imageUrl, { responseType: 'arraybuffer' })
+        this.httpService.get(mediaUrl, { responseType: 'arraybuffer' })
       );
       return Buffer.from(response.data).toString('base64');
     } catch (error) {
-      this.logger.error('Error fetching image for base64 conversion:', error);
-      throw new Error('Failed to fetch image');
+      this.logger.error('Error fetching media for base64 conversion:', error);
+      throw new Error('Failed to fetch media');
     }
   }
 

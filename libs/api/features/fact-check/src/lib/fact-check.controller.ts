@@ -39,34 +39,36 @@ export class FactCheckController {
   }
 
   @Post('verify')
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('media'))
   @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Verify fact with optional image analysis' })
+  @ApiOperation({ summary: 'Verify fact with optional media analysis (images/videos)' })
   @ApiResponse({ status: 200, description: 'Verification completed' })
   @ApiResponse({ status: 400, description: 'Invalid request' })
-  async verifyWithImage(
+  async verifyWithMedia(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: { userId: string; query: string }
   ) {
     let factToCheck = body.query;
 
-    // Si une image est fournie, l'analyser avec Gemini
+    // Si un média est fourni (image ou vidéo), l'analyser avec Gemini
     if (file) {
-      const { description } = await this.factCheckService.uploadAndAnalyzeImage(file);
+      const { description, mediaType } = await this.factCheckService.uploadAndAnalyzeMedia(file);
       
       if (body.query.trim()) {
-        // Si on a du texte et une image, les combiner de manière fluide
+        // Si on a du texte et un média, les combiner de manière fluide
         factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
 
-QUESTION À VÉRIFIER: ${description} ${body.query}`;
+${mediaType.toUpperCase()} ANALYSIS: ${description}
+
+ORIGINAL QUERY: ${body.query}`;
       } else {
-        // Si seule l'image est présente, utiliser seulement l'analyse d'image
+        // Si seul le média est présent, utiliser seulement l'analyse du média
         factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
 
-QUESTION À VÉRIFIER: ${description}`;
+${mediaType.toUpperCase()} ANALYSIS: ${description}`;
       }
     } else {
-      // Si pas d'image, vérifier s'il y a des URLs dans le texte
+      // Si pas de média, vérifier s'il y a des URLs dans le texte
       const urls = this.extractUrlsFromText(body.query);
       
       if (urls.length > 0) {
@@ -79,7 +81,7 @@ URL ANALYSIS: ${urlAnalysis}
 
 ORIGINAL QUERY: ${body.query}`;
       } else {
-        // Si pas d'image et pas d'URL, ajouter quand même l'instruction pour le texte seul
+        // Si pas de média et pas d'URL, ajouter quand même l'instruction pour le texte seul
         factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
 
 QUESTION À VÉRIFIER: ${body.query}`;

@@ -34,6 +34,7 @@ export class FactCheckTesterComponent implements OnInit {
   selectedImage = signal<File | null>(null);
   imagePreview = signal<string>('');
   isDragOver = signal<boolean>(false);
+  selectedMediaType = signal<'image' | 'video' | null>(null);
 
   canSubmit = computed(() => (this.query().trim().length > 0 || this.selectedImage() !== null) && !this.isLoading());
 
@@ -56,7 +57,7 @@ export class FactCheckTesterComponent implements OnInit {
       // Si une image est sélectionnée, l'ajouter aux données
       const selectedImage = this.selectedImage();
       if (selectedImage) {
-        formData.append('image', selectedImage);
+        formData.append('media', selectedImage);
       }
       
       // Appel au backend qui gère tout (upload image + analyse Gemini + vérification Vera)
@@ -105,7 +106,13 @@ export class FactCheckTesterComponent implements OnInit {
     const file = input.files?.[0];
     if (file) {
       this.selectedImage.set(file);
-      this.createImagePreview(file);
+      if (file.type.startsWith('image/')) {
+        this.selectedMediaType.set('image');
+        this.createImagePreview(file);
+      } else if (file.type.startsWith('video/')) {
+        this.selectedMediaType.set('video');
+        this.createVideoPreview(file);
+      }
     }
   }
 
@@ -117,9 +124,18 @@ export class FactCheckTesterComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  private createVideoPreview(file: File): void {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.imagePreview.set(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
   removeImage(): void {
     this.selectedImage.set(null);
     this.imagePreview.set('');
+    this.selectedMediaType.set(null);
   }
 
   onDragOver(event: DragEvent): void {
@@ -144,17 +160,26 @@ export class FactCheckTesterComponent implements OnInit {
       const file = files[0];
       if (file.type.startsWith('image/')) {
         this.selectedImage.set(file);
+        this.selectedMediaType.set('image');
         this.createImagePreview(file);
+      } else if (file.type.startsWith('video/')) {
+        this.selectedImage.set(file);
+        this.selectedMediaType.set('video');
+        this.createVideoPreview(file);
       } else {
-        this.error.set('Veuillez sélectionner un fichier image valide.');
+        this.error.set('Veuillez sélectionner un fichier image ou vidéo valide.');
       }
     }
   }
 
   private saveFactCheckToStorage(response: string): void {
+    const mediaType = this.selectedMediaType();
+    const mediaInfo = mediaType ? `[${mediaType.toUpperCase()}: ${this.selectedImage()?.name}]` : '';
+    const query = this.query() || mediaInfo;
+
     const factCheck: FactCheckRecord = {
       id: Date.now().toString(),
-      query: this.query() || (this.selectedImage() ? `[Image: ${this.selectedImage()?.name}]` : ''),
+      query: query,
       response,
       timestamp: Date.now(),
     };
