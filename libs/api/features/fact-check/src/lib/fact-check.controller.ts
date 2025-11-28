@@ -4,7 +4,6 @@ import {
   Body,
   Res,
   UseGuards,
-  HttpCode,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
@@ -19,16 +18,6 @@ import { JwtAuthGuard } from '@vera/api/features/auth';
 @Controller('fact-check')
 export class FactCheckController {
   constructor(private readonly factCheckService: FactCheckService) {}
-
-  @Post('verify-external')
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Verify a fact from external API (public endpoint)' })
-  @ApiResponse({ status: 200, description: 'Verification result' })
-  @ApiResponse({ status: 400, description: 'Invalid request' })
-  @ApiResponse({ status: 500, description: 'API call failed' })
-  async verifyExternal(@Body() dto: VerifyExternalFactDto) {
-    return this.factCheckService.verifyFactExternal(dto.userId, dto.query);
-  }
 
   @Post()
   @ApiBearerAuth()
@@ -49,7 +38,7 @@ export class FactCheckController {
     stream.pipe(res);
   }
 
-  @Post('verify-with-image')
+  @Post('verify')
   @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Verify fact with optional image analysis' })

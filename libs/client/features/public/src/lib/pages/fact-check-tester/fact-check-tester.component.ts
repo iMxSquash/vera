@@ -61,7 +61,7 @@ export class FactCheckTesterComponent implements OnInit {
       
       // Appel au backend qui gère tout (upload image + analyse Gemini + vérification Vera)
       const response = await firstValueFrom(
-        this.http.post(`${this.apiUrl}/fact-check/verify-with-image`, formData)
+        this.http.post(`${this.apiUrl}/fact-check/verify`, formData)
       );
 
       let resultText: string;
@@ -260,7 +260,34 @@ export class FactCheckTesterComponent implements OnInit {
   private cleanResponse(response: string): string {
     if (!response) return response;
 
-    return response
+    // Supprimer les messages de politesse spécifiques
+    const messagesToRemove = [
+      "Patientez quelques secondes, je suis en train de vérifier les faits.",
+      "Je vais vérifier cette information pour vous. Un instant, s'il vous plaît.",
+      "Si vous avez besoin de précisions ou souhaitez explorer un aspect particulier, faites-le moi savoir, et je pourrai vous aider davantage.",
+      "Je vais analyser cette information pour vous.",
+      "Un instant, s'il vous plaît.",
+      "Si vous avez besoin de précisions",
+      "faites-le moi savoir",
+      "je pourrai vous aider davantage",
+      "Merci de poser votre question. Je vais vérifier les informations disponibles à ce sujet. Veuillez patienter un instant.",
+      "N'hésitez pas à me dire si vous souhaitez explorer un aspect particulier de cette question.",
+      "Je vais vérifier les informations à ce sujet, merci de patienter.",
+      "Si vous souhaitez explorer plus en profondeur ce sujet ou avez des questions spécifiques, n'hésitez pas à me le faire savoir.",
+      "Je vais vérifier cela pour vous, merci de patienter un instant.",
+      "Je suis là si vous souhaitez en discuter davantage ou si vous avez d'autres questions."
+    ];
+
+    let cleanedResponse = response;
+
+    // Supprimer chaque message indésirable
+    messagesToRemove.forEach(message => {
+      const regex = new RegExp(message.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      cleanedResponse = cleanedResponse.replace(regex, '');
+    });
+
+    // Nettoyer les espaces et sauts de ligne
+    return cleanedResponse
       .split('\n') // Diviser en lignes
       .map(line => line.trim()) // Supprimer les espaces de chaque ligne
       .filter(line => line.length > 0) // Supprimer les lignes vides
