@@ -16,36 +16,29 @@ export class Content {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({
-    type: 'enum',
-    enum: ContentPlatform,
-  })
+  @Column({ type: 'enum', enum: ContentPlatform })
   platform!: ContentPlatform;
 
   @Column({ type: 'varchar', length: 500 })
   url!: string;
 
-  @Column({ type: 'text', nullable: true })
-  text!: string;
+  @Column({ type: 'text', nullable: true, default: null })
+  text!: string | null;
 
-  @Column({ type: 'json', nullable: true })
-  media!: Record<string, unknown>; // Pour stocker les métadonnées des médias (images, vidéos)
+  @Column({ type: 'json', nullable: true, default: {} })
+  media!: Record<string, unknown>;
 
-  @Column({ type: 'json', nullable: true })
-  metadata!: Record<string, unknown>; // Métadonnées supplémentaires (auteur, date, etc.)
+  @Column({ type: 'json', nullable: true, default: {} })
+  metadata!: Record<string, unknown>;
 
-  @Column({
-    type: 'enum',
-    enum: ContentStatus,
-    default: ContentStatus.PENDING,
-  })
+  @Column({ type: 'enum', enum: ContentStatus, default: ContentStatus.PENDING })
   status!: ContentStatus;
 
-  @Column({ type: 'text', nullable: true })
-  verification_result!: string;
+  @Column({ type: 'text', nullable: true, default: null })
+  verification_result!: string | null;
 
   @Column({ type: 'uuid', nullable: true })
-  fact_check_id!: string; // Référence vers la vérification fact-check associée
+  fact_check_id!: string | null; // <-- CORRECT
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt!: Date;

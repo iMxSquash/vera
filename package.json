@@ -44,7 +44,7 @@
     "pg": "^8.16.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0",
-    "telegraf": "^4.16.3",
+    "telegraf": "4.16.3",
     "typeorm": "^0.3.27",
     "zone.js": "~0.14.3"
   },

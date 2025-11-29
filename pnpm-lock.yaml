@@ -111,7 +111,7 @@ importers:
         specifier: ~7.8.0
         version: 7.8.2
       telegraf:
-        specifier: ^4.16.3
+        specifier: 4.16.3
         version: 4.16.3(encoding@0.1.13)
       typeorm:
         specifier: ^0.3.27
