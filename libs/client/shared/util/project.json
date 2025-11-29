@@ -1,35 +1,53 @@
 {
-    "name": "client-shared-util",
-    "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-    "projectType": "library",
-    "sourceRoot": "libs/client/shared/util/src",
-    "prefix": "app",
-    "targets": {
-        "lint": {
-            "executor": "@nx/eslint:lint",
-            "outputs": [
-                "{options.outputFile}"
-            ],
-            "options": {
-                "lintFilePatterns": [
-                    "libs/client/shared/util/**/*.ts",
-                    "libs/client/shared/util/**/*.tsx"
-                ]
-            }
+  "name": "client-shared-util",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/client/shared/util/src",
+  "prefix": "app",
+  "tags": [
+    "type:util",
+    "scope:client-shared"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
+      "options": {
+        "project": "libs/client/shared/util/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/client/shared/util/tsconfig.lib.prod.json"
         },
-        "test": {
-            "executor": "@nx/jest:jest",
-            "outputs": [
-                "{workspaceRoot}/coverage/{projectRoot}"
-            ],
-            "options": {
-                "jestConfig": "libs/client/shared/util/jest.config.ts",
-                "passWithNoTests": true
-            }
+        "development": {
+          "tsConfig": "libs/client/shared/util/tsconfig.lib.json"
         }
+      },
+      "defaultConfiguration": "production"
     },
-    "tags": [
-        "type:util",
-        "scope:client-shared"
-    ]
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/client/shared/util/**/*.ts",
+          "libs/client/shared/util/**/*.tsx"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/client/shared/util/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
 }
