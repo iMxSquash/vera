@@ -42,7 +42,7 @@ export class FactCheckService {
 
   async verifyFactExternal(userId: string, query: string): Promise<{ result: string }> {
     try {
-      this.logger.log(`Verifying external fact: ${query}`);
+      this.logger.log(`Verifying external fact: ${query}\n`);
       
       const response = await firstValueFrom(
         this.httpService.post<{ result: string }>(
@@ -64,7 +64,7 @@ export class FactCheckService {
         result = response.data?.result || 'No data received';
       }
 
-      this.logger.log(`Fact check completed`);
+      this.logger.log(`Fact check completed\n`);
 
       return { result };
 
@@ -99,7 +99,7 @@ export class FactCheckService {
 
       stream.on('end', async () => {
         passThrough.end();
-        this.logger.log(`Fact check completed`);
+        this.logger.log(`Fact check completed\n`);
       });
 
       stream.on('error', async (err) => {
@@ -122,7 +122,7 @@ export class FactCheckService {
     status: FactCheckStatus;
     message: string;
   }> {
-    this.logger.log(`Auto-verifying content ${contentId}`);
+    this.logger.log(`Auto-verifying content ${contentId}\n`);
 
     // 👉 TEMP : résultat fake en attendant ton moteur IA
     const fakeResult = {
@@ -166,14 +166,14 @@ export class FactCheckService {
       const supabaseUrl = this.configService.get<string>('SUPABASE_URL', '');
       const publicUrl = `${supabaseUrl}/storage/v1/object/public/${bucketName}/${filePath}`;
 
-      this.logger.log(`Media uploaded successfully. Public URL: ${publicUrl}`);
+      this.logger.log(`Media uploaded successfully. Public URL: ${publicUrl}\n`);
 
       // Vérifier que l'URL est accessible
       try {
         await firstValueFrom(
           this.httpService.get(publicUrl, { responseType: 'arraybuffer', timeout: 5000 })
         );
-        this.logger.log('Media URL is accessible');
+        this.logger.log('Media URL is accessible\n');
       } catch (urlError) {
         this.logger.error('Media URL is not accessible:', urlError);
         throw new Error('Uploaded media is not accessible via public URL');
@@ -226,7 +226,7 @@ export class FactCheckService {
       // Détecter le type MIME depuis l'URL ou utiliser image/jpeg par défaut
       const mimeType = this.getMimeTypeFromUrl(mediaUrl, mediaType);
 
-      this.logger.log(`Analyzing ${mediaType} with Gemini. URL: ${mediaUrl}, MIME: ${mimeType}`);
+      this.logger.log(`Analyzing ${mediaType} with Gemini. URL: ${mediaUrl}, MIME: ${mimeType}\n`);
 
       const requestBody = {
         contents: [{
@@ -288,7 +288,7 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
         }]
       };
 
-      this.logger.log(`Gemini request body prepared for ${mediaType}`);
+      this.logger.log(`Gemini request body prepared for ${mediaType}\n`);
 
       const response = await firstValueFrom(
         this.httpService.post(
@@ -297,9 +297,10 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
         )
       );
 
-      this.logger.log(`Gemini response received for ${mediaType}:`, response.data);
+      this.logger.log(`Gemini response received for ${mediaType}:\n${JSON.stringify(response.data, null, 2)}\n`);
 
       const description = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Description non disponible";
+      this.logger.log(`Gemini extracted description:\n${description}\n`);
       return description;
 
     } catch (error) {
@@ -314,7 +315,7 @@ Analyse cette image et applique les règles ci-dessus pour produire une seule qu
       // Détecter le type MIME depuis l'URL
       const mimeType = this.getMimeTypeFromUrl(audioUrl, 'audio');
 
-      this.logger.log(`Transcribing audio with Gemini. URL: ${audioUrl}, MIME: ${mimeType}`);
+      this.logger.log(`Transcribing audio with Gemini. URL: ${audioUrl}, MIME: ${mimeType}\n`);
 
       const requestBody = {
         contents: [{
@@ -353,7 +354,7 @@ Analyse ce contenu audio et applique les règles ci-dessus pour produire une seu
         }]
       };
 
-      this.logger.log(`Gemini transcription request body prepared`);
+      this.logger.log(`Gemini transcription request body prepared\n`);
 
       const response = await firstValueFrom(
         this.httpService.post(
@@ -362,9 +363,10 @@ Analyse ce contenu audio et applique les règles ci-dessus pour produire une seu
         )
       );
 
-      this.logger.log(`Gemini transcription response received:`, response.data);
+      this.logger.log(`Gemini transcription response received:\n${JSON.stringify(response.data, null, 2)}\n`);
 
       const transcription = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "Transcription non disponible";
+      this.logger.log(`Gemini extracted transcription:\n${transcription}\n`);
       return transcription;
 
     } catch (error) {
@@ -376,7 +378,7 @@ Analyse ce contenu audio et applique les règles ci-dessus pour produire une seu
 
   async analyzeUrlWithPerplexity(url: string): Promise<string> {
     try {
-      this.logger.log(`Analyzing URL with Perplexity. URL: ${url}`);
+      this.logger.log(`Analyzing URL with Perplexity. URL: ${url}\n`);
 
       const requestBody = {
         model: "sonar",
@@ -403,9 +405,10 @@ Analyse ce contenu audio et applique les règles ci-dessus pour produire une seu
         )
       );
 
-      this.logger.log(`Perplexity response received`);
+      this.logger.log(`Perplexity response received:\n${JSON.stringify(response.data, null, 2)}\n`);
 
       const analysis = response.data?.choices?.[0]?.message?.content || "Analyse non disponible";
+      this.logger.log(`Perplexity extracted analysis:\n${analysis}\n`);
       return analysis;
 
     } catch (error) {
@@ -493,7 +496,7 @@ Analyse ce contenu audio et applique les règles ci-dessus pour produire une seu
           throw new Error(`Failed to create bucket: ${createError.message}`);
         }
 
-        this.logger.log(`Bucket '${bucketName}' created successfully`);
+        this.logger.log(`Bucket '${bucketName}' created successfully\n`);
       }
     } catch (error) {
       this.logger.error('Error ensuring bucket exists:', error);
