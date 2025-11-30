@@ -84,9 +84,16 @@ Object.keys(process.env).forEach((key) => {
         return;
     }
 
-    // Ignorer les variables qui ne viennent pas de notre .env
-    if (!envConfig.parsed || !Object.prototype.hasOwnProperty.call(envConfig.parsed, key)) {
+    // Liste blanche des variables à toujours inclure si présentes dans l'environnement
+    const ALWAYS_INCLUDE = ['SERVER_URL', 'API_URL', 'FRONTEND_URL', 'SUPABASE_URL', 'SUPABASE_API_KEY', 'TOKEN_KEY'];
+
+    // Ignorer les variables qui ne viennent pas de notre .env (sauf whitelist)
+    if (!ALWAYS_INCLUDE.includes(key) && (!envConfig.parsed || !Object.prototype.hasOwnProperty.call(envConfig.parsed, key))) {
         return;
+    }
+
+    if (key === 'SERVER_URL') {
+        console.log('Dg: SERVER_URL trouvé dans process.env:', process.env[key]);
     }
 
     const camelKey = toCamelCase(key);
