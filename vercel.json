@@ -1,5 +1,15 @@
 {
-  "buildCommand": "pnpm nx build client",
-  "outputDirectory": "dist/apps/client",
-  "framework": null
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist/apps/client/browser/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
