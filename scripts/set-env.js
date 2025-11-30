@@ -97,7 +97,8 @@ Object.keys(process.env).forEach((key) => {
 envVars.production = isProduction;
 
 // Ajuster certaines URLs selon l'environnement
-if (!isProduction && envVars.serverUrl) {
+// Ajuster certaines URLs selon l'environnement
+if (envVars.serverUrl && !envVars.apiUrl) {
     envVars.apiUrl = `${envVars.serverUrl}/api`;
 } else if (isProduction && !envVars.apiUrl) {
     envVars.apiUrl = '/api'; // En production, utiliser un chemin relatif par défaut si non défini
