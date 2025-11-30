@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: vera-api
+    env: node
+    plan: free
+    buildCommand: pnpm install && pnpm nx build server --configuration=production
+    startCommand: node dist/apps/server/main.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_API_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: VERA_API_KEY
+        sync: false
