@@ -15,7 +15,7 @@ async function bootstrap() {
 
   const port = configService.get<number>('PORT') || 3000;
   const clientUrl =
-    configService.get<string>('CLIENT_URL') || 'http://localhost:4200';
+    configService.get<string>('CLIENT_URL') || configService.get<string>('SERVER_URL');
 
   // Enable CORS for development
   app.enableCors({
