@@ -1,7 +1,7 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "version": 2,
-    "buildCommand": "pnpm nx build client --configuration=production",
+    "buildCommand": "pnpm set-env:prod && pnpm nx build client --configuration=production",
     "outputDirectory": "dist/apps/client/browser",
     "framework": null,
     "installCommand": "pnpm install --frozen-lockfile",

@@ -89,8 +89,8 @@ envVars.production = isProduction;
 // Ajuster certaines URLs selon l'environnement
 if (!isProduction && envVars.serverUrl) {
     envVars.apiUrl = `${envVars.serverUrl}/api`;
-} else if (isProduction) {
-    envVars.apiUrl = '/api'; // En production, utiliser un chemin relatif
+} else if (isProduction && !envVars.apiUrl) {
+    envVars.apiUrl = '/api'; // En production, utiliser un chemin relatif par défaut si non défini
 }
 
 // Générer le contenu du fichier TypeScript
