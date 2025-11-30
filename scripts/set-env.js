@@ -12,11 +12,21 @@ const dotenv = require('dotenv');
 
 // Charger les variables d'environnement depuis .env
 const envPath = path.resolve(__dirname, '../.env');
-const envConfig = dotenv.config({ path: envPath });
+const envExamplePath = path.resolve(__dirname, '../.env.example');
+
+// Essayer de charger .env, sinon utiliser .env.example pour connaître les clés attendues
+let envConfig = dotenv.config({ path: envPath });
+let usingExample = false;
 
 if (envConfig.error) {
-    console.error('❌ Erreur lors de la lecture du fichier .env:', envConfig.error);
-    process.exit(1);
+    console.log('⚠️ Fichier .env non trouvé, utilisation de .env.example pour les clés...');
+    envConfig = dotenv.config({ path: envExamplePath });
+    usingExample = true;
+
+    if (envConfig.error) {
+        console.error('❌ Erreur: Ni .env ni .env.example n\'ont pu être chargés.');
+        process.exit(1);
+    }
 }
 
 // Déterminer le mode (production ou développement)
