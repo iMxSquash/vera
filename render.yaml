@@ -3,11 +3,9 @@ services:
     name: vera-api
     env: node
     plan: free
-    buildCommand: pnpm install && pnpm nx build server --configuration=production
-    startCommand: node dist/apps/server/main.js
+    buildCommand: pnpm install --prod=false && pnpm nx build server --configuration=production
+    startCommand: NODE_ENV=production node dist/apps/server/main.js
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: PORT
         value: 10000
       - key: CLIENT_URL
