@@ -6,7 +6,9 @@ import { FactCheckModule } from '@vera/api/features/fact-check';
 import { FeaturesInstagramPollsModule } from '@vera/api/features/instagram-polls';
 import { ContentsModule } from '@vera/api/features/contents';
 import { TelegramModule } from '@vera/api/features/bot';
+import { FaceSwapModule } from '@vera/api/features/face-swap';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     FeaturesInstagramPollsModule,
     ContentsModule,
     TelegramModule,
+    FaceSwapModule,
   ],
   controllers: [],
   providers: [],

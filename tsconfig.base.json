@@ -30,6 +30,9 @@
       "@vera/api/features/contents": [
         "libs/api/features/contents/src/index.ts"
       ],
+      "@vera/api/features/face-swap": [
+        "libs/api/features/face-swap/src/index.ts"
+      ],
       "@vera/api/features/fact-check": [
         "libs/api/features/fact-check/src/index.ts"
       ],
@@ -71,6 +74,9 @@
       ],
       "@vera/client/shared/util": [
         "libs/client/shared/util/src/index.ts"
+      ],
+      "@vera/data-access": [
+        "libs/client/shared/data-access/src/index.ts"
       ],
       "@vera/shared/models": [
         "libs/shared/models/src/index.ts"

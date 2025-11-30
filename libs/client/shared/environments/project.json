@@ -6,6 +6,24 @@
     "prefix": "vera",
     "tags": [],
     "targets": {
+        "build": {
+            "executor": "@nx/angular:package",
+            "outputs": [
+                "{workspaceRoot}/dist/{projectRoot}"
+            ],
+            "options": {
+                "project": "libs/client/shared/environments/ng-package.json"
+            },
+            "configurations": {
+                "production": {
+                    "tsConfig": "libs/client/shared/environments/tsconfig.lib.prod.json"
+                },
+                "development": {
+                    "tsConfig": "libs/client/shared/environments/tsconfig.lib.json"
+                }
+            },
+            "defaultConfiguration": "production"
+        },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": [

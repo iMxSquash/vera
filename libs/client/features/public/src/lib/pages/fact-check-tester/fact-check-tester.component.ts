@@ -1,7 +1,8 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@env';
 
@@ -19,8 +20,9 @@ interface FactCheckRecord {
   templateUrl: './fact-check-tester.component.html',
   styleUrl: './fact-check-tester.component.css',
 })
-export class FactCheckTesterComponent implements OnInit {
+export class FactCheckTesterComponent {
   private readonly http = inject(HttpClient);
+  private readonly route = inject(ActivatedRoute);
   private readonly apiUrl = environment.apiUrl;
   private readonly STORAGE_KEY = 'vera_fact_checks';
 
@@ -38,8 +40,17 @@ export class FactCheckTesterComponent implements OnInit {
 
   canSubmit = computed(() => (this.query().trim().length > 0 || this.selectedImage() !== null) && !this.isLoading());
 
-  ngOnInit(): void {
+  constructor() {
+    // Charger l'historique depuis le localStorage
     this.loadFactChecksFromStorage();
+    
+    // Récupérer le texte depuis les query parameters
+    this.route.queryParams.subscribe(params => {
+      const text = params['text'];
+      if (text) {
+        this.query.set(decodeURIComponent(text));
+      }
+    });
   }
 
   async submitFactCheck(): Promise<void> {
