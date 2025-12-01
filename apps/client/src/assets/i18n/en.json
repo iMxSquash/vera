@@ -1,0 +1,44 @@
+{
+    "common": {
+        "language": "English",
+        "characters": "characters",
+        "reload": "Reload",
+        "about": "About"
+    },
+    "fact_check": {
+        "title": "Fact Checker",
+        "subtitle": "Verify information online in real time",
+        "input_placeholder": "Enter text, a URL or upload an image/video/audio",
+        "submit": "Verify",
+        "submit_loading": "Verifying...",
+        "clear": "Clear",
+        "copy": "📋 Copy",
+        "copied": "✓ Copied",
+        "result_title": "Verification Result",
+        "history_title": "Verification History",
+        "no_history": "No verifications yet",
+        "clear_history": "Clear History",
+        "upload_media": "Upload an image, video or audio",
+        "drag_and_drop": "Drop a file here or click to select",
+        "supported_formats": "Supported formats: Images (JPG, PNG, GIF, WebP), Videos (MP4, AVI, MOV, WebM), Audio (MP3, WAV, M4A, OGG, FLAC)",
+        "remove_media": "Remove file",
+        "audio_file": "Audio file",
+        "links_found": "Found links",
+        "about_description": "This page tests the integration with the Vera API. Verifications are performed in real time by Vera's fact-checking system."
+    },
+    "errors": {
+        "error": "Error",
+        "invalid_file": "Invalid file",
+        "file_too_large": "File is too large (max 50 MB)",
+        "upload_error": "Error uploading file",
+        "verification_error": "Error during verification",
+        "no_input": "Please enter text or select a file",
+        "network_error": "Network error",
+        "no_video_support": "Your browser does not support video playback."
+    },
+    "media_types": {
+        "image": "IMAGE",
+        "video": "VIDEO",
+        "audio": "AUDIO"
+    }
+}

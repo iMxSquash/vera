@@ -9,24 +9,6 @@
     "scope:client-shared"
   ],
   "targets": {
-    "build": {
-      "executor": "@nx/angular:package",
-      "outputs": [
-        "{workspaceRoot}/dist/{projectRoot}"
-      ],
-      "options": {
-        "project": "libs/client/shared/util/ng-package.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "libs/client/shared/util/tsconfig.lib.prod.json"
-        },
-        "development": {
-          "tsConfig": "libs/client/shared/util/tsconfig.lib.json"
-        }
-      },
-      "defaultConfiguration": "production"
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": [

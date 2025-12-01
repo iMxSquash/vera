@@ -46,8 +46,9 @@ export class FactCheckController {
   @ApiResponse({ status: 400, description: 'Invalid request' })
   async verifyWithMedia(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: { userId: string; query: string }
+    @Body() body: { userId: string; query: string; lang?: string }
   ) {
+    const language = body.lang === 'en' ? 'English' : 'French';
     let factToCheck = body.query;
 
     // Si un média est fourni (image ou vidéo), l'analyser avec Gemini
@@ -56,14 +57,14 @@ export class FactCheckController {
       
       if (body.query.trim()) {
         // Si on a du texte et un média, les combiner de manière fluide
-        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement. Répond en ${language}.
 
 ${mediaType.toUpperCase()} ANALYSIS: ${description}
 
 ORIGINAL QUERY: ${body.query}`;
       } else {
         // Si seul le média est présent, utiliser seulement l'analyse du média
-        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement. Répond en ${language}.
 
 ${mediaType.toUpperCase()} ANALYSIS: ${description}`;
       }
@@ -75,14 +76,14 @@ ${mediaType.toUpperCase()} ANALYSIS: ${description}`;
         // Analyser la première URL trouvée avec Perplexity
         const urlAnalysis = await this.factCheckService.analyzeUrlWithPerplexity(urls[0]);
         
-        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement. Répond en ${language}.
 
 URL ANALYSIS: ${urlAnalysis}
 
 ORIGINAL QUERY: ${body.query}`;
       } else {
         // Si pas de média et pas d'URL, ajouter quand même l'instruction pour le texte seul
-        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement. Répond en ${language}.
 
 QUESTION À VÉRIFIER: ${body.query}`;
       }

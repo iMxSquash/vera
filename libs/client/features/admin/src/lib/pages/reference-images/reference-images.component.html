@@ -1,18 +1,19 @@
-<div class="reference-images-container">
-    <div class="header">
-        <h2 class="title">🖼️ Images de Référence</h2>
-        <p class="subtitle">Gérez les images utilisées pour le face swap</p>
+<div class="p-8 max-w-6xl mx-auto">
+    <div class="mb-8">
+        <h2 class="text-4xl font-bold text-gray-900 mb-2">🖼️ Images de Référence</h2>
+        <p class="text-lg text-gray-600">Gérez les images utilisées pour le face swap</p>
     </div>
 
     <!-- Upload Section -->
-    <div class="upload-section">
+    <div class="mb-8">
         <input type="file" id="file-upload" accept="image/*" (change)="onFileSelected($event)" hidden />
-        <label for="file-upload" class="upload-btn">
+        <label for="file-upload"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-lg font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
             @if (uploading()) {
-            <span class="spinner"></span>
+            <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
             <span>Upload en cours...</span>
             } @else {
-            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
             <span>Ajouter une image</span>
@@ -22,8 +23,8 @@
 
     <!-- Error Message -->
     @if (error()) {
-    <div class="error-message">
-        <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="p-4 bg-red-100 border-l-4 border-red-500 rounded text-red-700 flex gap-3 mb-8">
+        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
@@ -33,49 +34,51 @@
 
     <!-- Loading State -->
     @if (isLoading()) {
-    <div class="loading">
-        <div class="spinner-large"></div>
-        <p>Chargement des images...</p>
+    <div class="flex flex-col items-center justify-center py-16">
+        <div class="w-10 h-10 border-4 border-slate-300 border-t-purple-600 rounded-full animate-spin mb-4"></div>
+        <p class="text-gray-600">Chargement des images...</p>
     </div>
     }
 
     <!-- Images Grid -->
     @if (!isLoading() && images().length > 0) {
-    <div class="images-grid">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @for (image of images(); track image.id) {
-        <div class="image-card" [class.inactive]="!image.isActive">
-            <img [src]="image.supabaseUrl" [alt]="image.filePath" class="image" />
-            <div class="image-overlay">
-                <div class="image-actions">
-                    <button class="action-btn toggle" (click)="toggleStatus(image.id)"
-                        [title]="image.isActive ? 'Désactiver' : 'Activer'">
-                        @if (image.isActive) {
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                            </path>
-                        </svg>
-                        } @else {
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21">
-                            </path>
-                        </svg>
-                        }
-                    </button>
-                    <button class="action-btn delete" (click)="deleteImage(image.id)" title="Supprimer">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
+        <div class="relative aspect-square rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl"
+            [class]="image.isActive ? '' : 'opacity-60'">
+            <img [src]="image.supabaseUrl" [alt]="image.filePath" class="w-full h-full object-cover" />
+            <div
+                class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                <button class="p-3 bg-white rounded-full shadow-lg transition-transform duration-300 hover:scale-110"
+                    (click)="toggleStatus(image.id)" [title]="image.isActive ? 'Désactiver' : 'Activer'">
+                    @if (image.isActive) {
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                        </path>
+                    </svg>
+                    } @else {
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21">
+                        </path>
+                    </svg>
+                    }
+                </button>
+                <button class="p-3 bg-red-500 rounded-full shadow-lg transition-transform duration-300 hover:scale-110"
+                    (click)="deleteImage(image.id)" title="Supprimer">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                        </path>
+                    </svg>
+                </button>
             </div>
             @if (!image.isActive) {
-            <div class="inactive-badge">Inactive</div>
+            <div class="absolute top-3 right-3 px-3 py-1 bg-gray-800/80 text-white text-sm font-semibold rounded-full">
+                Inactive</div>
             }
         </div>
         }
@@ -84,14 +87,14 @@
 
     <!-- Empty State -->
     @if (!isLoading() && images().length === 0) {
-    <div class="empty-state">
-        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="flex flex-col items-center justify-center py-16 text-center">
+        <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
             </path>
         </svg>
-        <p class="empty-text">Aucune image de référence</p>
-        <p class="empty-subtext">Ajoutez votre première image pour commencer</p>
+        <p class="text-xl font-semibold text-gray-800 mb-2">Aucune image de référence</p>
+        <p class="text-gray-600">Ajoutez votre première image pour commencer</p>
     </div>
     }
 </div>

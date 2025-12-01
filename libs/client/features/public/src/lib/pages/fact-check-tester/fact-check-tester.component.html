@@ -1,31 +1,33 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8">
     <div class="max-w-2xl mx-auto">
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold text-slate-900 mb-2">Testeur Fact-Check Vera</h1>
-            <p class="text-slate-600">
-                Testez l'API de vérification de faits. Entrez un fait ou une affirmation à vérifier, ou sélectionnez une
-                image/vidéo/audio à analyser.
-            </p>
+        <div class="mb-8 flex items-start justify-between">
+            <div>
+                <h1 class="text-4xl font-bold text-slate-900 mb-2">{{ 'fact_check.title' | translate }}</h1>
+                <p class="text-slate-600">
+                    {{ 'fact_check.subtitle' | translate }}
+                </p>
+            </div>
+            <app-language-switcher></app-language-switcher>
         </div>
 
         <!-- Form Card -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div class="mb-6">
                 <label for="query" class="block text-sm font-semibold text-slate-900 mb-2">
-                    Fait à vérifier (optionnel si image sélectionnée)
+                    {{ 'fact_check.input_placeholder' | translate }}
                 </label>
                 <textarea id="query" [(ngModel)]="query" [disabled]="isLoading()"
-                    placeholder="Ex: Le changement climatique est réel et causé par les activités humaines (optionnel si vous avez sélectionné une image)"
+                    [placeholder]="translationService.get('fact_check.input_placeholder')"
                     class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 resize-none transition-colors disabled:bg-slate-50 disabled:cursor-not-allowed"
                     rows="4"></textarea>
-                <p class="text-xs text-slate-500 mt-1">Caractères : {{ query().length }}</p>
+                <p class="text-xs text-slate-500 mt-1">{{ query().length }} {{ 'common.characters' | translate }}</p>
             </div>
 
             <!-- Image Upload Section -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-slate-900 mb-2">
-                    Média à analyser (image, vidéo ou audio - peut être utilisé seul pour vérification)
+                    {{ 'fact_check.upload_media' | translate }}
                 </label>
                 <div class="border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors cursor-pointer"
                     (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
@@ -40,13 +42,13 @@
                             </svg>
                         </div>
                         <div class="text-sm text-slate-600">
-                            Cliquez pour sélectionner une image, vidéo ou audio ou glissez-déposez
+                            {{ 'fact_check.drag_and_drop' | translate }}
                         </div>
                         <input type="file" accept="image/*,video/*,audio/*" (change)="onImageSelected($event)"
                             class="hidden" id="imageInput">
                         <label for="imageInput"
                             class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer transition-colors">
-                            Sélectionner un média
+                            {{ 'fact_check.upload_media' | translate }}
                         </label>
                     </div>
                     } @else {
@@ -56,13 +58,13 @@
                             class="mx-auto max-h-32 rounded-lg shadow-sm">
                         } @else if (selectedMediaType() === 'video') {
                         <video [src]="imagePreview()" controls class="mx-auto max-h-32 rounded-lg shadow-sm">
-                            Votre navigateur ne supporte pas la lecture de vidéos.
+                            {{ 'errors.no_video_support' | translate }}
                         </video>
                         } @else if (selectedMediaType() === 'audio') {
                         <div class="flex items-center justify-center w-full h-32 bg-slate-100 rounded-lg">
                             <div class="text-center">
                                 <div class="text-4xl mb-2">🎵</div>
-                                <div class="text-sm text-slate-600">Fichier audio</div>
+                                <div class="text-sm text-slate-600">{{ 'fact_check.audio_file' | translate }}</div>
                             </div>
                         </div>
                         }
@@ -70,18 +72,11 @@
                         <div class="text-xs text-slate-500">{{ ((selectedImage()?.size || 0) / 1024 / 1024).toFixed(2)
                             }} MB</div>
                         <button (click)="removeImage()" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                            ✕ Supprimer
+                            ✕ {{ 'fact_check.remove_media' | translate }}
                         </button>
                     </div>
                     }
                 </div>
-            </div>
-
-            <!-- User ID Display -->
-            <div class="mb-6 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <p class="text-xs text-slate-600 font-mono">
-                    ID utilisateur : <span class="font-semibold">{{ userId() }}</span>
-                </p>
             </div>
 
             <!-- Action Buttons -->
@@ -89,14 +84,14 @@
                 <button (click)="submitFactCheck()" [disabled]="!canSubmit()"
                     class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
                     @if (!isLoading()) {
-                    <span>🔍 Vérifier</span>
+                    <span>🔍 {{ 'fact_check.submit' | translate }}</span>
                     } @else {
-                    <span>⏳ Vérification...</span>
+                    <span>⏳ {{ 'fact_check.submit_loading' | translate }}</span>
                     }
                 </button>
                 <button (click)="clearForm()" [disabled]="isLoading()"
                     class="px-6 py-3 bg-slate-200 text-slate-900 font-semibold rounded-lg hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                    ✕ Réinitialiser
+                    ✕ {{ 'fact_check.clear' | translate }}
                 </button>
             </div>
         </div>
@@ -104,7 +99,7 @@
         <!-- Error Message -->
         @if (error()) {
         <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg mb-6">
-            <p class="text-sm font-semibold text-red-700">Erreur</p>
+            <p class="text-sm font-semibold text-red-700">{{ 'errors.error' | translate }}</p>
             <p class="text-sm text-red-600 mt-1">{{ error() }}</p>
         </div>
         }
@@ -113,13 +108,13 @@
         @if (response()) {
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold text-slate-900">Résultat de la vérification</h2>
+                <h2 class="text-lg font-bold text-slate-900">{{ 'fact_check.result_title' | translate }}</h2>
                 <button (click)="copyResponseToClipboard()"
                     class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium">
                     @if (copiedToClipboard()) {
-                    ✓ Copié
+                    {{ 'fact_check.copied' | translate }}
                     } @else {
-                    📋 Copier
+                    {{ 'fact_check.copy' | translate }}
                     }
                 </button>
             </div>
@@ -134,10 +129,10 @@
         @if (factChecksHistory().length > 0) {
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold text-slate-900">Historique des vérifications</h2>
+                <h2 class="text-lg font-bold text-slate-900">{{ 'fact_check.history_title' | translate }}</h2>
                 <button (click)="clearHistory()"
                     class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
-                    🗑️ Effacer tout
+                    🗑️ {{ 'fact_check.clear_history' | translate }}
                 </button>
             </div>
             <div class="space-y-3 max-h-96 overflow-y-auto">
@@ -152,7 +147,7 @@
                         </div>
                         <button (click)="reloadFactCheck(factCheck)"
                             class="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
-                            ↻ Recharger
+                            ↻ {{ 'common.reload' | translate }}
                         </button>
                     </div>
                     <div class="bg-slate-50 p-3 rounded border-l-4 border-blue-500">
@@ -168,7 +163,7 @@
         <!-- Links Preview -->
         @if (extractedLinks().length > 0) {
         <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-lg font-bold text-slate-900 mb-4">Liens trouvés</h2>
+            <h2 class="text-lg font-bold text-slate-900 mb-4">{{ 'fact_check.links_found' | translate }}</h2>
             <div class="space-y-3">
                 @for (link of extractedLinks(); track link) {
                 <div class="border border-slate-200 rounded-lg p-4 hover:bg-slate-50 transition-colors">
@@ -189,12 +184,13 @@
                 }
             </div>
         </div>
-        } <!-- Info Section -->
+        }
+
+        <!-- Info Section -->
         <div class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h3 class="font-semibold text-blue-900 mb-2">ℹ️ À propos</h3>
+            <h3 class="font-semibold text-blue-900 mb-2">ℹ️ {{ 'common.about' | translate }}</h3>
             <p class="text-sm text-blue-800">
-                Cette page teste l'intégration avec l'API Vera. Les vérifications sont effectuées en temps réel
-                par le système de fact-checking de Vera.
+                {{ 'fact_check.about_description' | translate }}
             </p>
         </div>
     </div>
