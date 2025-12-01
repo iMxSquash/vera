@@ -1,20 +1,33 @@
 <div class="p-4">
-    <!-- Page Title -->
-    <h2 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h2>
+  <h2 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h2>
 
-    <!-- Stats Section -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white p-6 rounded-lg shadow text-center">
-            <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Fact-Checks</h3>
-            <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
+  <!-- Cartes de sondage -->
+  <section class="mt-10 space-y-8">
+
+    <div *ngFor="let s of surveys" class="bg-white p-6 rounded-lg shadow">
+
+        <h3 class="text-xl font-bold text-gray-800 mb-1">
+            {{ s.title }}
+        </h3>
+        
+        <p>Total réponses : <strong>{{ s.stats.total }}</strong></p>
+        <p>Oui : <strong>{{ s.stats.yes }}</strong> ({{ s.stats.percentYes }}%)</p>
+        <p>Non : <strong>{{ s.stats.no }}</strong> ({{ s.stats.percentNo }}%)</p>
+
+        <!-- Bouton rafraîchir -->
+        <button
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition mb-4"
+            (click)="refreshSurvey(s.sheetId)"
+            [disabled]="loadingId === s.sheetId"
+        >
+            <span *ngIf="loadingId !== s.sheetId">🔄 Rafraîchir</span>
+            <span *ngIf="loadingId === s.sheetId">⏳ Import…</span>
+        </button>
+
+        <!-- Graphique -->
+        <app-survey-chart [stats]="s.stats"></app-survey-chart>
+
         </div>
-        <div class="bg-white p-6 rounded-lg shadow text-center">
-            <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Sondages</h3>
-            <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow text-center">
-            <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Utilisateurs</h3>
-            <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
-        </div>
-    </section>
+
+  </section>
 </div>

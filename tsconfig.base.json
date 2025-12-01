@@ -18,6 +18,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@client/features/survey": [
+        "libs/client/features/survey/src/index.ts"
+      ],
       "@env": [
         "libs/client/shared/environments/src/lib/environment.ts"
       ],
@@ -30,7 +33,7 @@
       "@vera/api/features/instagram-polls": [
         "libs/api/features/instagram-polls/src/index.ts"
       ],
-      "@vera/api/features/survey" : [ 
+      "@vera/api/features/survey": [
         "libs/api/features/survey/src/index.ts"
       ],
       "@vera/api/shared/data-access": [
@@ -38,6 +41,9 @@
       ],
       "@vera/api/shared/util": [
         "libs/api/shared/util/src/index.ts"
+      ],
+      "@vera/client-features-survey": [
+        "libs/client/features/src/index.ts"
       ],
       "@vera/client/feature-admin": [
         "libs/client/features/admin/src/index.ts"
@@ -77,6 +83,9 @@
       ],
       "@vera/shared/util": [
         "libs/shared/util/src/index.ts"
+      ],
+      "@vera/survey": [
+        "libs/client/features/survey/src/index.ts"
       ]
     }
   },

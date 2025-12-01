@@ -1,24 +1,40 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { SurveyService } from './survey.service';
-import { CreateSurveyDto } from './dto/create-survey.dto';
 
 @Controller('survey')
 export class SurveyController {
   constructor(private readonly surveyService: SurveyService) {}
 
-  @Post()
-  async create(@Body() body: CreateSurveyDto) {
-    // Vérification du secret
-    /*if (body.secret !== process.env.FORM_SECRET) {
-      throw new HttpException('Unauthorized request', HttpStatus.UNAUTHORIZED);
-    }
-
-    delete body.secret;*/
-    return this.surveyService.create(body);
+  @Get('all')
+  getAllSurveys() {
+    return this.surveyService.findAllSurveys();
   }
 
-  @Get()
-  async findAll() {
-    return this.surveyService.findAll();
+  // Importer les réponses depuis un Google Sheet en BDD
+  // GET /api/survey/import/:sheetId
+   @Get('import/:sheetId')
+  import(@Param('sheetId') sheetId: string) {
+    return this.surveyService.importFromGoogleSheet(sheetId);
   }
+
+  @Get('cleanup')
+cleanup() {
+  return this.surveyService.cleanup();
+}
+
+  @Get(':sheetId/stats')
+  getStats(@Param('sheetId') sheetId: string) {
+    return this.surveyService.getStats(sheetId);
+  }
+
+  // Récupérer les réponses d’un sondage particulier
+  // GET /api/survey/:sheetId
+  @Get(':sheetId')
+  findBySheet(@Param('sheetId') sheetId: string) {
+    return this.surveyService.findBySheet(sheetId);
+  }
+
+  
+
+  
 }

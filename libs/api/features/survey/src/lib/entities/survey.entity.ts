@@ -1,14 +1,19 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('survey')
+@Entity()
 export class Survey {
+  @PrimaryGeneratedColumn()
+  id?: number;
 
-  @PrimaryGeneratedColumn('uuid') 
-  id?: string;
+  @Column({nullable:true})
+  sheetId!: string;
+
+  @Column({nullable:true})
+  title!:string;
 
   @Column()
   q1!: string;
 
-  @CreateDateColumn()
+  @Column()
   created_at!: Date;
 }

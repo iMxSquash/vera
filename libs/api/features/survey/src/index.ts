@@ -1,5 +1,4 @@
 export * from './lib/survey.controller'
 export * from './lib/survey.module'
 export * from './lib/survey.service'
-export * from './lib/dto/create-survey.dto'
 export * from './lib/entities/survey.entity'

@@ -6,6 +6,7 @@ import { FactCheckModule } from '@vera/api/features/fact-check';
 import { FeaturesInstagramPollsModule } from '@vera/api/features/instagram-polls';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SurveyModule } from '@vera/api/features/survey';
+import { GoogleSheetsService } from 'libs/api/features/survey/src/lib/google-sheets/google-sheets.services';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { SurveyModule } from '@vera/api/features/survey';
     SurveyModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [GoogleSheetsService],
 })
 export class AppModule {}
