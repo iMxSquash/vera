@@ -16,6 +16,7 @@ export class FactCheckService {
   private readonly veraApiKey: string;
   private readonly geminiApiKey: string;
   private readonly perplexityApiKey: string;
+  private readonly youtubeApiKey: string;
 
   constructor(
     @InjectRepository(ImageEntity)
@@ -28,6 +29,7 @@ export class FactCheckService {
     this.veraApiKey = this.configService.get<string>('VERA_API_KEY', '');
     this.geminiApiKey = this.configService.get<string>('GEMINI_API_KEY', '');
     this.perplexityApiKey = this.configService.get<string>('PERPLEXITY_API_KEY', '');
+    this.youtubeApiKey = this.configService.get<string>('YOUTUBE_API_KEY', '');
     
     if (!this.veraApiKey) {
       this.logger.warn('VERA_API_KEY is not set');
@@ -37,6 +39,9 @@ export class FactCheckService {
     }
     if (!this.perplexityApiKey) {
       this.logger.warn('PERPLEXITY_API_KEY is not set');
+    }
+    if (!this.youtubeApiKey) {
+      this.logger.warn('YOUTUBE_API_KEY is not set');
     }
   }
 
@@ -378,6 +383,14 @@ Analyse ce contenu audio et applique les règles ci-dessus pour produire une seu
 
   async analyzeUrlWithPerplexity(url: string): Promise<string> {
     try {
+      // Vérifier si c'est un lien YouTube
+      const youtubeVideoId = this.extractYoutubeVideoId(url);
+      
+      if (youtubeVideoId) {
+        return await this.analyzeYoutubeVideo(youtubeVideoId);
+      }
+      
+      // Sinon utiliser Perplexity pour les autres URLs
       this.logger.log(`Analyzing URL with Perplexity. URL: ${url}\n`);
 
       const requestBody = {
@@ -415,6 +428,115 @@ Analyse ce contenu audio et applique les règles ci-dessus pour produire une seu
       this.logger.error('Error analyzing URL with Perplexity:', error);
       // Fallback en cas d'erreur
       return `Erreur lors de l'analyse de l'URL (${url}). Contenu nécessitant vérification factuelle.`;
+    }
+  }
+
+  private extractYoutubeVideoId(url: string): string | null {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+      /^([a-zA-Z0-9_-]{11})$/ // Cas où c'est juste l'ID
+    ];
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+
+    return null;
+  }
+
+  private async analyzeYoutubeVideo(videoId: string): Promise<string> {
+    try {
+      this.logger.log(`Analyzing YouTube video with ID: ${videoId}\n`);
+
+      const response = await firstValueFrom(
+        this.httpService.get('https://www.googleapis.com/youtube/v3/videos', {
+          params: {
+            id: videoId,
+            key: this.youtubeApiKey,
+            part: 'snippet,statistics',
+          },
+        })
+      );
+
+      const video = response.data?.items?.[0];
+      if (!video) {
+        return "Vidéo YouTube non trouvée";
+      }
+
+      const snippet = video.snippet;
+      const statistics = video.statistics;
+
+      const rawAnalysis = `Vidéo YouTube: "${snippet.title}" par ${snippet.channelTitle}. ${snippet.description}. Vues: ${statistics.viewCount}, Likes: ${statistics.likeCount}, Commentaires: ${statistics.commentCount}.`;
+
+      this.logger.log(`YouTube video raw analysis:\n${rawAnalysis}\n`);
+
+      // Passer l'analyse par Perplexity pour extraire la revendication factuelle
+      const factualAnalysis = await this.processYoutubeAnalysisWithPerplexity(rawAnalysis);
+
+      return factualAnalysis;
+
+    } catch (error) {
+      this.logger.error('Error analyzing YouTube video:', error);
+      return `Erreur lors de l'analyse de la vidéo YouTube. Contenu nécessitant vérification factuelle.`;
+    }
+  }
+
+  private async processYoutubeAnalysisWithPerplexity(youtubeInfo: string): Promise<string> {
+    try {
+      this.logger.log(`Processing YouTube analysis with Perplexity\n`);
+
+      const requestBody = {
+        model: "sonar",
+        messages: [
+          {
+            role: "user",
+            content: `Tu es un expert en vérification de faits. Basé sur ces informations YouTube, formule UNE SEULE question ou affirmation factuelle courte et vérifiable qui résume le contenu principal de la vidéo.
+
+Informations YouTube:
+${youtubeInfo}
+
+Instructions:
+- Maximum 1 phrase, 20 mots
+- Utilise soit une QUESTION soit une AFFIRMATION factuelle
+- Ne fais pas de description, seulement une revendication vérifiable
+- Sois direct et concis
+
+Exemple de sortie:
+"Emmanuel Macron a annoncé un nouveau service national volontaire et purement militaire à partir de l'été prochain?"
+
+Formule maintenant la revendication factuelle:`
+          }
+        ],
+        max_tokens: 100,
+        temperature: 0.1
+      };
+
+      const response = await firstValueFrom(
+        this.httpService.post(
+          'https://api.perplexity.ai/chat/completions',
+          requestBody,
+          {
+            headers: {
+              'Authorization': `Bearer ${this.perplexityApiKey}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+      );
+
+      this.logger.log(`Perplexity YouTube analysis response received\n`);
+
+      const analysis = response.data?.choices?.[0]?.message?.content || youtubeInfo;
+      this.logger.log(`Perplexity extracted factual claim:\n${analysis}\n`);
+      return analysis;
+
+    } catch (error) {
+      this.logger.error('Error processing YouTube analysis with Perplexity:', error);
+      // Fallback: retourner l'analyse brute si Perplexity échoue
+      return youtubeInfo;
     }
   }
 
