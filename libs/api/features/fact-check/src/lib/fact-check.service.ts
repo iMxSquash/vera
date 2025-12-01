@@ -171,27 +171,6 @@ export class FactCheckService {
   }
 
   // ----------------------------------------------------
-  // 🔥 AUTO VERIFY (corrigé et fonctionnel)
-  // ----------------------------------------------------
-  async autoVerify(contentId: string): Promise<{
-    status: FactCheckStatus;
-    message: string;
-  }> {
-    this.logger.log(`Auto-verifying content ${contentId}\n`);
-
-    // 👉 TEMP : résultat fake en attendant ton moteur IA
-    const fakeResult = {
-      ok: true,
-      reason: "Exemple de résultat automatique",
-    };
-
-    return {
-      status: FactCheckStatus.COMPLETED,
-      message: fakeResult.reason,
-    };
-  }
-
-  // ----------------------------------------------------
   // 🔥 MEDIA UPLOAD & ANALYSIS (Images + Vidéos + Audio)
   // ----------------------------------------------------
   async uploadAndAnalyzeMedia(file: Express.Multer.File): Promise<{ mediaId: string; description: string; mediaType: 'image' | 'video' | 'audio' }> {
