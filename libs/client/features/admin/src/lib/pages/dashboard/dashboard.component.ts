@@ -7,11 +7,9 @@ import { SurveyChartComponent } from '@client/features/survey';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
-  imports: [CommonModule, SurveyChartComponent],
+  imports: [CommonModule, RouterLink, SurveyChartComponent],
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent {}
 export class DashboardComponent implements OnInit {
 
   surveys: { sheetId: string; title: string; stats: any }[] = [];
