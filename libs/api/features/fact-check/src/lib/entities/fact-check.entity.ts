@@ -35,3 +35,27 @@ export class FactCheckEntity {
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 }
+
+@Entity('images')
+export class ImageEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  filename!: string;
+
+  @Column({ type: 'varchar', length: 500 })
+  path!: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  mimetype!: string;
+
+  @Column({ type: 'int' })
+  size!: number;
+
+  @Column({ type: 'text', nullable: true })
+  geminiDescription?: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt!: Date;
+}

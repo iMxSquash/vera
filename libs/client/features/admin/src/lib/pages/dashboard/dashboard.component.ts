@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { SurveyService } from '@client/features/survey';
 import { SurveyChartComponent } from '@client/features/survey';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
+  imports: [CommonModule, RouterLink],
   imports: [CommonModule, SurveyChartComponent],
   templateUrl: './dashboard.component.html',
 })
+export class DashboardComponent {}
 export class DashboardComponent implements OnInit {
 
   surveys: { sheetId: string; title: string; stats: any }[] = [];

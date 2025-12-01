@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: vera-api
+    env: node
+    plan: free
+    buildCommand: pnpm install --prod=false && pnpm nx build server --configuration=production
+    startCommand: NODE_ENV=production node dist/apps/server/main.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: CLIENT_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_API_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: VERA_API_URL
+        sync: false
+      - key: VERA_API_KEY
+        sync: false
+      - key: TELEGRAM_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PERPLEXITY_API_KEY
+        sync: false
+      - key: PIAPI_API_KEY
+        sync: false
+      - key: PIAPI_BASE_URL
+        sync: false

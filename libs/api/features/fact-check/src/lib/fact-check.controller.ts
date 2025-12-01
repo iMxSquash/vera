@@ -1,16 +1,15 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Param,
   Res,
   UseGuards,
-  NotFoundException,
-  HttpCode,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { FactCheckService } from './fact-check.service';
 import { VerifyExternalFactDto } from './dto/verify-external-fact.dto';
 import { JwtAuthGuard } from '@vera/api/features/auth';
@@ -19,16 +18,6 @@ import { JwtAuthGuard } from '@vera/api/features/auth';
 @Controller('fact-check')
 export class FactCheckController {
   constructor(private readonly factCheckService: FactCheckService) {}
-
-  @Post('verify-external')
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Verify a fact from external API (public endpoint)' })
-  @ApiResponse({ status: 200, description: 'Verification result' })
-  @ApiResponse({ status: 400, description: 'Invalid request' })
-  @ApiResponse({ status: 500, description: 'API call failed' })
-  async verifyExternal(@Body() dto: VerifyExternalFactDto) {
-    return this.factCheckService.verifyFactExternal(dto.userId, dto.query);
-  }
 
   @Post()
   @ApiBearerAuth()
@@ -49,27 +38,75 @@ export class FactCheckController {
     stream.pipe(res);
   }
 
-  @Get()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get fact check history' })
-  @ApiResponse({ status: 200, description: 'List of fact checks' })
-  async findAll() {
-    return this.factCheckService.findAll();
+  @Post('verify')
+  @UseInterceptors(FileInterceptor('media'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Verify fact with optional media analysis (images/videos)' })
+  @ApiResponse({ status: 200, description: 'Verification completed' })
+  @ApiResponse({ status: 400, description: 'Invalid request' })
+  async verifyWithMedia(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: { userId: string; query: string }
+  ) {
+    let factToCheck = body.query;
+
+    // Si un média est fourni (image ou vidéo), l'analyser avec Gemini
+    if (file) {
+      const { description, mediaType } = await this.factCheckService.uploadAndAnalyzeMedia(file);
+      
+      if (body.query.trim()) {
+        // Si on a du texte et un média, les combiner de manière fluide
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+
+${mediaType.toUpperCase()} ANALYSIS: ${description}
+
+ORIGINAL QUERY: ${body.query}`;
+      } else {
+        // Si seul le média est présent, utiliser seulement l'analyse du média
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+
+${mediaType.toUpperCase()} ANALYSIS: ${description}`;
+      }
+    } else {
+      // Si pas de média, vérifier s'il y a des URLs dans le texte
+      const urls = this.extractUrlsFromText(body.query);
+      
+      if (urls.length > 0) {
+        // Analyser la première URL trouvée avec Perplexity
+        const urlAnalysis = await this.factCheckService.analyzeUrlWithPerplexity(urls[0]);
+        
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+
+URL ANALYSIS: ${urlAnalysis}
+
+ORIGINAL QUERY: ${body.query}`;
+      } else {
+        // Si pas de média et pas d'URL, ajouter quand même l'instruction pour le texte seul
+        factToCheck = `SYSTEM: Tu es un vérificateur de faits direct et concis. RÉPONDS UNIQUEMENT avec les informations factuelles. NE COMMENCE JAMAIS par "Je vais vérifier", "Patientez", "Un instant", "Je suis en train de vérifier les faits". NE TERMINE JAMAIS par "Souhaitez-vous approfondir", "Si vous voulez explorer", "N'hésitez pas à me demander". Sois DIRECT et FACTUEL uniquement.
+
+QUESTION À VÉRIFIER: ${body.query}`;
+      }
+    }
+
+    // Vérifier le fait avec Vera
+    return this.factCheckService.verifyFactExternal(body.userId, factToCheck);
   }
 
-  @Get(':id')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get fact check details' })
-  @ApiResponse({ status: 200, description: 'Fact check details' })
-  @ApiResponse({ status: 404, description: 'Fact check not found' })
-  async findOne(@Param('id') id: string) {
-    const factCheck = await this.factCheckService.findOne(id);
-    if (!factCheck) {
-      throw new NotFoundException(`Fact check with ID ${id} not found`);
+  private extractUrlsFromText(text: string): string[] {
+    if (!text) return [];
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urls: string[] = [];
+    let match;
+
+    while ((match = urlRegex.exec(text)) !== null) {
+      const url = match[0].replace(/[.,;!?()]+$/, ''); // Supprimer la ponctuation à la fin
+      if (!urls.includes(url)) {
+        urls.push(url);
+      }
     }
-    return factCheck;
+
+    return urls;
   }
 }
 
