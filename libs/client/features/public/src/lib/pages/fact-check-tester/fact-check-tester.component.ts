@@ -69,7 +69,9 @@ export class FactCheckTesterComponent {
       const formData = new FormData();
       formData.append('userId', this.userId());
       formData.append('query', this.query());
-      formData.append('lang', this.translationService.currentLanguage());
+      // Récupérer la langue depuis le localStorage
+      const savedLanguage = localStorage.getItem('vera_language') || 'fr';
+      formData.append('lang', savedLanguage);
       
       // Si une image est sélectionnée, l'ajouter aux données
       const selectedImage = this.selectedImage();

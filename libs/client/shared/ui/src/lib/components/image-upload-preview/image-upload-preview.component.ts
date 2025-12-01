@@ -18,7 +18,6 @@ export interface FaceSwapResponse {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './image-upload-preview.component.html',
-  styleUrl: './image-upload-preview.component.css',
 })
 export class ImageUploadPreviewComponent {
   selectedFile = signal<File | null>(null);

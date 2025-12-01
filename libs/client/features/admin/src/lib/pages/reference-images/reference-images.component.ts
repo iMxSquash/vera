@@ -17,7 +17,6 @@ interface ReferenceImage {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './reference-images.component.html',
-  styleUrl: './reference-images.component.css',
 })
 export class ReferenceImagesComponent implements OnInit {
   images = signal<ReferenceImage[]>([]);
