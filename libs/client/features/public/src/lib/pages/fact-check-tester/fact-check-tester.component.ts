@@ -69,6 +69,7 @@ export class FactCheckTesterComponent {
       const formData = new FormData();
       formData.append('userId', this.userId());
       formData.append('query', this.query());
+      formData.append('lang', this.translationService.currentLanguage());
       
       // Si une image est sélectionnée, l'ajouter aux données
       const selectedImage = this.selectedImage();
