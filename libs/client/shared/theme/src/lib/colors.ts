@@ -33,10 +33,19 @@ const successColors = {
     3: '#F0FDFA',
 };
 
+const UiKit = {
+    beige: "#FEF2E4",
+    vert: "#C3E4A1",
+    rose: "#FFDEE0",
+    bleu: "#B4D2FF"
+}
+
 export const colors = {
     neutrals: neutralsColors,
     brand: brandColors,
     alert: alertColors,
     warning: warningColors,
     success: successColors,
+    UiKit: UiKit,
 };
+
