@@ -37,6 +37,7 @@ export class FactCheckTesterComponent {
   imagePreview = signal<string>('');
   isDragOver = signal<boolean>(false);
   selectedMediaType = signal<'image' | 'video' | 'audio' | null>(null);
+  copiedToClipboard = signal<boolean>(false);
 
   canSubmit = computed(() => (this.query().trim().length > 0 || this.selectedImage() !== null) && !this.isLoading());
 
@@ -342,5 +343,19 @@ export class FactCheckTesterComponent {
       .join('\n') // Rejoindre les lignes
       .replace(/\n{3,}/g, '\n\n') // Maximum 2 sauts de ligne consécutifs
       .trim(); // Supprimer les espaces au début et à la fin
+  }
+
+  copyResponseToClipboard(): void {
+    const responseText = this.response();
+    if (responseText) {
+      navigator.clipboard.writeText(responseText).then(() => {
+        this.copiedToClipboard.set(true);
+        setTimeout(() => {
+          this.copiedToClipboard.set(false);
+        }, 2000);
+      }).catch(() => {
+        this.error.set('Erreur lors de la copie du texte');
+      });
+    }
   }
 }
