@@ -6,12 +6,12 @@
 
 /* Upload Zone */
 .upload-zone {
-    border: 3px dashed #cbd5e0;
+    border: 3px dashed #C3E4A1;
     border-radius: 16px;
     padding: 4rem 2rem;
     text-align: center;
     transition: all 0.3s ease;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: white;
     background-clip: padding-box;
     position: relative;
 }
@@ -22,17 +22,8 @@
     inset: 0;
     border-radius: 16px;
     padding: 3px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-}
-
-.upload-zone:hover {
-    border-color: #667eea;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
 }
 
 .upload-label {
@@ -46,7 +37,6 @@
 .upload-icon {
     width: 64px;
     height: 64px;
-    color: #667eea;
     filter: drop-shadow(0 4px 6px rgba(102, 126, 234, 0.3));
 }
 
