@@ -7,21 +7,23 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, TranslateModule],
   template: `
-    <div class="flex items-center gap-1 bg-white rounded-lg border border-slate-200 p-1">
+    <div class="flex items-center gap-0.5 bg-white rounded-md border border-gray-200 p-0.5">
       <button 
         (click)="switchTo('fr')"
-        [class.bg-blue-100]="currentLanguage() === 'fr'"
-        [class.text-blue-700]="currentLanguage() === 'fr'"
-        class="px-3 py-1.5 rounded font-medium text-sm transition-colors hover:bg-slate-100"
+        [class.bg-gray-100]="currentLanguage() === 'fr'"
+        [class.text-gray-900]="currentLanguage() === 'fr'"
+        [class.text-gray-500]="currentLanguage() !== 'fr'"
+        class="px-2.5 py-1 rounded font-semibold text-xs transition-colors hover:bg-gray-50"
       >
         FR
       </button>
-      <div class="w-px h-5 bg-slate-200"></div>
+      <div class="w-px h-4 bg-gray-200"></div>
       <button 
         (click)="switchTo('en')"
-        [class.bg-blue-100]="currentLanguage() === 'en'"
-        [class.text-blue-700]="currentLanguage() === 'en'"
-        class="px-3 py-1.5 rounded font-medium text-sm transition-colors hover:bg-slate-100"
+        [class.bg-gray-100]="currentLanguage() === 'en'"
+        [class.text-gray-900]="currentLanguage() === 'en'"
+        [class.text-gray-500]="currentLanguage() !== 'en'"
+        class="px-2.5 py-1 rounded font-semibold text-xs transition-colors hover:bg-gray-50"
       >
         EN
       </button>
