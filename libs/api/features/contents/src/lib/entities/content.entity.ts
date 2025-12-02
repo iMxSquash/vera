@@ -38,7 +38,7 @@ export class Content {
   verification_result!: string | null;
 
   @Column({ type: 'uuid', nullable: true })
-  fact_check_id!: string | null; // <-- CORRECT
+  fact_check_id!: string | null;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt!: Date;

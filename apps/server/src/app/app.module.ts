@@ -29,8 +29,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     AuthModule,
     FactCheckModule,
     FeaturesInstagramPollsModule,
-    ContentsModule,
-    TelegramModule,
+    ContentsModule,  // <-- ton module local
+    TelegramModule,  // <-- ton module local
   ],
   controllers: [],
   providers: [],
