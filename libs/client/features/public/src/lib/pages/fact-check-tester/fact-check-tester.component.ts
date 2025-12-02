@@ -3,8 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@env';
+import { TranslationService } from '../../services/translation.service';
+import { LanguageSwitcherComponent } from '@vera/client/shared/ui';
 
 interface FactCheckRecord {
   id: string;
@@ -16,7 +19,7 @@ interface FactCheckRecord {
 @Component({
   selector: 'app-fact-check-tester',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule, LanguageSwitcherComponent],
   templateUrl: './fact-check-tester.component.html',
   styleUrl: './fact-check-tester.component.css',
 })
@@ -25,6 +28,7 @@ export class FactCheckTesterComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly apiUrl = environment.apiUrl;
   private readonly STORAGE_KEY = 'vera_fact_checks';
+  public readonly translationService = inject(TranslationService);
 
   query = signal<string>('');
   userId = signal<string>('test-user-' + Math.random().toString(36).substr(2, 9));
@@ -65,6 +69,9 @@ export class FactCheckTesterComponent {
       const formData = new FormData();
       formData.append('userId', this.userId());
       formData.append('query', this.query());
+      // Récupérer la langue depuis le localStorage
+      const savedLanguage = localStorage.getItem('vera_language') || 'fr';
+      formData.append('lang', savedLanguage);
       
       // Si une image est sélectionnée, l'ajouter aux données
       const selectedImage = this.selectedImage();

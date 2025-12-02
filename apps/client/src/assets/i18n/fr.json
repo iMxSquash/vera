@@ -1,0 +1,44 @@
+{
+    "common": {
+        "language": "Français",
+        "characters": "caractères",
+        "reload": "Recharger",
+        "about": "À propos"
+    },
+    "fact_check": {
+        "title": "Vérificateur de faits",
+        "subtitle": "Vérifiez les informations en ligne en temps réel",
+        "input_placeholder": "Entrez un texte, une URL ou uploadez une image/vidéo/audio",
+        "submit": "Vérifier",
+        "submit_loading": "Vérification en cours...",
+        "clear": "Réinitialiser",
+        "copy": "📋 Copier",
+        "copied": "✓ Copié",
+        "result_title": "Résultat de la vérification",
+        "history_title": "Historique des vérifications",
+        "no_history": "Aucune vérification pour le moment",
+        "clear_history": "Effacer l'historique",
+        "upload_media": "Télécharger une image, vidéo ou audio",
+        "drag_and_drop": "Glissez-déposez un fichier ici ou cliquez pour sélectionner",
+        "supported_formats": "Formats supportés : Images (JPG, PNG, GIF, WebP), Vidéos (MP4, AVI, MOV, WebM), Audio (MP3, WAV, M4A, OGG, FLAC)",
+        "remove_media": "Supprimer le fichier",
+        "audio_file": "Fichier audio",
+        "links_found": "Liens trouvés",
+        "about_description": "Cette page teste l'intégration avec l'API Vera. Les vérifications sont effectuées en temps réel par le système de fact-checking de Vera."
+    },
+    "errors": {
+        "error": "Erreur",
+        "invalid_file": "Fichier invalide",
+        "file_too_large": "Le fichier est trop volumineux (max 50 MB)",
+        "upload_error": "Erreur lors du téléchargement du fichier",
+        "verification_error": "Erreur lors de la vérification",
+        "no_input": "Veuillez entrer du texte ou sélectionner un fichier",
+        "network_error": "Erreur réseau",
+        "no_video_support": "Votre navigateur ne supporte pas la lecture de vidéos."
+    },
+    "media_types": {
+        "image": "IMAGE",
+        "video": "VIDÉO",
+        "audio": "AUDIO"
+    }
+}
