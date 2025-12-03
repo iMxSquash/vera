@@ -7,6 +7,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Request, Response, NextFunction } from 'express';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -65,7 +66,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   // Add middleware for additional security headers
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     // Ensure CORS headers are set
     res.header('Access-Control-Allow-Private-Network', 'true');
     next();

@@ -28,6 +28,7 @@ export class VeraChatWindowComponent {
   response = input<VeraResponse | null>(null);
   isLoading = input<boolean>(false);
   error = input<string | null>(null);
+  initialQuestion = input<string>('');
 
   submitQuestion = output<string>();
   submitWithFile = output<{ question: string; file: File | null }>();

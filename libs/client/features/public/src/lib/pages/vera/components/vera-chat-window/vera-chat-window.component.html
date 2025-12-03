@@ -104,7 +104,8 @@
     <!-- Input Area - Hidden when viewing a response -->
     @if (!response()) {
     <div class="flex-shrink-0">
-        <app-vera-input (submitWithFile)="onSubmitQuestion($event)" [isLoading]="isLoading()"></app-vera-input>
+        <app-vera-input (submitWithFile)="onSubmitQuestion($event)" [isLoading]="isLoading()"
+            [initialQuestion]="initialQuestion()"></app-vera-input>
     </div>
     }
 

@@ -83,7 +83,7 @@
             <!-- Question Input -->
             <textarea id="vera-question-input" name="question" [(ngModel)]="question" (keydown)="onKeyDown($event)"
                 [disabled]="isLoading()" placeholder="{{ 'vera.input.placeholder' | translate }}"
-                class="flex-1 my-auto border-transparent rounded-[3px] focus:outline-none focus:ring-0 resize-none disabled:bg-gray-50 disabled:text-gray-500"
+                class="flex-1 my-auto border-transparent rounded-[3px] focus:outline-none focus:ring-0 resize-none disabled:bg-gray-50 h-auto max-h-[48px] disabled:text-gray-500"
                 rows="1"></textarea>
 
             <!-- Submit Button -->

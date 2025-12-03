@@ -1,4 +1,4 @@
-import { Component, output, signal, input } from '@angular/core';
+import { Component, output, signal, input, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,11 +17,23 @@ export class VeraInputComponent {
   submitQuestion = output<string>();
   submitWithFile = output<{ question: string; file: File | null }>();
   isLoading = input<boolean>(false);
+  initialQuestion = input<string>('');
 
   question = signal<string>('');
   selectedFile = signal<File | null>(null);
   filePreview = signal<string | null>(null);
   showMediaMenu = signal<boolean>(false);
+
+  constructor() {
+    // Set initial question when input changes
+    effect(() => {
+      const initial = this.initialQuestion();
+      if (initial && this.question() === '') {
+        this.question.set(initial);
+        this.autoResizeTextarea();
+      }
+    }, { allowSignalWrites: true });
+  }
 
   onSubmit(): void {
     if (this.question().trim() || this.selectedFile()) {
@@ -62,6 +74,21 @@ export class VeraInputComponent {
       event.preventDefault();
       this.onSubmit();
     }
+    // Auto-resize textarea
+    this.autoResizeTextarea();
+  }
+
+  autoResizeTextarea(): void {
+    // Use setTimeout to ensure the DOM is updated
+    setTimeout(() => {
+      const textarea = document.getElementById('vera-question-input') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.style.height = 'auto';
+        const maxHeight = 48;
+        const newHeight = Math.min(textarea.scrollHeight, maxHeight);
+        textarea.style.height = newHeight + 'px';
+      }
+    }, 0);
   }
 
   toggleMediaMenu(): void {
