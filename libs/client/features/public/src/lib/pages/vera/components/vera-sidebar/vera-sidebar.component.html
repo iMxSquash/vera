@@ -1,16 +1,16 @@
-<aside class="flex w-full md:w-64 bg-gray-900 text-white flex-col h-full">
+<aside class="flex w-full md:w-64 bg-vera-sidebar text-white flex-col h-full">
     <!-- New Chat Button (Desktop) / Close Button (Mobile) -->
     <div class="p-4">
         <!-- Close Button for Mobile -->
         <button (click)="onCloseMobile()"
-            class="md:hidden w-full flex items-center justify-end gap-2 text-white font-semibold rounded-lg transition-colors">
+            class="md:hidden w-full flex items-center justify-end gap-2 text-vera-primary font-semibold rounded-lg transition-colors">
             <vera-icon name="cross" [size]="20" color="text-white"></vera-icon>
         </button>
 
         <!-- New Chat Button for Desktop -->
         <button (click)="onNewChat()"
-            class="hidden md:flex w-full items-center justify-center md:justify-start gap-2 px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors">
-            <vera-icon name="conv-chat" [size]="20" color="text-white"></vera-icon>
+            class="hidden md:flex w-full items-center justify-center md:justify-start gap-2 px-4 py-3 bg-vera-primary text-black font-semibold rounded-lg hover:brightness-90 transition-colors">
+            <vera-icon name="conv-chat" [size]="20" color="text-black"></vera-icon>
             <span class="hidden md:inline">{{ 'vera.sidebar.new_chat' | translate }}</span>
         </button>
     </div>
@@ -18,15 +18,15 @@
     <!-- Chat History -->
     <div class="flex-1 overflow-y-auto">
         <div class="p-4">
-            <h3 class="text-sm font-semibold text-gray-400 mb-4">{{ 'vera.sidebar.chat_history' | translate }}</h3>
+            <h3 class="text-sm font-semibold text-vera-primary mb-4">{{ 'vera.sidebar.chat_history' | translate }}</h3>
             @if (chats().length === 0) {
-            <p class="text-xs text-gray-500 text-center py-4">{{ 'vera.sidebar.no_chats' | translate }}</p>
+            <p class="text-xs text-neutrals-600 text-center py-4">{{ 'vera.sidebar.no_chats' | translate }}</p>
             } @else {
             <div class="space-y-2 max-h-[calc(100vh-210px)] overflow-y-auto">
                 @for (chat of chats(); track chat.id) {
-                <div class="group relative border-b border-green-500">
-                    <button (click)="onSelectChat(chat)" [class.bg-gray-800]="selectedChat()?.id === chat.id"
-                        class="w-full text-left px-3 py-2 rounded-t-lg text-sm text-gray-300 hover:bg-gray-800 transition-colors break-words">
+                <div class="group relative border-b border-vera-primary">
+                    <button (click)="onSelectChat(chat)" [class.bg-neutrals-800]="selectedChat()?.id === chat.id"
+                        class="w-full text-left px-3 py-2 rounded-t-lg text-sm text-neutrals-500 hover:bg-vera-primary/10 transition-colors break-words">
                         <!-- Media Preview or Icon -->
                         @if (chat.media) {
                         <div class="mb-2 flex items-center gap-2">
@@ -34,25 +34,25 @@
                             <img [src]="chat.media.preview" [alt]="chat.media.name"
                                 class="h-8 w-8 rounded object-cover flex-shrink-0" />
                             } @else {
-                            <div class="h-8 w-8 rounded bg-green-900 flex items-center justify-center flex-shrink-0">
+                            <div class="h-8 w-8 rounded bg-vera-primary flex items-center justify-center flex-shrink-0">
                                 @if (chat.media.type === 'image') {
-                                <vera-icon name="search-img" [size]="16" color="text-green-400"></vera-icon>
+                                <vera-icon name="search-img" [size]="16" color="text-vera-primary"></vera-icon>
                                 } @else if (chat.media.type === 'video') {
-                                <vera-icon name="video" [size]="16" color="text-green-400"></vera-icon>
+                                <vera-icon name="video" [size]="16" color="text-vera-primary"></vera-icon>
                                 } @else if (chat.media.type === 'audio') {
-                                <vera-icon name="microphone" [size]="16" color="text-green-400"></vera-icon>
+                                <vera-icon name="microphone" [size]="16" color="text-vera-primary"></vera-icon>
                                 }
                             </div>
                             }
-                            <span class="text-xs text-gray-400 truncate">{{ chat.media.name }}</span>
+                            <span class="text-xs text-neutrals-600 truncate">{{ chat.media.name }}</span>
                         </div>
                         }
                         <p class="line-clamp-2">{{ chat.question }}</p>
-                        <p class="text-xs text-gray-500 mt-1">{{ formatDate(chat.date) }}</p>
+                        <p class="text-xs text-neutrals-600 mt-1">{{ formatDate(chat.date) }}</p>
                     </button>
                     <!-- Delete Button on Hover -->
                     <button (click)="onDeleteChat(chat, $event)"
-                        class="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1 text-gray-400 hover:text-red-400 hover:bg-red-900 hover:bg-opacity-20 rounded"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1 text-neutrals-600 hover:text-red-400 hover:bg-red-50 rounded"
                         title="Supprimer">
                         <vera-icon name="cross" [size]="16"></vera-icon>
                     </button>

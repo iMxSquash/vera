@@ -1,11 +1,11 @@
 <div class="flex flex-col h-full w-full">
     <!-- Mobile Quick Actions -->
     <div class="md:hidden flex items-center justify-between w-full px-6 py-4">
-        <button (click)="toggleSidebar()" class="text-gray-700" title="Historique">
+        <button (click)="toggleSidebar()" class="text-neutrals-700" title="Historique">
             <vera-icon name="burger-menu-left" [size]="20"></vera-icon>
         </button>
 
-        <button (click)="showNewChat()" class="text-gray-700" title="Chat">
+        <button (click)="showNewChat()" class="text-neutrals-700" title="Chat">
             <vera-icon name="conv-chat" [size]="20"></vera-icon>
         </button>
     </div>
@@ -15,7 +15,7 @@
         <!-- Sidebar - Desktop always visible, Mobile modal -->
         @if (showSidebar()) {
         <div
-            class="fixed left-0 top-0 md:top-0 bottom-0 md:relative md:bottom-auto z-50 md:z-auto w-screen h-screen md:w-auto bg-white md:bg-gray-900">
+            class="fixed left-0 top-[72px] md:top-0 bottom-0 md:relative md:bottom-auto z-50 md:z-auto w-screen h-[calc(100vh-72px)] md:w-auto bg-neutrals-50 md:bg-vera-sidebar">
             <app-vera-sidebar [chats]="chatHistory()" [selectedChat]="selectedChat()" (newChat)="createNewChat();"
                 (selectChat)="selectChat($event); showChatOnly();" (deleteChat)="deleteChat($event)"
                 (closeMobile)="showChatOnly()"></app-vera-sidebar>

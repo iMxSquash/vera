@@ -87,7 +87,7 @@ export class VeraChatWindowComponent {
       const cleanUrl = url.replace(/[.,;!?()]+$/, '');
       const punctuation = url.slice(cleanUrl.length);
 
-      return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-700 underline">${cleanUrl}</a>${punctuation}`;
+      return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:underline">${cleanUrl}</a>${punctuation}`;
     });
   }
 
