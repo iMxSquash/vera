@@ -2,15 +2,13 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { IconComponent } from '../../icons/icon.component';
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-header-mobile',
   standalone: true,
-  imports: [CommonModule, RouterLink, IconComponent, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterLink, IconComponent],
   template: `
     <div class="md:hidden flex items-center gap-3">
-      <app-language-switcher></app-language-switcher>
       <button 
         (click)="toggleMenu()"
         class="p-2 hover:bg-gray-100 rounded-md transition-colors"
