@@ -15,15 +15,61 @@ async function bootstrap() {
 
   const port = configService.get<number>('PORT') || 3000;
   const clientUrl = configService.get<string>('CLIENT_URL');
+  const nodeEnv = configService.get<string>('NODE_ENV') || 'development';
 
-  // Enable CORS for development
-  app.enableCors({
-    origin: clientUrl || 'chrome-extension://*',
+  // CORS configuration for web app, extensions, and development
+  const corsOptions = {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      // Allow requests without origin (mobile apps, extensions, Postman)
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      // Allow chrome extensions
+      if (origin.startsWith('chrome-extension://')) {
+        callback(null, true);
+        return;
+      }
+
+      // Allow client URL
+      if (origin === clientUrl) {
+        callback(null, true);
+        return;
+      }
+
+      // Allow localhost in development
+      if (nodeEnv === 'development' && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+        callback(null, true);
+        return;
+      }
+
+      // In production, be more restrictive
+      if (nodeEnv === 'production') {
+        if (origin.includes('vera')) {
+          callback(null, true);
+          return;
+        }
+      }
+
+      callback(new Error('CORS policy: origin not allowed'));
+    },
     credentials: true,
-  });
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+
+  app.enableCors(corsOptions);
 
   // Set global route prefix
   app.setGlobalPrefix('api');
+
+  // Add middleware for additional security headers
+  app.use((req, res, next) => {
+    // Ensure CORS headers are set
+    res.header('Access-Control-Allow-Private-Network', 'true');
+    next();
+  });
 
   // Swagger setup
   const config = new DocumentBuilder()
