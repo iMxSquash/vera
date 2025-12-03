@@ -18,7 +18,7 @@ async function bootstrap() {
 
   // Enable CORS for development
   app.enableCors({
-    origin: clientUrl,
+    origin: clientUrl || 'chrome-extension://*',
     credentials: true,
   });
 
