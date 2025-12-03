@@ -18,6 +18,7 @@ export class VeraSidebarComponent {
   newChat = output<void>();
   selectChat = output<ChatMessage>();
   deleteChat = output<ChatMessage>();
+  closeMobile = output<void>();
 
   onNewChat(): void {
     this.newChat.emit();
@@ -30,6 +31,10 @@ export class VeraSidebarComponent {
   onDeleteChat(chat: ChatMessage, event: Event): void {
     event.stopPropagation();
     this.deleteChat.emit(chat);
+  }
+
+  onCloseMobile(): void {
+    this.closeMobile.emit();
   }
 
   formatDate(date: Date): string {

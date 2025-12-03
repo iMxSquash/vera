@@ -1,11 +1,38 @@
-<div class="flex h-full w-full overflow-hidden">
-    <!-- Sidebar -->
-    <app-vera-sidebar [chats]="chatHistory()" [selectedChat]="selectedChat()" (newChat)="createNewChat()"
-        (selectChat)="selectChat($event)" (deleteChat)="deleteChat($event)"></app-vera-sidebar>
+<div class="flex flex-col h-full w-full">
+    <!-- Mobile Quick Actions -->
+    <div class="md:hidden flex items-center justify-between w-full px-6 py-4">
+        <button (click)="toggleSidebar()" class="text-gray-700" title="Historique">
+            <vera-icon name="burger-menu-left" [size]="20"></vera-icon>
+        </button>
 
-    <!-- Chat Window -->
-    <div class="flex-1 w-full md:w-auto overflow-hidden">
-        <app-vera-chat-window [selectedChat]="selectedChat()" [response]="currentResponse()" [isLoading]="isLoading()"
-            [error]="error()" (submitWithFile)="onSubmitWithFile($event)"></app-vera-chat-window>
+        <button (click)="showNewChat()" class="text-gray-700" title="Chat">
+            <vera-icon name="conv-chat" [size]="20"></vera-icon>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-1 h-full w-full overflow-hidden">
+        <!-- Sidebar - Desktop always visible, Mobile modal -->
+        @if (showSidebar()) {
+        <div
+            class="fixed left-0 top-0 md:top-0 bottom-0 md:relative md:bottom-auto z-50 md:z-auto w-screen h-screen md:w-auto bg-white md:bg-gray-900">
+            <app-vera-sidebar [chats]="chatHistory()" [selectedChat]="selectedChat()"
+                (newChat)="createNewChat();" (selectChat)="selectChat($event); showChatOnly();"
+                (deleteChat)="deleteChat($event)" (closeMobile)="showChatOnly()"></app-vera-sidebar>
+        </div>
+        } @else {
+        <!-- Desktop Sidebar (always visible) -->
+        <div class="hidden md:block">
+            <app-vera-sidebar [chats]="chatHistory()" [selectedChat]="selectedChat()" (newChat)="createNewChat()"
+                (selectChat)="selectChat($event)" (deleteChat)="deleteChat($event)"></app-vera-sidebar>
+        </div>
+        }
+
+        <!-- Chat Window -->
+        <div class="flex-1 w-full md:w-auto overflow-hidden">
+            <app-vera-chat-window [selectedChat]="selectedChat()" [response]="currentResponse()"
+                [isLoading]="isLoading()" [error]="error()"
+                (submitWithFile)="onSubmitWithFile($event)"></app-vera-chat-window>
+        </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { environment } from '@env';
 import { VeraSidebarComponent } from './components/vera-sidebar/vera-sidebar.component';
 import { VeraChatWindowComponent } from './components/vera-chat-window/vera-chat-window.component';
+import { IconComponent } from '@vera/client/shared/ui';
 
 export interface ChatMessage {
   id: string;
@@ -42,6 +43,7 @@ export interface Source {
     TranslateModule,
     VeraSidebarComponent,
     VeraChatWindowComponent,
+    IconComponent,
   ],
   templateUrl: './vera.component.html',
   styleUrl: './vera.component.css',
@@ -55,12 +57,27 @@ export class VeraComponent {
   currentResponse = signal<VeraResponse | null>(null);
   isLoading = signal<boolean>(false);
   error = signal<string | null>(null);
+  showSidebar = signal<boolean>(false);
 
   // Response cache: chatId -> response
   private responseCache = new Map<string, VeraResponse>();
 
   constructor() {
     this.loadChatHistory();
+  }
+
+  toggleSidebar(): void {
+    this.showSidebar.update(val => !val);
+  }
+
+  showChatOnly(): void {
+    this.showSidebar.set(false);
+  } 
+
+  showNewChat(): void {
+    this.showSidebar.set(false);
+    this.selectedChat.set(null);
+    this.currentResponse.set(null);
   }
 
   private loadChatHistory(): void {
