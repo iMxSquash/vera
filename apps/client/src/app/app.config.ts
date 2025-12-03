@@ -1,7 +1,7 @@
 import {
   ApplicationConfig,
   provideZoneChangeDetection,
-  isDevMode,
+  isDevMode
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -24,11 +24,11 @@ export const appConfig: ApplicationConfig = {
     }),
     { provide: ENVIRONMENT, useValue: environment },
     provideTranslateService({
-      fallbackLang: 'fr',
+      fallbackLang: localStorage.getItem('vera_language') || 'fr',
     }),
     provideTranslateHttpLoader({
       prefix: './i18n/',
       suffix: '.json'
-    })
+    }),
   ],
 };

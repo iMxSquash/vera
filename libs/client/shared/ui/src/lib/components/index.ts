@@ -6,3 +6,4 @@ export * from './header/header-actions.component';
 export * from './header/header-mobile.component';
 export * from './button/button.component';
 export * from './hyperlink/hyperlink.component';
+export * from '../icons/icon.component';

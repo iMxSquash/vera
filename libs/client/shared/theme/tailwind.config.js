@@ -9,6 +9,7 @@ module.exports = {
       },
       backgroundImage: {
         'gradient-login': 'linear-gradient(135deg, #54668E 0%, #22263D 100%)',
+        'vera-pattern': 'url(/img/background.png)',
       },
       keyframes: {
         fadeIn: {

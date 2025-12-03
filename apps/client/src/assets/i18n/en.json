@@ -40,5 +40,37 @@
         "image": "IMAGE",
         "video": "VIDEO",
         "audio": "AUDIO"
+    },
+    "vera": {
+        "title": "Vera - Fact Checker",
+        "welcome": {
+            "title": "How can I inform you?",
+            "subtitle": "Verify information in real time",
+            "photo": "Photo",
+            "video": "Video",
+            "audio": "Audio",
+            "footer": "Vera uses AI to fact-check and identify misinformation"
+        },
+        "response": {
+            "loading": "Verification in progress...",
+            "answer": "Answer",
+            "sources": "Sources",
+            "source": "Source {{ number }}",
+            "copy": "Copy link",
+            "copied": "Copied!",
+            "open": "Open",
+            "timestamp": "Verified on {{ date }}",
+            "error-help": "Please check your connection and try again"
+        },
+        "input": {
+            "placeholder": "Ask a question",
+            "upload": "Upload an image, video or audio",
+            "helper": "Press Ctrl+Enter to send"
+        },
+        "sidebar": {
+            "new_chat": "New chat",
+            "chat_history": "Your chats",
+            "no_chats": "No chats yet"
+        }
     }
 }

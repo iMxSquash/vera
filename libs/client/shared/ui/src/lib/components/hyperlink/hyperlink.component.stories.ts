@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig, moduleMetadata } from '@storybook/angular';
 import { provideRouter } from '@angular/router';
 import { HyperlinkComponent } from './hyperlink.component';
+import { fn } from '@storybook/test';
 
 const meta: Meta<HyperlinkComponent> = {
   component: HyperlinkComponent,
@@ -21,7 +22,7 @@ const meta: Meta<HyperlinkComponent> = {
   argTypes: {
     href: {
       control: 'text',
-      description: 'URL destination',
+      description: 'URL destination (for routes or external links)',
     },
     variant: {
       control: 'select',
@@ -41,13 +42,16 @@ const meta: Meta<HyperlinkComponent> = {
       control: 'text',
       description: 'Custom rel attribute',
     },
+    action: {
+      description: 'Emit when clicked (for buttons-like behavior)',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<HyperlinkComponent>;
 
-export const Primary: Story = {
+export const PrimaryRoute: Story = {
   args: {
     href: '/',
     variant: 'primary',
@@ -56,12 +60,12 @@ export const Primary: Story = {
   render: (args) => ({
     props: args,
     template: `<app-hyperlink [href]="href" [variant]="variant" [external]="external">
-      Primary Link
+      Primary Route Link
     </app-hyperlink>`,
   }),
 };
 
-export const Secondary: Story = {
+export const SecondaryRoute: Story = {
   args: {
     href: '/',
     variant: 'secondary',
@@ -70,12 +74,12 @@ export const Secondary: Story = {
   render: (args) => ({
     props: args,
     template: `<app-hyperlink [href]="href" [variant]="variant" [external]="external">
-      Secondary Link
+      Secondary Route Link
     </app-hyperlink>`,
   }),
 };
 
-export const Muted: Story = {
+export const MutedRoute: Story = {
   args: {
     href: '/',
     variant: 'muted',
@@ -84,12 +88,12 @@ export const Muted: Story = {
   render: (args) => ({
     props: args,
     template: `<app-hyperlink [href]="href" [variant]="variant" [external]="external">
-      Muted Link
+      Muted Route Link
     </app-hyperlink>`,
   }),
 };
 
-export const External: Story = {
+export const ExternalLink: Story = {
   args: {
     href: 'https://example.com',
     variant: 'primary',
@@ -99,6 +103,32 @@ export const External: Story = {
     props: args,
     template: `<app-hyperlink [href]="href" [variant]="variant" [external]="external">
       External Link
+    </app-hyperlink>`,
+  }),
+};
+
+export const ActionButton: Story = {
+  args: {
+    variant: 'primary',
+    isAction: true,
+  },
+  render: (args) => ({
+    props: { ...args, onAction: fn() },
+    template: `<app-hyperlink [variant]="variant" [isAction]="isAction" (action)="onAction()">
+      Action Link (Click me)
+    </app-hyperlink>`,
+  }),
+};
+
+export const ActionButtonSecondary: Story = {
+  args: {
+    variant: 'secondary',
+    isAction: true,
+  },
+  render: (args) => ({
+    props: { ...args, onAction: fn() },
+    template: `<app-hyperlink [variant]="variant" [isAction]="isAction" (action)="onAction()">
+      Action Link Secondary
     </app-hyperlink>`,
   }),
 };
@@ -122,21 +152,27 @@ export const AllVariants: Story = {
     template: `
       <div class="flex flex-col gap-4">
         <div>
-          <h3 class="text-lg font-semibold mb-2">Primary</h3>
+          <h3 class="text-lg font-semibold mb-2">Primary Route</h3>
           <app-hyperlink href="/" variant="primary">
-            Primary Link
+            Primary Route Link
           </app-hyperlink>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-2">Secondary</h3>
+          <h3 class="text-lg font-semibold mb-2">Secondary Route</h3>
           <app-hyperlink href="/" variant="secondary">
-            Secondary Link
+            Secondary Route Link
           </app-hyperlink>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-2">Muted</h3>
+          <h3 class="text-lg font-semibold mb-2">Muted Route</h3>
           <app-hyperlink href="/" variant="muted">
-            Muted Link
+            Muted Route Link
+          </app-hyperlink>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2">Primary Action</h3>
+          <app-hyperlink variant="primary" [isAction]="true" (action)="console.log('clicked')">
+            Primary Action
           </app-hyperlink>
         </div>
       </div>
@@ -151,24 +187,40 @@ export const WithContext: Story = {
         <p>
           This is a paragraph with a
           <app-hyperlink href="/" variant="primary">
-            primary link
+            primary route link
           </app-hyperlink>
           in the middle of the text.
         </p>
         <p>
           This is a paragraph with a
           <app-hyperlink href="/" variant="secondary">
-            secondary link
+            secondary route link
           </app-hyperlink>
           in the middle of the text.
         </p>
         <p>
           This is a paragraph with a
           <app-hyperlink href="/" variant="muted">
-            muted link
+            muted route link
           </app-hyperlink>
           in the middle of the text.
         </p>
+      </div>
+    `,
+  }),
+};
+
+export const LanguageSwitcher: Story = {
+  render: () => ({
+    template: `
+      <div class="flex items-center gap-0.5 bg-white rounded-md border border-gray-200 p-0.5">
+        <app-hyperlink variant="primary" [isAction]="true" (action)="console.log('FR clicked')" class="px-2.5 py-1 rounded font-semibold text-xs">
+          FR
+        </app-hyperlink>
+        <div class="w-px h-4 bg-gray-200"></div>
+        <app-hyperlink variant="muted" [isAction]="true" (action)="console.log('EN clicked')" class="px-2.5 py-1 rounded font-semibold text-xs">
+          EN
+        </app-hyperlink>
       </div>
     `,
   }),

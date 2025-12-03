@@ -40,5 +40,41 @@
         "image": "IMAGE",
         "video": "VIDÉO",
         "audio": "AUDIO"
+    },
+    "vera": {
+        "title": "Vera - Vérificateur de faits",
+        "welcome": {
+            "title": "Comment puis-je vous informer?",
+            "subtitle": "Vérifiez les informations en temps réel",
+            "photo": "Photo",
+            "video": "Vidéo",
+            "audio": "Audio",
+            "footer": "Vera utilise l'IA pour vérifier les faits et les fausses informations"
+        },
+        "response": {
+            "loading": "Vérification en cours...",
+            "answer": "Réponse",
+            "sources": "Sources",
+            "source": "Source {{ number }}",
+            "copy": "Copier le lien",
+            "copied": "Copié !",
+            "open": "Ouvrir",
+            "timestamp": "Vérifié le {{ date }}",
+            "error-help": "Veuillez vérifier votre connexion et réessayer"
+        },
+        "input": {
+            "placeholder": "Poser une question",
+            "upload": "Télécharger une image, vidéo ou audio",
+            "helper": "Appuyez sur Ctrl+Entrée pour envoyer",
+            "add_media": "Ajouter un média",
+            "add_photo": "Ajouter une photo",
+            "add_video": "Ajouter une vidéo",
+            "add_audio": "Ajouter un audio"
+        },
+        "sidebar": {
+            "new_chat": "Nouveau chat",
+            "chat_history": "Vos chats",
+            "no_chats": "Aucun chat pour le moment"
+        }
     }
 }
