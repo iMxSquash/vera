@@ -57,7 +57,7 @@ import { DOCUMENT } from '@angular/common';
         Accueil
       </a>
       <a 
-        href="/fact-check-test"
+        href="/vera"
         (click)="isOpen.set(false)"
         class="flex inline-block gap-[10px] items-center text-[20px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
