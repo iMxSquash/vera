@@ -89,7 +89,7 @@
 
             <!-- Submit Button -->
             <button (click)="onSubmit()" [disabled]="isLoading() || (!question().trim() && !selectedFile())"
-                class="flex items-center justify-center h-12 w-12 bg-vera-primary hover:brightness-90 text-black disabled:text-white rounded-[3px] transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed font-medium whitespace-nowrap">
+                class="flex items-center justify-center h-12 w-12 bg-vera-primary hover:brightness-90 text-black disabled:text-neutrals-900 rounded-[3px] transition-colors duration-200 disabled:bg-neutrals-400 disabled:cursor-not-allowed font-medium whitespace-nowrap">
                 @if (isLoading()) {
                 <vera-icon name="conv-chat" [size]="20"></vera-icon>
                 } @else {
