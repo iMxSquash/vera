@@ -62,23 +62,18 @@ export class FaceSwapService {
   }
 
   async getRandomReferenceImage(): Promise<ReferenceImageEntity> {
-    const count = await this.referenceImageRepo.count({
+    // Get all active reference images (only from uploads folder)
+    const referenceImages = await this.referenceImageRepo.find({
       where: { isActive: true },
     });
 
-    if (count === 0) {
+    if (referenceImages.length === 0) {
       throw new NotFoundException('No active reference images available');
     }
 
-    const randomIndex = Math.floor(Math.random() * count);
-
-    const images = await this.referenceImageRepo.find({
-      where: { isActive: true },
-      skip: randomIndex,
-      take: 1,
-    });
-
-    return images[0];
+    // Select a random image from the list
+    const randomIndex = Math.floor(Math.random() * referenceImages.length);
+    return referenceImages[randomIndex];
   }
 
   async createFaceSwapTask(
