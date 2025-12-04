@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '@env';
@@ -50,6 +51,7 @@ export interface Source {
 })
 export class VeraComponent {
   private readonly http = inject(HttpClient);
+  private readonly route = inject(ActivatedRoute);
   private readonly apiUrl = environment.apiUrl;
 
   chatHistory = signal<ChatMessage[]>([]);
@@ -58,12 +60,23 @@ export class VeraComponent {
   isLoading = signal<boolean>(false);
   error = signal<string | null>(null);
   showSidebar = signal<boolean>(false);
+  initialQuestion = signal<string>('');
 
   // Response cache: chatId -> response
   private responseCache = new Map<string, VeraResponse>();
 
   constructor() {
     this.loadChatHistory();
+    
+    // Check for query parameter 'text' and populate input field
+    this.route.queryParams.subscribe(params => {
+      const textQuery = params['text'];
+      if (textQuery) {
+        const decodedText = decodeURIComponent(textQuery);
+        // Set initial question in input field
+        this.initialQuestion.set(decodedText);
+      }
+    });
   }
 
   toggleSidebar(): void {

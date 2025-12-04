@@ -28,6 +28,7 @@ export class VeraChatWindowComponent {
   response = input<VeraResponse | null>(null);
   isLoading = input<boolean>(false);
   error = input<string | null>(null);
+  initialQuestion = input<string>('');
 
   submitQuestion = output<string>();
   submitWithFile = output<{ question: string; file: File | null }>();
@@ -86,7 +87,7 @@ export class VeraChatWindowComponent {
       const cleanUrl = url.replace(/[.,;!?()]+$/, '');
       const punctuation = url.slice(cleanUrl.length);
 
-      return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-700 underline">${cleanUrl}</a>${punctuation}`;
+      return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:underline">${cleanUrl}</a>${punctuation}`;
     });
   }
 

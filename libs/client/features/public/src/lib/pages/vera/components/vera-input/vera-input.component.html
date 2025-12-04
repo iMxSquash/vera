@@ -3,63 +3,64 @@
         <!-- File Preview -->
         @if (selectedFile(); as file) {
         <div
-            class="mb-4 group flex items-center gap-3 bg-white border border-green-200 rounded-lg p-3 hover:bg-green-50 transition-colors">
+            class="mb-4 group flex items-center gap-3 bg-neutrals-50 border border-vera-primary rounded-lg p-3 hover:bg-neutrals-100 transition-colors">
             @if (filePreview()) {
             <img [src]="filePreview()" alt="Preview" class="h-10 w-10 rounded-md object-cover flex-shrink-0" />
             } @else {
-            <div class="h-10 w-10 rounded-md bg-green-100 flex items-center justify-center flex-shrink-0">
-                <vera-icon name="add" [size]="20" color="text-green-600"></vera-icon>
+            <div class="h-10 w-10 rounded-md bg-vera-cream flex items-center justify-center flex-shrink-0">
+                <vera-icon name="add" [size]="20" color="text-vera-primary"></vera-icon>
             </div>
             }
 
             <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 truncate">{{ file.name }}</p>
-                <p class="text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">{{ (file.size /
+                <p class="text-sm font-medium text-neutrals-900 truncate">{{ file.name }}</p>
+                <p class="text-xs text-neutrals-600 opacity-0 group-hover:opacity-100 transition-opacity">{{ (file.size
+                    /
                     1024 / 1024).toFixed(2) }}MB</p>
             </div>
 
             <button (click)="clearFile()"
-                class="flex-shrink-0 p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                class="flex-shrink-0 p-1.5 text-neutrals-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
                 <vera-icon name="cross" [size]="18"></vera-icon>
             </button>
         </div>
         }
 
         <!-- Input Area -->
-        <div class="flex gap-3 bg-white items-end rounded-md p-1">
+        <div class="flex gap-3 bg-neutrals-50 items-end rounded-md p-1">
             <!-- Add Media Button with Dropdown -->
             <div class="relative" #mediaMenu (document:click)="closeMediaMenuIfClickedOutside($event, mediaMenu)">
                 <button (click)="toggleMediaMenu()"
-                    class="flex items-center justify-center h-12 w-12 rounded-[3px] bg-green-100 hover:bg-green-200 transition-colors"
+                    class="flex items-center justify-center h-12 w-12 rounded-[3px] bg-vera-primary hover:brightness-90 transition-colors"
                     title="{{ 'vera.input.add_media' | translate }}">
-                    <vera-icon name="add" [size]="20" color="text-green-600"></vera-icon>
+                    <vera-icon name="add" [size]="20" color="text-neutrals-900"></vera-icon>
                 </button>
 
                 <!-- Media Menu Bubble -->
                 @if (showMediaMenu()) {
                 <div
-                    class="absolute bottom-16 left-0 bg-green-100 rounded-2xl shadow-lg p-4 min-w-max z-50 animate-in fade-in duration-200">
+                    class="absolute bottom-16 left-0 bg-vera-primary rounded-2xl rounded-bl-sm shadow-lg p-4 min-w-max z-50 animate-in fade-in duration-200">
                     <div class="space-y-2">
                         <!-- Photo Option -->
-                        <div>
+                        <div class="border-b border-black">
                             <input type="file" id="file-upload-photo" class="hidden" (change)="onFileSelected($event)"
                                 accept="image/*" />
                             <label for="file-upload-photo"
-                                class="flex items-center gap-3 px-4 py-2 rounded-[3px] hover:bg-green-200 cursor-pointer transition-colors group">
-                                <vera-icon name="search-img" [size]="20" color="text-gray-700"></vera-icon>
-                                <span class="text-sm text-gray-700 font-medium">{{ 'vera.input.add_photo' | translate
+                                class="flex items-center gap-3 pb-2 rounded-[3px] cursor-pointer transition-colors group">
+                                <vera-icon name="search-img" [size]="20" color="text-black"></vera-icon>
+                                <span class="text-sm text-black font-medium">{{ 'vera.input.add_photo' | translate
                                     }}</span>
                             </label>
                         </div>
 
                         <!-- Video Option -->
-                        <div>
+                        <div class="border-b border-black">
                             <input type="file" id="file-upload-video" class="hidden" (change)="onFileSelected($event)"
                                 accept="video/*" />
                             <label for="file-upload-video"
-                                class="flex items-center gap-3 px-4 py-2 rounded-[3px] hover:bg-green-200 cursor-pointer transition-colors">
-                                <vera-icon name="video" [size]="20" color="text-gray-700"></vera-icon>
-                                <span class="text-sm text-gray-700 font-medium">{{ 'vera.input.add_video' | translate
+                                class="flex items-center gap-3 py-2 rounded-[3px] cursor-pointer transition-colors">
+                                <vera-icon name="video-player" [size]="20" color="text-black"></vera-icon>
+                                <span class="text-sm text-black font-medium">{{ 'vera.input.add_video' | translate
                                     }}</span>
                             </label>
                         </div>
@@ -69,9 +70,9 @@
                             <input type="file" id="file-upload-audio" class="hidden" (change)="onFileSelected($event)"
                                 accept="audio/*" />
                             <label for="file-upload-audio"
-                                class="flex items-center gap-3 px-4 py-2 rounded-[3px] hover:bg-green-200 cursor-pointer transition-colors">
-                                <vera-icon name="microphone" [size]="20" color="text-gray-700"></vera-icon>
-                                <span class="text-sm text-gray-700 font-medium">{{ 'vera.input.add_audio' | translate
+                                class="flex items-center gap-3 pt-2 rounded-[3px] cursor-pointer transition-colors">
+                                <vera-icon name="mic" [size]="20" color="text-black"></vera-icon>
+                                <span class="text-sm text-black font-medium">{{ 'vera.input.add_audio' | translate
                                     }}</span>
                             </label>
                         </div>
@@ -83,12 +84,12 @@
             <!-- Question Input -->
             <textarea id="vera-question-input" name="question" [(ngModel)]="question" (keydown)="onKeyDown($event)"
                 [disabled]="isLoading()" placeholder="{{ 'vera.input.placeholder' | translate }}"
-                class="flex-1 my-auto border-transparent rounded-[3px] focus:outline-none focus:ring-0 resize-none disabled:bg-gray-50 disabled:text-gray-500"
+                class="flex-1 my-auto border-transparent rounded-[3px] focus:outline-none focus:ring-0 resize-none disabled:bg-neutrals-100 h-auto max-h-[48px] disabled:text-neutrals-600"
                 rows="1"></textarea>
 
             <!-- Submit Button -->
             <button (click)="onSubmit()" [disabled]="isLoading() || (!question().trim() && !selectedFile())"
-                class="flex items-center justify-center h-12 w-12 bg-green-600 hover:bg-green-700 text-black disabled:text-white rounded-[3px] transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed font-medium whitespace-nowrap">
+                class="flex items-center justify-center h-12 w-12 bg-vera-primary hover:brightness-90 text-black disabled:text-white rounded-[3px] transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed font-medium whitespace-nowrap">
                 @if (isLoading()) {
                 <vera-icon name="conv-chat" [size]="20"></vera-icon>
                 } @else {
