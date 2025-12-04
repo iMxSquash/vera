@@ -75,13 +75,15 @@
     },
     "landing": {
         "hero": {
-            "title": "Need to verify information?",
+            "title": "Need to ",
+            "title_high": "verify information?",
             "subtitle": "Vera Web is your verification hub. Analyze your sources, detect AI and secure your research in one click.",
             "discover": "Discover Vera",
             "download_extension": "Download extension"
         },
         "features": {
-            "title": "Discover Vera Web",
+            "title": "Discover ",
+            "title_high": "Vera Web ",
             "subtitle": "Vera Web is your verification hub. Analyze your sources, detect AI and secure your research in one click.",
             "feature1": {
                 "title": "Ask your question",
@@ -101,7 +103,8 @@
             }
         },
         "deepfake": {
-            "title": "Don't believe your eyes. Test the illusion",
+            "title": "Don't believe your eyes. ",
+            "title_high": "Test the illusion",
             "description1": "Understand the mechanics of misinformation by generating a deepfake of yourself.",
             "description2": "It's fake. It's troubling. And yet… it's really you"
         },

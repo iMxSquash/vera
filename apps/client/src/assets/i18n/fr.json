@@ -79,13 +79,15 @@
     },
     "landing": {
         "hero": {
-            "title": "Besoin de vérifier une info ?",
+            "title": "Besoin de ",
+            "title_high": "vérifier une info ?",
             "subtitle": "Vera Web est votre QG de vérification. Analysez vos sources, détectez les IA et sécurisez vos travaux de recherche en un clic.",
             "discover": "Découvrir Vera",
             "download_extension": "Télécharger l'extension"
         },
         "features": {
-            "title": "Découvrez Vera Web",
+            "title": "Découvrez ",
+            "title_high": "Vera Web",
             "subtitle": "Vera Web est votre QG de vérification. Analysez vos sources, détectez les IA et sécurisez vos travaux de recherche en un clic.",
             "feature1": {
                 "title": "Posez votre question",
@@ -105,12 +107,14 @@
             }
         },
         "deepfake": {
-            "title": "Ne croyez plus vos yeux. Testez l'illusion",
+            "title": "Ne croyez plus vos yeux. ",
+            "title_high": "Testez l'illusion",
             "description1": "Comprenez la mécanique de la désinformation en générant un deepfake de vous même.",
             "description2": "C'est faux. C'est troublant. Et pourtant… c'est bien vous"
         },
         "extension": {
-            "title": "Sélectionnez du texte, notre extension vérifie",
+            "title": "Sélectionnez du texte, notre ",
+            "title_high": "extension vérifie",
             "description": "Plus besoin de quitter votre site préféré pour savoir si une info est vraie ! Avec notre extension, sélectionnez simplement le texte qui vous intrigue et découvrez instantanément sa véracité. Rapide, simple et fiable.",
             "download": "Télécharger l'extension"
         },

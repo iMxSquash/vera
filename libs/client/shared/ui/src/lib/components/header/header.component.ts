@@ -11,7 +11,7 @@ import { IconComponent } from "../../icons";
   standalone: true,
   imports: [CommonModule, RouterLink, HeaderNavComponent, HeaderActionsComponent, HeaderMobileComponent, IconComponent],
   template: `
-    <header class="sticky top-0 z-50 bg-vera-cream flex items-center justify-between h-[80px] px-[20px] shadow-sm">
+    <header class="sticky top-0 z-50 bg-vera-cream flex items-center justify-between h-[57px] lg:h-[80px] px-[20px] shadow-sm">
       <!-- Logo -->
       <div class="flex-shrink-0">
         <a routerLink="/" class="hover:opacity-80 transition-opacity">
