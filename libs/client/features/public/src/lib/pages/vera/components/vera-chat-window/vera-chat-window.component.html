@@ -16,12 +16,12 @@
                     <div class="mb-3">
                         @if (selectedChat()!.media!.type === 'image') {
                         <img [src]="selectedChat()!.media!.preview" [alt]="selectedChat()!.media!.name"
-                            class="rounded-lg max-w-xs h-auto" />
+                            class="rounded-lg w-full h-auto object-cover" />
                         } @else if (selectedChat()!.media!.type === 'video') {
                         <video [src]="selectedChat()!.media!.preview" controls
-                            class="rounded-lg max-w-xs h-auto"></video>
+                            class="rounded-lg w-full h-auto object-cover"></video>
                         } @else if (selectedChat()!.media!.type === 'audio') {
-                        <audio [src]="selectedChat()!.media!.preview" controls class="rounded-lg w-full"></audio>
+                        <audio [src]="selectedChat()!.media!.preview" controls class="w-full"></audio>
                         }
                     </div>
                     }

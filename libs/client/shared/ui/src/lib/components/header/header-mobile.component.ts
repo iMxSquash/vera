@@ -1,14 +1,12 @@
 import { Component, signal, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { IconComponent } from '../../icons/icon.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-header-mobile',
   standalone: true,
-  imports: [CommonModule, RouterLink, IconComponent, LanguageSwitcherComponent],
+  imports: [CommonModule, LanguageSwitcherComponent],
   template: `
     <div class="md:hidden flex items-center gap-3 z-[100]">
       <button 
