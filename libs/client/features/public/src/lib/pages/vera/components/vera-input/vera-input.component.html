@@ -47,8 +47,9 @@
                                 accept="image/*" />
                             <label for="file-upload-photo"
                                 class="flex items-center gap-3 pb-2 rounded-[3px] cursor-pointer transition-colors group">
-                                <vera-icon name="search-img" [size]="20" color="text-black"></vera-icon>
-                                <span class="text-sm text-black font-medium">{{ 'vera.input.add_photo' | translate
+                                <vera-icon name="search-img" [size]="20" color="text-neutrals-900"></vera-icon>
+                                <span class="text-sm text-neutrals-900 font-medium">{{ 'vera.input.add_photo' |
+                                    translate
                                     }}</span>
                             </label>
                         </div>
@@ -59,8 +60,9 @@
                                 accept="video/*" />
                             <label for="file-upload-video"
                                 class="flex items-center gap-3 py-2 rounded-[3px] cursor-pointer transition-colors">
-                                <vera-icon name="video-player" [size]="20" color="text-black"></vera-icon>
-                                <span class="text-sm text-black font-medium">{{ 'vera.input.add_video' | translate
+                                <vera-icon name="video-player" [size]="20" color="text-neutrals-900"></vera-icon>
+                                <span class="text-sm text-neutrals-900 font-medium">{{ 'vera.input.add_video' |
+                                    translate
                                     }}</span>
                             </label>
                         </div>
@@ -71,8 +73,9 @@
                                 accept="audio/*" />
                             <label for="file-upload-audio"
                                 class="flex items-center gap-3 pt-2 rounded-[3px] cursor-pointer transition-colors">
-                                <vera-icon name="mic" [size]="20" color="text-black"></vera-icon>
-                                <span class="text-sm text-black font-medium">{{ 'vera.input.add_audio' | translate
+                                <vera-icon name="mic" [size]="20" color="text-neutrals-900"></vera-icon>
+                                <span class="text-sm text-neutrals-900 font-medium">{{ 'vera.input.add_audio' |
+                                    translate
                                     }}</span>
                             </label>
                         </div>
@@ -89,11 +92,11 @@
 
             <!-- Submit Button -->
             <button (click)="onSubmit()" [disabled]="isLoading() || (!question().trim() && !selectedFile())"
-                class="flex items-center justify-center h-12 w-12 bg-vera-primary hover:brightness-90 text-black disabled:text-white rounded-[3px] transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed font-medium whitespace-nowrap">
+                class="flex items-center justify-center h-12 w-12 bg-vera-primary hover:brightness-90 text-neutrals-900 disabled:text-neutrals-900 rounded-[3px] transition-colors duration-200 disabled:bg-neutrals-400 disabled:cursor-not-allowed font-medium whitespace-nowrap">
                 @if (isLoading()) {
                 <vera-icon name="conv-chat" [size]="20"></vera-icon>
                 } @else {
-                <vera-icon name="send" [size]="20" color="text-black"></vera-icon>
+                <vera-icon name="send" [size]="20" color="text-neutrals-900"></vera-icon>
                 }
             </button>
         </div>

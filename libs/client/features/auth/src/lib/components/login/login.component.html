@@ -1,5 +1,5 @@
 <div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-brand-2 to-brand-1">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <div class="bg-neutrals-50 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 class="text-center text-2xl font-bold text-neutrals-900 mb-6">Vera Admin</h1>
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
@@ -13,7 +13,7 @@
                     class="px-3 py-2 border border-neutrals-300 rounded-md text-base focus:outline-none focus:border-brand-2 focus:ring-2 focus:ring-brand-2/10" />
             </div>
             <button type="submit" [disabled]="isLoading()"
-                class="px-3 py-2 bg-brand-2 text-white rounded-md font-semibold cursor-pointer transition hover:bg-brand-1 disabled:opacity-60 disabled:cursor-not-allowed">
+                class="px-3 py-2 bg-brand-2 text-neutrals-50 rounded-md font-semibold cursor-pointer transition hover:bg-brand-1 disabled:opacity-60 disabled:cursor-not-allowed">
                 {{ isLoading() ? 'Connexion en cours...' : 'Se connecter' }}
             </button>
             @if (error(); as error) {

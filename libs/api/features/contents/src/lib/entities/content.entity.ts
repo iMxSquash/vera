@@ -26,13 +26,13 @@ export class Content {
   url!: string;
 
   @Column({ type: 'text', nullable: true })
-  text!: string;
+  text?: string | null;
 
   @Column({ type: 'json', nullable: true })
-  media!: Record<string, unknown>; // Pour stocker les métadonnées des médias (images, vidéos)
+  media?: Record<string, unknown>; // Pour stocker les métadonnées des médias (images, vidéos)
 
   @Column({ type: 'json', nullable: true })
-  metadata!: Record<string, unknown>; // Métadonnées supplémentaires (auteur, date, etc.)
+  metadata?: Record<string, unknown>; // Métadonnées supplémentaires (auteur, date, etc.)
 
   @Column({
     type: 'enum',
@@ -42,10 +42,10 @@ export class Content {
   status!: ContentStatus;
 
   @Column({ type: 'text', nullable: true })
-  verification_result!: string;
+  verification_result?: string | null;
 
   @Column({ type: 'uuid', nullable: true })
-  fact_check_id!: string; // Référence vers la vérification fact-check associée
+  fact_check_id?: string | null;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt!: Date;

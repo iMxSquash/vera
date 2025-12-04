@@ -12,7 +12,7 @@
         </div>
 
         <!-- Form Card -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div class="bg-neutrals-50 rounded-xl shadow-lg p-6 mb-6">
             <div class="mb-6">
                 <label for="query" class="block text-sm font-semibold text-slate-900 mb-2">
                     {{ 'fact_check.input_placeholder' | translate }}
@@ -47,7 +47,7 @@
                         <input type="file" accept="image/*,video/*,audio/*" (change)="onImageSelected($event)"
                             class="hidden" id="imageInput">
                         <label for="imageInput"
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer transition-colors">
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-neutrals-50 text-sm font-medium rounded-lg hover:bg-blue-700 cursor-pointer transition-colors">
                             {{ 'fact_check.upload_media' | translate }}
                         </label>
                     </div>
@@ -82,7 +82,7 @@
             <!-- Action Buttons -->
             <div class="flex gap-3">
                 <button (click)="submitFactCheck()" [disabled]="!canSubmit()"
-                    class="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
+                    class="flex-1 px-6 py-3 bg-blue-600 text-neutrals-50 font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
                     @if (!isLoading()) {
                     <span>🔍 {{ 'fact_check.submit' | translate }}</span>
                     } @else {
@@ -106,7 +106,7 @@
 
         <!-- Response Card -->
         @if (response()) {
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div class="bg-neutrals-50 rounded-xl shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-bold text-slate-900">{{ 'fact_check.result_title' | translate }}</h2>
                 <button (click)="copyResponseToClipboard()"
@@ -127,7 +127,7 @@
 
         <!-- History Section -->
         @if (factChecksHistory().length > 0) {
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div class="bg-neutrals-50 rounded-xl shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-bold text-slate-900">{{ 'fact_check.history_title' | translate }}</h2>
                 <button (click)="clearHistory()"
@@ -162,7 +162,7 @@
 
         <!-- Links Preview -->
         @if (extractedLinks().length > 0) {
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="bg-neutrals-50 rounded-xl shadow-lg p-6">
             <h2 class="text-lg font-bold text-slate-900 mb-4">{{ 'fact_check.links_found' | translate }}</h2>
             <div class="space-y-3">
                 @for (link of extractedLinks(); track link) {

@@ -775,7 +775,7 @@ export class Feature {
 
 ```html
 <!-- Bon -->
-<button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Click me</button>
+<button class="px-4 py-2 bg-blue-600 text-neutrals-50 rounded-lg hover:bg-blue-700 transition-colors">Click me</button>
 
 <!-- À éviter (trop de classes custom CSS) -->
 <button class="custom-button">Click me</button>

@@ -213,7 +213,7 @@ export const WithContext: Story = {
 export const LanguageSwitcher: Story = {
   render: () => ({
     template: `
-      <div class="flex items-center gap-0.5 bg-white rounded-md border border-gray-200 p-0.5">
+      <div class="flex items-center gap-0.5 bg-neutrals-50 rounded-md border border-gray-200 p-0.5">
         <app-hyperlink variant="primary" [isAction]="true" (action)="console.log('FR clicked')" class="px-2.5 py-1 rounded font-semibold text-xs">
           FR
         </app-hyperlink>

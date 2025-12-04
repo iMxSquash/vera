@@ -33,7 +33,7 @@ import { DOCUMENT } from '@angular/common';
 
     <!-- Mobile Menu Overlay -->
     <nav 
-      class="fixed top-0 right-0 h-full w-full bg-[#FEF2E4] shadow-xl transition-transform duration-300 p-8 z-[100]
+      class="fixed top-0 right-0 h-full w-full bg-vera-cream shadow-xl transition-transform duration-300 p-8 z-[100]
         flex flex-col justify-center items-center gap-12 overflow-y-auto
         md:hidden"
       [class.translate-x-full]="!isOpen()"
@@ -57,9 +57,9 @@ import { DOCUMENT } from '@angular/common';
         Accueil
       </a>
       <a 
-        href="/fact-check-test"
+        href="/vera"
         (click)="isOpen.set(false)"
-        class="flex inline-block gap-[10px] items-center text-[20px] bg-[#C3E4A1] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        class="flex inline-block gap-[10px] items-center text-[20px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
         Parler à Vera
         <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +69,7 @@ import { DOCUMENT } from '@angular/common';
       <a 
         href="/"
         (click)="isOpen.set(false)"
-        class="inline-block text-[#C3E4A1] bg-black text-[20px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        class="inline-block text-vera-primary bg-neutrals-900 text-[20px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
         Télécharger l'extension
       </a>

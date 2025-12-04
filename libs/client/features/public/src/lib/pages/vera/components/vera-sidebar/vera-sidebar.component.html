@@ -1,16 +1,16 @@
-<aside class="flex w-full md:w-64 bg-vera-sidebar text-white flex-col h-full">
+<aside class="flex w-full md:w-64 bg-vera-sidebar text-neutrals-50 flex-col h-full">
     <!-- New Chat Button (Desktop) / Close Button (Mobile) -->
     <div class="p-4">
         <!-- Close Button for Mobile -->
         <button (click)="onCloseMobile()"
             class="md:hidden w-full flex items-center justify-end gap-2 text-vera-primary font-semibold rounded-lg transition-colors">
-            <vera-icon name="cross" [size]="20" color="text-white"></vera-icon>
+            <vera-icon name="cross" [size]="20" color="text-neutrals-50"></vera-icon>
         </button>
 
         <!-- New Chat Button for Desktop -->
         <button (click)="onNewChat()"
-            class="hidden md:flex w-full items-center justify-center md:justify-start gap-2 px-4 py-3 bg-vera-primary text-black font-semibold rounded-lg hover:brightness-90 transition-colors">
-            <vera-icon name="conv-chat" [size]="20" color="text-black"></vera-icon>
+            class="hidden md:flex w-full items-center justify-center md:justify-start gap-2 px-4 py-3 bg-vera-primary text-neutrals-900 font-semibold rounded-lg hover:brightness-90 transition-colors">
+            <vera-icon name="conv-chat" [size]="20" color="text-neutrals-900"></vera-icon>
             <span class="hidden md:inline">{{ 'vera.sidebar.new_chat' | translate }}</span>
         </button>
     </div>
