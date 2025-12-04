@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router'; // ← Ajout de Router
 import { SurveyService } from '@client/features/survey';
 import { SurveyChartComponent } from '@client/features/survey';
 
@@ -13,8 +13,9 @@ import { SurveyChartComponent } from '@client/features/survey';
 export class DashboardComponent implements OnInit {
 
   surveys: { sheetId: string; title: string; stats: any }[] = [];
+  loadingId: string | null = null;
 
-  constructor(private surveyService: SurveyService) {}
+  constructor(private surveyService: SurveyService, private router: Router) {} // ← Router injecté
 
   ngOnInit(): void {
     this.loadSurveys();
@@ -22,35 +23,24 @@ export class DashboardComponent implements OnInit {
 
   loadSurveys() {
     this.surveyService.getAllSurveys().subscribe(rows => {
-
       this.surveys = [];
-
       rows.forEach(row => {
         this.surveyService.getStats(row.sheetId).subscribe(stats => {
-
           this.surveys.push({
             sheetId: row.sheetId,
             title: row.title,
             stats
           });
-
         });
       });
-
     });
   }
 
-
-  loadingId: string | null = null;
-
   refreshSurvey(sheetId: string) {
     this.loadingId = sheetId;
-
     this.surveyService.importSurvey(sheetId).subscribe({
       next: () => {
-        // Mise à jour des stats après import
         this.surveyService.getStats(sheetId).subscribe(stats => {
-          // Remplace les anciennes stats
           const index = this.surveys.findIndex(s => s.sheetId === sheetId);
           if (index !== -1) {
             this.surveys[index].stats = stats;
@@ -65,6 +55,11 @@ export class DashboardComponent implements OnInit {
         alert("Erreur lors de la mise à jour du sondage.");
       }
     });
+  }
+
+  /** Méthode pour savoir si une route est active pour la nav */
+  isActive(url: string): boolean {
+    return this.router.url === url;
   }
 
 }

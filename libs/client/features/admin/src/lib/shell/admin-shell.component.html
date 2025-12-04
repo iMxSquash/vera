@@ -1,27 +1,46 @@
-<div class="min-h-screen bg-gray-100">
-    <!-- Header/Navbar -->
-    <header class="bg-white shadow">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Vera Admin</h1>
-            </div>
-            <div class="flex items-center gap-4">
-                @if (currentAdmin()) {
-                <div class="text-sm">
-                    <p class="text-gray-600">Connecté en tant que:</p>
-                    <p class="font-semibold text-gray-900">{{ currentAdmin()?.email }}</p>
-                </div>
-                }
-                <button (click)="logout()"
-                    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
-                    Déconnexion
-                </button>
-            </div>
-        </div>
-    </header>
+<div class="min-h-screen flex flex-col bg-vera-cream">
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 bg-[#FEF2E4]">
-        <router-outlet></router-outlet>
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-neutrals-50 flex items-center justify-between h-[80px] px-[20px] shadow-sm">
+    <div class="flex items-center gap-4">
+      <vera-icon name="logo" [size]="50"></vera-icon>
+    </div>
+    <div class="flex items-center gap-8">
+      <div *ngIf="currentAdmin()" class="text-right">
+        <p class="text-sm text-neutrals-600">Connecté en tant que :</p>
+        <p class="font-semibold text-neutrals-900">{{ currentAdmin()?.email }}</p>
+      </div>
+      <button (click)="logout()"
+        class="px-6 py-2 rounded-lg font-medium shadow-md text-neutrals-50 bg-alert-1 hover:bg-alert-2 transition-all duration-300">
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <div class="flex flex-1">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white/80 backdrop-blur-md shadow-2xl p-6 flex flex-col gap-4 font-fustat">
+      <nav class="flex flex-col gap-4">
+        <a routerLink="/admin/dashboard"
+           class="flex items-center gap-3 p-3 rounded-xl hover:bg-vera-100 transition duration-300 font-medium text-gray-800"
+           [class.bg-vera-200]="isActive('/admin/dashboard')">
+          <span class="text-xl">📊</span>
+          <span class="truncate">Dashboard</span>
+        </a>
+        <a routerLink="/admin/reference-images"
+           class="flex items-center gap-3 p-3 rounded-xl hover:bg-vera-100 transition duration-300 font-medium text-gray-800"
+           [class.bg-vera-200]="isActive('/admin/reference-images')">
+          <span class="text-xl">🎥</span>
+          <span class="truncate">Deepfake</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-10 overflow-y-auto">
+      <router-outlet></router-outlet>
     </main>
+    
+  </div>
 </div>

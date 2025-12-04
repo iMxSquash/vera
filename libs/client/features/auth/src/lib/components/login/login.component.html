@@ -1,26 +1,63 @@
-<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-brand-2 to-brand-1">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 class="text-center text-2xl font-bold text-neutrals-900 mb-6">Vera Admin</h1>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-                <label for="email" class="font-semibold text-neutrals-700">Email</label>
-                <input type="email" id="email" formControlName="email" required
-                    class="px-3 py-2 border border-neutrals-300 rounded-md text-base focus:outline-none focus:border-brand-2 focus:ring-2 focus:ring-brand-2/10" />
-            </div>
-            <div class="flex flex-col gap-2">
-                <label for="password" class="font-semibold text-neutrals-700">Mot de passe</label>
-                <input type="password" id="password" formControlName="password" required
-                    class="px-3 py-2 border border-neutrals-300 rounded-md text-base focus:outline-none focus:border-brand-2 focus:ring-2 focus:ring-brand-2/10" />
-            </div>
-            <button type="submit" [disabled]="isLoading()"
-                class="px-3 py-2 bg-brand-2 text-white rounded-md font-semibold cursor-pointer transition hover:bg-brand-1 disabled:opacity-60 disabled:cursor-not-allowed">
-                {{ isLoading() ? 'Connexion en cours...' : 'Se connecter' }}
-            </button>
-            @if (error(); as error) {
-            <div class="px-3 py-2 bg-alert-3 text-alert-1 rounded-md text-sm">
-                {{ error }}
-            </div>
-            }
-        </form>
-    </div>
+<div
+  class="flex justify-center items-center min-h-screen bg-vera-pattern bg-cover bg-center bg-no-repeat p-4"
+>
+  <div
+    class="backdrop-blur-md bg-white/80 p-8 rounded-2xl shadow-xl w-full max-w-md animate-fadeIn"
+  >
+    <h1 class="text-center text-3xl font-extrabold text-neutrals-900 mb-8 tracking-tight">
+      Vera Admin
+    </h1>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-5"
+    >
+      <!-- Email -->
+      <div class="flex flex-col gap-1.5">
+        <label for="email" class="font-semibold text-neutrals-700 text-sm">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          required
+          class="px-4 py-2.5 border border-neutrals-300 rounded-lg text-base shadow-sm
+                 focus:outline-none focus:border-brand-2 focus:ring-2 focus:ring-brand-2/20 transition"
+        />
+      </div>
+
+      <!-- Password -->
+      <div class="flex flex-col gap-1.5">
+        <label for="password" class="font-semibold text-neutrals-700 text-sm">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          required
+          class="px-4 py-2.5 border border-neutrals-300 rounded-lg text-base shadow-sm
+                 focus:outline-none focus:border-brand-2 focus:ring-2 focus:ring-brand-2/20 transition"
+        />
+      </div>
+
+      <!-- Submit button -->
+      <button
+        type="submit"
+        [disabled]="isLoading()"
+        class="px-4 py-3 bg-cta-primary text-white rounded-xl font-semibold shadow-lg
+               hover:bg-[#083E82] transition-all active:scale-[0.97]
+               disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {{ isLoading() ? 'Connexion en cours...' : 'Se connecter' }}
+      </button>
+
+      <!-- Error message -->
+      @if (error(); as error) {
+      <div
+        class="px-4 py-2 bg-alert-3 text-alert-1 rounded-lg text-sm shadow-sm border border-alert-2"
+      >
+        {{ error }}
+      </div>
+      }
+    </form>
+  </div>
 </div>
