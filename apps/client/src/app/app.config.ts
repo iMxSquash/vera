@@ -10,6 +10,8 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { appRoutes } from './app.routes';
 import { authInterceptor } from '@vera/client/shared/interceptors';
 import { provideServiceWorker } from '@angular/service-worker';
+import { ENVIRONMENT } from '@vera/data-access';
+import { environment } from '@env';
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '@env';
+import { ENVIRONMENT, Environment } from '../tokens/environment.token';
 
 export interface FaceSwapResponse {
   id: string;
@@ -28,7 +28,8 @@ export interface ReferenceImage {
   providedIn: 'root',
 })
 export class FaceSwapService {
-  private readonly apiUrl = `${environment.serverUrl}/api/face-swap`;
+  private readonly environment = inject(ENVIRONMENT);
+  private readonly apiUrl = `${this.environment.serverUrl}/api/face-swap`;
 
   constructor(private http: HttpClient) {}
 

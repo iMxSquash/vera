@@ -15,7 +15,7 @@ export const routes: Route[] = [
       {
         path: 'fact-check-test',
         component: FactCheckTesterComponent,
-      }
+      },
     ],
   },
 ];

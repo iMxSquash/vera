@@ -48,4 +48,3 @@ export const colors = {
     success: successColors,
     UiKit: UiKit,
 };
-
