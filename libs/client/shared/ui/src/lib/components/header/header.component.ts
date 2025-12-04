@@ -11,24 +11,22 @@ import { IconComponent } from "../../icons";
   standalone: true,
   imports: [CommonModule, RouterLink, HeaderNavComponent, HeaderActionsComponent, HeaderMobileComponent, IconComponent],
   template: `
-    <header class="sticky top-0 z-50 bg-white border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <!-- Logo -->
-        <div class="flex-shrink-0">
-          <a routerLink="/" class="text-2xl font-bold text-gray-900 hover:text-gray-700 transition-colors">
-            <vera-icon name="logo" [size]="108" [height]="34" [viewBox]="'0 0 108 34'"></vera-icon>
-          </a>
-        </div>
-
-        <!-- Desktop Navigation -->
-        <app-header-nav></app-header-nav>
-
-        <!-- Actions -->
-        <app-header-actions></app-header-actions>
-
-        <!-- Mobile Menu -->
-        <app-header-mobile></app-header-mobile>
+    <header class="sticky top-0 z-50 bg-[#FEF2E4] flex items-center justify-between h-[80px] px-[20px] shadow-sm">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a routerLink="/" class="hover:opacity-80 transition-opacity">
+          <vera-icon name="logo" [size]="56" [height]="18" [viewBox]="'0 0 56 18'"></vera-icon>
+        </a>
       </div>
+
+      <!-- Desktop Navigation -->
+      <app-header-nav></app-header-nav>
+
+      <!-- Actions -->
+      <app-header-actions></app-header-actions>
+
+      <!-- Mobile Menu -->
+      <app-header-mobile></app-header-mobile>
     </header>
   `,
 })

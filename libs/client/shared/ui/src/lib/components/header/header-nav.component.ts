@@ -10,21 +10,21 @@ import { RouterLink } from '@angular/router';
     <nav class="hidden md:flex items-center gap-8">
       <a 
         routerLink="/" 
-        class="text-gray-700 text-sm font-medium hover:text-gray-900 transition-colors"
+        class="text-black text-[14px] hover:text-brand-2 transition-colors"
       >
         Accueil
       </a>
       <a 
-        routerLink="/vera" 
-        class="text-gray-700 text-sm font-medium hover:text-gray-900 transition-colors"
+        routerLink="/download" 
+        class="text-black text-[14px] hover:text-brand-2 transition-colors"
       >
-        Vera Web
+        Télécharger l'extension
       </a>
       <a 
-        routerLink="/fact-check-test" 
-        class="text-gray-700 text-sm font-medium hover:text-gray-900 transition-colors"
+        routerLink="/vera" 
+        class="inline-block text-white bg-black text-[14px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
-        Test Fact-Check
+        Parler à Vera
       </a>
     </nav>
   `,
