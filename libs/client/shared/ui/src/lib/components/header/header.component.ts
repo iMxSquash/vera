@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HeaderNavComponent } from './header-nav.component';
@@ -26,8 +26,23 @@ import { IconComponent } from "../../icons";
       <app-header-actions></app-header-actions>
 
       <!-- Mobile Menu -->
-      <app-header-mobile></app-header-mobile>
+      @if (isMobile()) {
+        <app-header-mobile></app-header-mobile>
+      }
     </header>
   `,
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  isMobile = signal(false);
+
+  constructor() {
+    // Check initial screen size
+    this.checkMobileSize();
+    // Listen to window resize
+    window.addEventListener('resize', () => this.checkMobileSize());
+  }
+
+  private checkMobileSize() {
+    this.isMobile.set(window.innerWidth < 768);
+  }
+}
