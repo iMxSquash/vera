@@ -13,7 +13,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
     <div class="md:hidden flex items-center gap-3 z-[100]">
       <button 
         (click)="toggleMenu()"
-        class="p-2 focus:outline-none"
+        class="focus:outline-none"
         [attr.aria-label]="isOpen() ? 'Fermer le menu' : 'Ouvrir le menu'"
         [attr.aria-expanded]="isOpen()"
       >
@@ -41,7 +41,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
       <!-- Croix pour fermer -->
       <button
         (click)="isOpen.set(false)"
-        class="absolute top-[20px] right-[20px] p-2 hover:opacity-70 transition-opacity focus:outline-none"
+        class="absolute top-[20px] right-[20px] hover:opacity-70 transition-opacity focus:outline-none"
         [attr.aria-label]="'Fermer le menu'"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -59,7 +59,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
       <a 
         routerLink="/vera"
         (click)="isOpen.set(false)"
-        class="inline-block gap-[10px] items-center text-[20px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        class="flex gap-[10px] items-center text-[20px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
         {{ 'landing.footer.talk_vera' | translate }}
         <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -70,7 +70,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
         href="https://github.com/iMxSquash/vera-extension"
         target="_blank" rel="noopener noreferrer"
         (click)="isOpen.set(false)"
-        class="inline-block text-vera-primary bg-neutrals-900 text-[20px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        class="flex text-vera-primary bg-neutrals-900 text-[20px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
         {{ 'landing.hero.download_extension' | translate }}
       </a>
