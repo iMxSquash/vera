@@ -1,10 +1,10 @@
 <div class="mx-auto p-8">
     <!-- Upload Zone -->
     @if (!previewUrl()) {
-    <div class="relative flex items-center justify-center w-[50vw] h-[30vw] max-w-[800px] max-h-[350px] border-2 border-dashed border-[#C3E4A1] bg-white rounded-2xl p-16 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+    <div class="relative flex items-center justify-center md:w-[50vw] md:h-[30vw] max-w-[800px] max-h-[350px] border-2 border-dashed border-[#C3E4A1] bg-white rounded-2xl p-16 text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
         (drop)="onDrop($event)" (dragover)="onDragOver($event)">
         <input type="file" id="file-input" accept="image/*" (change)="onFileSelected($event)" hidden />
-        <label for="file-input" class="cursor-pointer flex flex-col items-center gap-4">
+        <label for="file-input" class="cursor-pointer flex flex-col items-center">
             <svg width="39" height="39" viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_315_303)">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M1.70623 10.725C2.58373 10.725 2.07998 9.84753 2.01498 6.15878C2.01498 3.41253 1.85248 2.42128 4.93998 1.96628C6.67873 1.72253 8.56373 1.96628 10.3025 1.88503C10.4552 1.86066 10.5942 1.78264 10.6945 1.665C10.7949 1.54736 10.85 1.39779 10.85 1.24316C10.85 1.08852 10.7949 0.938955 10.6945 0.821311C10.5942 0.703667 10.4552 0.625654 10.3025 0.601281C7.23123 0.357531 3.86748 -1.07247 0.812482 1.62503C-0.926268 3.25003 0.812482 8.27128 1.10498 10.2375C1.12136 10.3814 1.19353 10.513 1.30597 10.6042C1.41841 10.6953 1.56213 10.7387 1.70623 10.725Z" fill="black"/>
