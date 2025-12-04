@@ -72,5 +72,65 @@
             "chat_history": "Your chats",
             "no_chats": "No chats yet"
         }
+    },
+    "landing": {
+        "hero": {
+            "title": "Need to verify information?",
+            "subtitle": "Vera Web is your verification hub. Analyze your sources, detect AI and secure your research in one click.",
+            "discover": "Discover Vera",
+            "download_extension": "Download extension"
+        },
+        "features": {
+            "title": "Discover Vera Web",
+            "subtitle": "Vera Web is your verification hub. Analyze your sources, detect AI and secure your research in one click.",
+            "feature1": {
+                "title": "Ask your question",
+                "description": "In a few seconds, Vera analyzes information from over 400 reliable and recognized sources."
+            },
+            "feature2": {
+                "title": "Vera verifies your question instantly",
+                "description": "In a few seconds, Vera analyzes information from over 400 reliable and recognized sources."
+            },
+            "feature3": {
+                "title": "Immediate response",
+                "description": "You get a clear, direct and fact-based answer."
+            },
+            "feature4": {
+                "title": "Sources included",
+                "description": "Sources are displayed to allow you to verify the information yourself."
+            }
+        },
+        "deepfake": {
+            "title": "Don't believe your eyes. Test the illusion",
+            "description1": "Understand the mechanics of misinformation by generating a deepfake of yourself.",
+            "description2": "It's fake. It's troubling. And yet… it's really you"
+        },
+        "extension": {
+            "title": "Select text, our extension verifies",
+            "description": "No need to leave your favorite website to know if information is true! With our extension, simply select the text that intrigues you and instantly discover its truthfulness. Fast, simple and reliable.",
+            "download": "Download extension"
+        },
+        "daily_fake": {
+            "title": "Today's fake",
+            "subtitle": "A viral statement, taken out of context or not? Here, we take the time to sort it out.",
+            "claim": "\"Intelligent\" traffic lights would spy on pedestrians",
+            "description": "According to several sources on social networks, new traffic lights installed in some cities would use cameras to analyze pedestrian behavior and transmit this data to private companies.",
+            "verify": "Let's verify?"
+        },
+        "questions": {
+            "title": "A few questions to ask VERA",
+            "subtitle": "Don't know where to start? Here are some examples to test VERA and get reliable answers quickly.",
+            "question1": "\"Videos say that recent forest fires were caused by 'laser weapons', is that true?\"",
+            "question2": "Has France's public debt really reached 115.6% of GDP in 2025?",
+            "question3": "Does a report claim that some electric cars pollute more than an old diesel car?",
+            "question4": "Do recent AI tools make up 'facts' when asked about geopolitics?"
+        },
+        "footer": {
+            "description": "Vera is the artificial intelligence that secures your browsing and reveals the invisible behind information. Don't doubt, verify",
+            "menu_title": "Main menu",
+            "home": "Home",
+            "talk_vera": "Talk to Vera",
+            "extension": "Extension"
+        }
     }
 }

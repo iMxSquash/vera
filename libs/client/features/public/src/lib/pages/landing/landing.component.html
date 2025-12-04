@@ -14,17 +14,16 @@
                     d="M25.0697 23.0099C25.2875 26.3146 26.0465 27.4659 30.3142 31.0528C43.0148 41.645 51.2374 50.2066 50.6829 43.7824C50.4746 41.1589 48.3189 38.9492 33.8793 26.0711C25.8629 18.9895 24.8074 18.5869 25.0697 23.0099Z"
                     fill="black" />
             </svg>
-            <h1 class="mb-4 text-[24px] lg:text-[48px]">Besoin de vérifier une info ?</h1>
+            <h1 class="mb-4 text-[24px] lg:text-[48px]">{{ 'landing.hero.title' | translate }}</h1>
         </div>
 
         <p class="text-[13px] lg:text-[24px] mb-8">
-            Vera Web est votre QG de vérification. Analysez vos sources,
-            détectez les IA et sécurisez vos travaux de recherche en un clic.
+            {{ 'landing.hero.subtitle' | translate }}
         </p>
         <div class="flex flex-col gap-[24px] items-start items-center">
             <a href="/fact-check-test"
                 class="flex inline-block gap-[10px] items-center text-[14px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] lg:text-[20px]">
-                Découvrir Vera
+                {{ 'landing.hero.discover' | translate }}
                 <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M4.38564 11.9022C4.54959 11.6226 8.64624 9.55394 10.8493 8.64083C14.7822 7.0007 15.1827 6.70248 14.946 5.60299C14.6365 4.16803 11.4684 2.49064 6.02425 0.86924C2.83797 -0.0812519 2.14615 -0.174435 1.38139 0.216935C1.03545 0.384668 0.92617 0.626899 0.889753 1.13019C0.889753 1.1488 0.361733 9.23713 0.161441 9.38614C-0.949207 10.2063 4.02152 12.4986 4.38564 11.9022ZM2.87447 9.59132C2.74693 9.46077 3.07474 2.0247 3.20213 2.0247C3.275 2.0247 11.5595 4.59659 11.5595 5.00656C11.5777 5.39787 3.11109 9.83349 2.87447 9.59132Z"
@@ -33,7 +32,7 @@
             </a>
             <a href="/"
                 class="inline-block text-vera-primary bg-neutrals-900 text-[14px] border border-black rounded-full px-[24px] py-[8px] lg:text-[20px]">
-                Télécharger l'extension
+                {{ 'landing.hero.download_extension' | translate }}
             </a>
         </div>
 
@@ -79,10 +78,9 @@
                 </svg>
 
                 <div class="flex flex-col gap-[24px] px-[29px]">
-                    <h2 class="text-[24px] lg:text-[48px]">Découvrez Vera Web</h2>
+                    <h2 class="text-[24px] lg:text-[48px]">{{ 'landing.features.title' | translate }}</h2>
                     <p class="text-[13px] lg:text-[24px]">
-                        Vera Web est votre QG de vérification. Analysez vos sources,
-                        détectez les IA et sécurisez vos travaux de recherche en un clic.
+                        {{ 'landing.features.subtitle' | translate }}
                     </p>
                 </div>
 
@@ -94,9 +92,10 @@
                             [class.opacity-50]="activeIndex !== 0" [class.opacity-100]="activeIndex === 0">
                             <img src="img/interogation.png" class="h-12 w-12 rounded-md">
                             <div>
-                                <h3 class="text-[14px] lg:text-[20px]">Posez votre question</h3>
-                                <p class="text-[10px] lg:text-[14px]">En quelques secondes, Vera analyse l’information
-                                    parmi plus de 400 sources fiables et reconnues.</p>
+                                <h3 class="text-[14px] lg:text-[20px]">{{ 'landing.features.feature1.title' | translate
+                                    }}</h3>
+                                <p class="text-[10px] lg:text-[14px]">{{ 'landing.features.feature1.description' |
+                                    translate }}</p>
                             </div>
                         </div>
 
@@ -104,9 +103,10 @@
                             [class.opacity-50]="activeIndex !== 1" [class.opacity-100]="activeIndex === 1">
                             <img src="img/loupe.png" class="h-12 w-12 rounded-md">
                             <div>
-                                <h3 class="text-[14px] lg:text-[20px]">Vera vérifie instantanément ta question</h3>
-                                <p class="text-[10px] lg:text-[14px]">En quelques secondes, Vera analyse l’information
-                                    parmi plus de 400 sources fiables et reconnues.</p>
+                                <h3 class="text-[14px] lg:text-[20px]">{{ 'landing.features.feature2.title' | translate
+                                    }}</h3>
+                                <p class="text-[10px] lg:text-[14px]">{{ 'landing.features.feature2.description' |
+                                    translate }}</p>
                             </div>
                         </div>
 
@@ -114,9 +114,10 @@
                             [class.opacity-50]="activeIndex !== 2" [class.opacity-100]="activeIndex === 2">
                             <img src="img/chat.png" class="h-10 w-10 rounded-md">
                             <div>
-                                <h3 class="text-[14px] lg:text-[20px]">Réponse immmédiate</h3>
-                                <p class="text-[10px] lg:text-[14px]">Vous obtenez une réponse claire, directe et basée
-                                    sur des faits.</p>
+                                <h3 class="text-[14px] lg:text-[20px]">{{ 'landing.features.feature3.title' | translate
+                                    }}</h3>
+                                <p class="text-[10px] lg:text-[14px]">{{ 'landing.features.feature3.description' |
+                                    translate }}</p>
                             </div>
                         </div>
 
@@ -124,9 +125,10 @@
                             [class.opacity-50]="activeIndex !== 3" [class.opacity-100]="activeIndex === 3">
                             <img src="img/web.png" class="h-12 w-12 rounded-md">
                             <div>
-                                <h3 class="text-[14px] lg:text-[20px]">Sources incluses</h3>
-                                <p class="text-[10px] lg:text-[14px]">Les sources sont affichées pour te permettre de
-                                    vérifier l’information toi-même.</p>
+                                <h3 class="text-[14px] lg:text-[20px]">{{ 'landing.features.feature4.title' | translate
+                                    }}</h3>
+                                <p class="text-[10px] lg:text-[14px]">{{ 'landing.features.feature4.description' |
+                                    translate }}</p>
                             </div>
                         </div>
                     </div>
@@ -190,11 +192,10 @@
                 fill="black" />
         </svg>
 
-        <h2 class="text-[24px] lg:text-[48px]">Ne croyez plus vos yeux. Testez l'illusion</h2>
+        <h2 class="text-[24px] lg:text-[48px]">{{ 'landing.deepfake.title' | translate }}</h2>
         <div class="relative">
-            <p class="text-[13px] lg:text-[24px]">Comprenez la mécanique de la désinformation en générant un deepfake de
-                vous même.</p>
-            <p class="text-[13px] lg:text-[24px]">C’est faux. C’est troublant. Et pourtant… c’est bien vous</p>
+            <p class="text-[13px] lg:text-[24px]">{{ 'landing.deepfake.description1' | translate }}</p>
+            <p class="text-[13px] lg:text-[24px]">{{ 'landing.deepfake.description2' | translate }}</p>
             <svg class="absolute right-0" width="19" height="54" viewBox="0 0 19 54" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -222,16 +223,13 @@
 
     <div
         class="flex flex-col gap-[42px] mx-[29px] pt-[39px]  lg:mx-[73px]  text-center items-start items-center bg-vera-primary rounded-md">
-        <h2 class="text-[24px] lg:text-[48px]">Sélectionnez du texte, notre extension vérifie</h2>
+        <h2 class="text-[24px] lg:text-[48px]">{{ 'landing.extension.title' | translate }}</h2>
         <p class="text-[13px] lg:text-[24px]">
-            Plus besoin de quitter votre site préféré pour savoir si une info est vraie !
-            Avec notre extension, sélectionnez simplement le texte qui vous intrigue et découvrez instantanément sa
-            véracité.
-            Rapide, simple et fiable.
+            {{ 'landing.extension.description' | translate }}
         </p>
         <a href="/"
             class="inline-block text-vera-primary bg-neutrals-900 text-[14px] lg:text-[20px] border border-black rounded-full px-[24px] py-[8px]">
-            Télécharger l'extension
+            {{ 'landing.extension.download' | translate }}
         </a>
         <div class="relative">
             <svg class="absolute -top-[50px] -left-[50px]" width="73" height="64" viewBox="0 0 73 64" fill="none"
@@ -333,18 +331,15 @@
     <div
         class="flex flex-col text-center gap-[40px] bg-vera-sidebar text-neutrals-50 px-[29px] lg:px-[73px]  py-[38px]">
         <div class="flex flex-col gap-[24px]">
-            <h2 class="text-[24px] lg:text-[48px]">Le fake du jour</h2>
-            <p class="text-[13px] lg:text-[24px]">Une affirmation virale, sortie de son contexte ou pas ? Ici, on prend
-                le temps de faire le tri.</p>
+            <h2 class="text-[24px] lg:text-[48px]">{{ 'landing.daily_fake.title' | translate }}</h2>
+            <p class="text-[13px] lg:text-[24px]">{{ 'landing.daily_fake.subtitle' | translate }}</p>
         </div>
         <div>
             <img>
         </div>
         <div class="flex flex-col gap-[24px] items-start items-center">
-            <p class="text-[14px] lg:text-[32px]">Des feux rouges “intelligents” espionneraient les piétons</p>
-            <p class="text-[13px] lg:text-[24px]">Selon plusieurs sources sur les réseaux sociaux, de nouveaux
-                feux rouges installés dans certaines villes utiliseraient des caméras pour analyser le comportement
-                des piétons et transmettre ces données à des entreprises privées.
+            <p class="text-[14px] lg:text-[32px]">{{ 'landing.daily_fake.claim' | translate }}</p>
+            <p class="text-[13px] lg:text-[24px]">{{ 'landing.daily_fake.description' | translate }}
             </p>
             <div class="relative">
                 <svg class="absolute -right-[40px] -top-[30px]" width="68" height="61" viewBox="0 0 68 61" fill="none"
@@ -379,7 +374,7 @@
                 </svg>
                 <a href="/fact-check-test"
                     class="flex gap-[10px] items-center inline-block text-[14px] lg:text-[20px] text-neutrals-900 bg-vera-primary border border-black rounded-full px-[24px] py-[8px]">
-                    On vérifie ?
+                    {{ 'landing.daily_fake.verify' | translate }}
                     <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M4.38564 11.9022C4.54959 11.6226 8.64624 9.55394 10.8493 8.64083C14.7822 7.0007 15.1827 6.70248 14.946 5.60299C14.6365 4.16803 11.4684 2.49064 6.02425 0.86924C2.83797 -0.0812519 2.14615 -0.174435 1.38139 0.216935C1.03545 0.384668 0.92617 0.626899 0.889753 1.13019C0.889753 1.1488 0.361733 9.23713 0.161441 9.38614C-0.949207 10.2063 4.02152 12.4986 4.38564 11.9022ZM2.87447 9.59132C2.74693 9.46077 3.07474 2.0247 3.20213 2.0247C3.275 2.0247 11.5595 4.59659 11.5595 5.00656C11.5777 5.39787 3.11109 9.83349 2.87447 9.59132Z"
@@ -401,17 +396,15 @@
                     d="M73.5303 58.7964C69.7454 56.9198 69.7736 57.0499 59.5047 64.2459C51.9286 69.567 50.3742 71.3901 52.2367 72.5673C54.2922 73.8235 54.6937 73.6785 64.6082 67.2854C74.0052 61.2543 75.858 59.9367 73.5303 58.7964Z"
                     fill="black" />
             </svg>
-            <h2 class="text-[24px] lg:text-[48px]">Quelques questions à poser à VERA</h2>
+            <h2 class="text-[24px] lg:text-[48px]">{{ 'landing.questions.title' | translate }}</h2>
         </div>
         <p class="text-[13px] lg:text-[24px]">
-            Vous ne savez pas par où commencer ?
-            Voici quelques exemples pour tester VERA et obtenir rapidement des réponses fiables.
+            {{ 'landing.questions.subtitle' | translate }}
         </p>
 
         <div class="flex flex-col gap-[16px] text-[13px] lg:text-[24px]">
             <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
-                <p>“Des vidéos disent que des feux de forêt récents auraient été causés par des « armes laser », est‑ce
-                    vrai ?”</p>
+                <p>{{ 'landing.questions.question1' | translate }}</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="39" height="62" rx="4" fill="#2A2A2A" />
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -420,7 +413,7 @@
                 </svg>
             </div>
             <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
-                <p>Est‑ce que la dette publique de 2025 en France a réellement atteint 115,6 % du PIB ?</p>
+                <p>{{ 'landing.questions.question2' | translate }}</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="39" height="62" rx="4" fill="#2A2A2A" />
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -429,8 +422,7 @@
                 </svg>
             </div>
             <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
-                <p>Est‑ce qu’un reportage affirme que certaines voitures électriques polluent plus qu’une voiture diesel
-                    ancienne ?</p>
+                <p>{{ 'landing.questions.question3' | translate }}</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="39" height="62" rx="4" fill="#2A2A2A" />
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -439,8 +431,7 @@
                 </svg>
             </div>
             <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
-                <p>Est-ce que des outils d’IA récents inventent des « faits » quand on les interroge sur la
-                    géopolitique ?</p>
+                <p>{{ 'landing.questions.question4' | translate }}</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="39" height="62" rx="4" fill="#2A2A2A" />
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -476,18 +467,15 @@
         </svg>
 
         <p class="text-[13px]">
-            Vera est l'intelligence artificielle qui sécurise
-            votre navigation et révèle l'invisible derrière l'information.<br>
-            Ne doutez plus, vérifiez
+            {{ 'landing.footer.description' | translate }}<br>
         </p>
     </div>
     <!--<p>&copy; 2025 Vera. Tous droits réservés.</p>-->
     <nav class="flex flex-col gap-[15px]">
-        <h3 class="text-[15px]">Menu principal</h3>
+        <h3 class="text-[15px]">{{ 'landing.footer.menu_title' | translate }}</h3>
         <div class="text-[13px] flex flex-col underline">
-            <a href="/vera">Acceuil</a>
-            <a href="/vera">Parler à Vera</a>
-            <a href="/vera">L'extention</a>
+            <a href="/vera">{{ 'landing.footer.home' | translate }}</a>
+            <a href="/vera">{{ 'landing.footer.talk_vera' | translate }}</a>
+            <a href="/vera">{{ 'landing.footer.extension' | translate }}</a>
         </div>
     </nav>
-</footer>

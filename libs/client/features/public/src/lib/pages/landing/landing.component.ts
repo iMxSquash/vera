@@ -1,14 +1,17 @@
 
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImageUploadPreviewComponent } from '@vera/client/shared/ui';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
   imports:[
     CommonModule,
-    ImageUploadPreviewComponent
+    ImageUploadPreviewComponent,
+    TranslateModule
   ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.css',
@@ -16,23 +19,22 @@ import { ImageUploadPreviewComponent } from '@vera/client/shared/ui';
 
 
 export class LandingComponent {
-
-  activeIndex = 0; // rubrique active par défaut (la 1ère)
+  private readonly translationService = inject(TranslationService);
+  
+  activeIndex = 0;
 
   @HostListener('window:scroll', [])
 onScroll() {
   const wrapper = document.querySelector('.scroll-wrapper') as HTMLElement;
   if (!wrapper) return;
 
-  const start = wrapper.offsetTop;          // position Y du début
-  const end = start + wrapper.offsetHeight; // fin de la zone
+  const start = wrapper.offsetTop;
+  const end = start + wrapper.offsetHeight;
   const scroll = window.scrollY;
 
-  // On normalise 0 → 1
   let progress = (scroll - start) / (end - start);
   progress = Math.min(Math.max(progress, 0), 1);
 
-  // Seuils personnalisés
   if (progress < 0.20) {
     this.activeIndex = 0;
   } else if (progress < 0.40) {
