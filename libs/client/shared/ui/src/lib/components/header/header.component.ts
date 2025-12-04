@@ -19,11 +19,14 @@ import { IconComponent } from "../../icons";
         </a>
       </div>
 
-      <!-- Desktop Navigation -->
-      <app-header-nav></app-header-nav>
+      <div class="flex items-center gap-8">
+        <!-- Desktop Navigation -->
+        <app-header-nav></app-header-nav>
 
-      <!-- Actions -->
-      <app-header-actions></app-header-actions>
+        <!-- Actions -->
+        <app-header-actions></app-header-actions>
+      </div>
+
 
       <!-- Mobile Menu -->
       @if (isMobile()) {
