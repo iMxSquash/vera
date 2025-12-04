@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 import { PublicShellComponent } from './shell/public-shell.component';
 import { LandingComponent } from './pages/landing/landing.component';
-import { FactCheckTesterComponent } from './pages/fact-check-tester/fact-check-tester.component';
 import { VeraComponent } from './pages/vera/vera.component';
 
 export const routes: Route[] = [
@@ -15,7 +14,8 @@ export const routes: Route[] = [
       },
       {
         path: 'fact-check-test',
-        component: FactCheckTesterComponent,
+        redirectTo: 'vera',
+        pathMatch: 'full',
       },
       {
         path: 'vera',
