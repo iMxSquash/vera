@@ -1,6 +1,5 @@
 <div class="p-4">
-    <!-- Page Title -->
-    <h2 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h2>
+  <h2 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h2>
 
     <!-- Stats Section -->
     <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -8,33 +7,63 @@
             <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Fact-Checks</h3>
             <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow text-center">
-            <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Sondages</h3>
-            <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow text-center">
-            <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Utilisateurs</h3>
-            <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
-        </div>
-    </section>
 
-    <!-- Quick Actions -->
-    <section>
-        <h3 class="text-xl font-semibold text-gray-900 mb-4">Actions rapides</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a routerLink="/admin/reference-images"
-                class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow border-l-4 border-brand-2 cursor-pointer">
-                <div class="flex items-center">
-                    <svg class="h-8 w-8 text-brand-2 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <div>
-                        <h4 class="font-semibold text-gray-900">Images de Référence</h4>
-                        <p class="text-sm text-gray-600">Gérer les images pour le face-swap AI</p>
-                    </div>
+            <!-- Cartes de sondage -->
+            <section class="mt-10 space-y-8">
+
+            <div *ngFor="let s of surveys" class="bg-white p-6 rounded-lg shadow">
+
+                <h3 class="text-xl font-bold text-gray-800 mb-1">
+                    {{ s.title }}
+                </h3>
+                
+                <p>Total réponses : <strong>{{ s.stats.total }}</strong></p>
+                <p>Oui : <strong>{{ s.stats.yes }}</strong> ({{ s.stats.percentYes }}%)</p>
+                <p>Non : <strong>{{ s.stats.no }}</strong> ({{ s.stats.percentNo }}%)</p>
+
+                <!-- Bouton rafraîchir -->
+                <button
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition mb-4"
+                    (click)="refreshSurvey(s.sheetId)"
+                    [disabled]="loadingId === s.sheetId"
+                >
+                    <span *ngIf="loadingId !== s.sheetId">🔄 Rafraîchir</span>
+                    <span *ngIf="loadingId === s.sheetId">⏳ Import…</span>
+                </button>
+
+                <!-- Graphique -->
+                <app-survey-chart [stats]="s.stats"></app-survey-chart>
+
                 </div>
-            </a>
-        </div>
-    </section>
+                <div class="bg-white p-6 rounded-lg shadow text-center">
+                    <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Sondages</h3>
+                    <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow text-center">
+                    <h3 class="m-0 text-gray-600 text-sm font-medium uppercase tracking-wide">Utilisateurs</h3>
+                    <p class="m-0 text-brand-2 text-3xl font-bold mt-4">0</p>
+                </div>
+            </section>
+
+        <!-- Quick Actions -->
+        <section>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Actions rapides</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a routerLink="/admin/reference-images"
+                    class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow border-l-4 border-brand-2 cursor-pointer">
+                    <div class="flex items-center">
+                        <svg class="h-8 w-8 text-brand-2 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Images de Référence</h4>
+                            <p class="text-sm text-gray-600">Gérer les images pour le face-swap AI</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+  </section>
 </div>

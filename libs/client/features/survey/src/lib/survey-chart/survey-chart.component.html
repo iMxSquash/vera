@@ -1,0 +1,15 @@
+<div style="width: 250px; height: 250px; margin: auto;">
+  <canvas
+    baseChart
+    [data]="chartData"
+    [type]="chartType"
+    [options]="chartOptions"
+  >
+  </canvas>
+</div>
+
+<div style="text-align:center; margin-top:10px;">
+  <p><strong>Oui :</strong> {{ chartData.datasets[0].data[0] }}%</p>
+  <p><strong>Non :</strong> {{ chartData.datasets[0].data[1] }}%</p>
+
+</div>

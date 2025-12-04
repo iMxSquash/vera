@@ -8,7 +8,8 @@ import { ContentsModule } from '@vera/api/features/contents';
 import { TelegramModule } from '@vera/api/features/bot';
 import { FaceSwapModule } from '@vera/api/features/face-swap';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { SurveyModule } from '@vera/api/features/survey';
+import { GoogleSheetsService } from 'libs/api/features/survey/src/lib/google-sheets/google-sheets.services';
 
 @Module({
   imports: [
@@ -34,8 +35,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ContentsModule,
     TelegramModule,
     FaceSwapModule,
+    SurveyModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [GoogleSheetsService],
 })
 export class AppModule {}
