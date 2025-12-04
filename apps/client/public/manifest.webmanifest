@@ -2,12 +2,18 @@
   "name": "Vera - Fact-Checking Platform",
   "short_name": "Vera",
   "description": "Plateforme de fact-checking et vérification d'informations",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "theme_color": "#A8D989",
+  "background_color": "#F5E6D3",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
   "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "icons/icon-72x72.png",
       "sizes": "72x72",
