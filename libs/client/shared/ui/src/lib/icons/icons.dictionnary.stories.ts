@@ -52,7 +52,7 @@ export const IconsGallery: Story = {
               // Success notification
               const notification = document.createElement('div');
               notification.textContent = 'Code copié !';
-              notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg';
+              notification.className = 'fixed bottom-4 right-4 bg-green-500 text-neutrals-50 px-4 py-2 rounded shadow-lg';
               document.body.appendChild(notification);
               setTimeout(() => {
                 notification.remove();
@@ -86,7 +86,7 @@ export const IndividualIcons: Story = {
                       &lt;vera-icon name="{{ icon.key }}" size="24"&gt;&lt;/vera-icon&gt;
                     </code>
                     <button 
-                      class="mt-2 text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                      class="mt-2 text-xs bg-blue-500 text-neutrals-50 px-2 py-1 rounded hover:bg-blue-600"
                       (click)="copyToClipboard(icon.key)">
                       Copier le code
                     </button>

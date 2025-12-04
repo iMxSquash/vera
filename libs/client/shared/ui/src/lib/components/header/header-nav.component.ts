@@ -10,19 +10,19 @@ import { RouterLink } from '@angular/router';
     <nav class="hidden md:flex items-center gap-8">
       <a 
         routerLink="/" 
-        class="text-black text-[14px] hover:text-brand-2 transition-colors"
+        class="text-neutrals-900 text-[14px] hover:text-brand-2 transition-colors"
       >
         Accueil
       </a>
       <a 
         routerLink="/download" 
-        class="text-black text-[14px] hover:text-brand-2 transition-colors"
+        class="text-neutrals-900 text-[14px] hover:text-brand-2 transition-colors"
       >
         Télécharger l'extension
       </a>
       <a 
         routerLink="/vera" 
-        class="inline-block text-white bg-black text-[14px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        class="inline-block text-neutrals-50 bg-neutrals-900 text-[14px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
         Parler à Vera
       </a>

@@ -23,7 +23,7 @@
         </p>
         <div class="flex flex-col gap-[24px] items-start items-center">
             <a href="/fact-check-test"
-                class="flex inline-block gap-[10px] items-center text-[14px] bg-[#C3E4A1] border border-black rounded-full px-[24px] py-[8px] lg:text-[20px]">
+                class="flex inline-block gap-[10px] items-center text-[14px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] lg:text-[20px]">
                 Découvrir Vera
                 <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -32,7 +32,7 @@
                 </svg>
             </a>
             <a href="/"
-                class="inline-block text-[#C3E4A1] bg-black text-[14px] border border-black rounded-full px-[24px] py-[8px] lg:text-[20px]">
+                class="inline-block text-vera-primary bg-neutrals-900 text-[14px] border border-black rounded-full px-[24px] py-[8px] lg:text-[20px]">
                 Télécharger l'extension
             </a>
         </div>
@@ -40,7 +40,7 @@
     </div>
 
     <!-- WRAPPER STOP-SCROLL -->
-    <div class="relative bg-[#C3E4A1] min-h-[300vh] scroll-wrapper">
+    <div class="relative bg-vera-primary min-h-[300vh] scroll-wrapper">
         <!-- BLOC STICKY (il reste collé pendant le scroll) -->
         <div class="sticky top-[80px]" id="scroll-section">
 
@@ -90,7 +90,7 @@
                     <div
                         class="flex flex-col md:w-1/2 gap-[8px] text-start justify-center px-[29px] md:px-[0px] md:pl-[73px]">
                         <!-- tes 4 rubriques, inchangées pour l’instant -->
-                        <div class="flex items-center bg-white gap-[10px] p-2 rounded-[8px] transition-all duration-300"
+                        <div class="flex items-center bg-neutrals-50 gap-[10px] p-2 rounded-[8px] transition-all duration-300"
                             [class.opacity-50]="activeIndex !== 0" [class.opacity-100]="activeIndex === 0">
                             <img src="img/interogation.png" class="h-12 w-12 rounded-md">
                             <div>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center bg-white gap-[10px] p-2 rounded-[8px] transition-all duration-300"
+                        <div class="flex items-center bg-neutrals-50 gap-[10px] p-2 rounded-[8px] transition-all duration-300"
                             [class.opacity-50]="activeIndex !== 1" [class.opacity-100]="activeIndex === 1">
                             <img src="img/loupe.png" class="h-12 w-12 rounded-md">
                             <div>
@@ -110,7 +110,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center bg-white gap-[10px] p-2 rounded-[8px] transition-all duration-600"
+                        <div class="flex items-center bg-neutrals-50 gap-[10px] p-2 rounded-[8px] transition-all duration-600"
                             [class.opacity-50]="activeIndex !== 2" [class.opacity-100]="activeIndex === 2">
                             <img src="img/chat.png" class="h-10 w-10 rounded-md">
                             <div>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center bg-white gap-[10px] p-2 rounded-[8px] transition-all duration-300"
+                        <div class="flex items-center bg-neutrals-50 gap-[10px] p-2 rounded-[8px] transition-all duration-300"
                             [class.opacity-50]="activeIndex !== 3" [class.opacity-100]="activeIndex === 3">
                             <img src="img/web.png" class="h-12 w-12 rounded-md">
                             <div>
@@ -221,7 +221,7 @@
     </div>
 
     <div
-        class="flex flex-col gap-[42px] mx-[29px] pt-[39px]  lg:mx-[73px]  text-center items-start items-center bg-[#C3E4A1] rounded-md">
+        class="flex flex-col gap-[42px] mx-[29px] pt-[39px]  lg:mx-[73px]  text-center items-start items-center bg-vera-primary rounded-md">
         <h2 class="text-[24px] lg:text-[48px]">Sélectionnez du texte, notre extension vérifie</h2>
         <p class="text-[13px] lg:text-[24px]">
             Plus besoin de quitter votre site préféré pour savoir si une info est vraie !
@@ -230,7 +230,7 @@
             Rapide, simple et fiable.
         </p>
         <a href="/"
-            class="inline-block text-[#C3E4A1] bg-black text-[14px] lg:text-[20px] border border-black rounded-full px-[24px] py-[8px]">
+            class="inline-block text-vera-primary bg-neutrals-900 text-[14px] lg:text-[20px] border border-black rounded-full px-[24px] py-[8px]">
             Télécharger l'extension
         </a>
         <div class="relative">
@@ -326,11 +326,12 @@
                     </clipPath>
                 </defs>
             </svg>
-            <div class="h-[400px] w-[300px] bg-white"></div>
+            <div class="h-[400px] w-[300px] bg-neutrals-50"></div>
         </div>
     </div>
 
-    <div class="flex flex-col text-center gap-[40px] bg-[#2A2A2A] text-white px-[29px] lg:px-[73px]  py-[38px]">
+    <div
+        class="flex flex-col text-center gap-[40px] bg-vera-sidebar text-neutrals-50 px-[29px] lg:px-[73px]  py-[38px]">
         <div class="flex flex-col gap-[24px]">
             <h2 class="text-[24px] lg:text-[48px]">Le fake du jour</h2>
             <p class="text-[13px] lg:text-[24px]">Une affirmation virale, sortie de son contexte ou pas ? Ici, on prend
@@ -377,7 +378,7 @@
                         fill="white" />
                 </svg>
                 <a href="/fact-check-test"
-                    class="flex gap-[10px] items-center inline-block text-[14px] lg:text-[20px] text-black bg-[#C3E4A1] border border-black rounded-full px-[24px] py-[8px]">
+                    class="flex gap-[10px] items-center inline-block text-[14px] lg:text-[20px] text-neutrals-900 bg-vera-primary border border-black rounded-full px-[24px] py-[8px]">
                     On vérifie ?
                     <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -408,7 +409,7 @@
         </p>
 
         <div class="flex flex-col gap-[16px] text-[13px] lg:text-[24px]">
-            <div class="flex items-center justify-between bg-[#C3E4A1] p-2 rounded-md text-start">
+            <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
                 <p>“Des vidéos disent que des feux de forêt récents auraient été causés par des « armes laser », est‑ce
                     vrai ?”</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -418,7 +419,7 @@
                         fill="#F5ECDE" />
                 </svg>
             </div>
-            <div class="flex items-center justify-between bg-[#C3E4A1] p-2 rounded-md text-start">
+            <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
                 <p>Est‑ce que la dette publique de 2025 en France a réellement atteint 115,6 % du PIB ?</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="39" height="62" rx="4" fill="#2A2A2A" />
@@ -427,7 +428,7 @@
                         fill="#F5ECDE" />
                 </svg>
             </div>
-            <div class="flex items-center justify-between bg-[#C3E4A1] p-2 rounded-md text-start">
+            <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
                 <p>Est‑ce qu’un reportage affirme que certaines voitures électriques polluent plus qu’une voiture diesel
                     ancienne ?</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -437,7 +438,7 @@
                         fill="#F5ECDE" />
                 </svg>
             </div>
-            <div class="flex items-center justify-between bg-[#C3E4A1] p-2 rounded-md text-start">
+            <div class="flex items-center justify-between bg-vera-primary p-2 rounded-md text-start">
                 <p>Est-ce que des outils d’IA récents inventent des « faits » quand on les interroge sur la
                     géopolitique ?</p>
                 <svg width="39" height="62" viewBox="0 0 39 62" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -454,7 +455,7 @@
 
 <!-- Footer -->
 <footer
-    class="bg-[#333333] flex flex-col gap-[32px] text-white py-[42px] px-[31px] lg:px-8 md:flex-row md:justify-between">
+    class="bg-[#333333] flex flex-col gap-[32px] text-neutrals-50 py-[42px] px-[31px] lg:px-8 md:flex-row md:justify-between">
     <div class="flex flex-col gap-[16px]">
         <svg width="86" height="27" viewBox="0 0 86 27" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
