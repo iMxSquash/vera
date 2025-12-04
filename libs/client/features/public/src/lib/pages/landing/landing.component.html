@@ -1,6 +1,6 @@
-<section class="flex flex-col gap-[106px] pb-[120px]">
+<section class="flex flex-col pb-[120px]">
     <!-- Hero Section -->
-    <div class="flex flex-col gap-[32px] px-[29px] lg:px-[73px] text-center justify-center h-[calc(100vh-106px-57px)] lg:h-[calc(100vh-106px-80px)]">
+    <div class="flex flex-col gap-[32px] px-[29px] lg:px-[73px] text-center justify-center h-[calc(100vh-57px)] lg:h-[calc(100vh-80px)]">
         <div class="relative w-fit mx-auto">
             <svg class="absolute -top-[60px] -left-[40px]" width="78" height="69" viewBox="0 0 78 69" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -35,13 +35,13 @@
         </div>
 
     </div>
-
+<div class="flex flex-col gap-[106px]">
     <!-- WRAPPER STOP-SCROLL -->
     <div class="relative bg-vera-primary min-h-[300vh] scroll-wrapper">
         <!-- BLOC STICKY (il reste collé pendant le scroll) -->
         <div class="sticky top-0" id="scroll-section">
 
-            <div class="relative flex flex-col gap-[10px] py-[10px] md:gap-[62px] text-center md:justify-center h-[calc(100vh-57px)] overflow-hidden">
+            <div class="relative flex flex-col pt-4 gap-[14px] py-[10px] md:gap-[62px] text-center md:justify-center h-[calc(100vh-57px)] overflow-hidden">
 
                 <svg class="absolute top-[10px] right-[10px]" width="58" height="66" viewBox="0 0 58 66" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -325,7 +325,7 @@
         <div class="flex flex-col items-center lg:flex-row gap-[40px] lg:gap-[48px]">
             
             <!-- GRID -->
-            <div class="grid max-w-[600px] grid-cols-5 grid-rows-4 gap-4 text-black">
+            <div class="grid max-h-[400px] max-w-[600px] grid-cols-5 grid-rows-5 gap-4 text-black">
 
                 <!-- Haut gauche : 3 col × 2 rows -->
                 <div class="row-start-1 row-end-4 col-start-1 col-end-4">
@@ -344,22 +344,23 @@
 
                 <!-- Bas gauche : 2 col × 2 rows -->
                 <div class="
-                    bg-white rounded-xl p-5
-                    col-start-2 col-end-4 row-start-4 row-end-5
+                    bg-white rounded-xl p-2
+                    col-start-2 col-end-4 row-start-4 row-end-6
+                    mb-auto
                 ">
-                    <p class="font-semibold mb-3">Vos réponses</p>
+                    <p class="text-[13px] md:text-[20px] mb-3">Vos réponses</p>
 
                     <div class="flex justify-between border-b border-gray-300 py-1">
-                        <span>Vrai</span><span>62%</span>
+                        <span class="text-[13px] md:text-[14px]">Vrai</span><span class="text-[11px] md-[13px]">62%</span>
                     </div>
 
                     <div class="flex justify-between border-b border-gray-300 py-1">
-                        <span>Faux</span><span>38%</span>
+                        <span class="text-[13px] md:text-[14px]">Faux</span><span class="text-[11px] md-[13px]">38%</span>
                     </div>
                 </div>
 
                 <!-- Bas droite : 2 col × 2 rows -->
-                <div class="col-start-4 col-end-6 row-start-2 row-end-5">
+                <div class="col-start-4 col-end-6 row-start-2 row-end-6">
                     <img src="img/feu_vert.png"
                         class="w-full h-full object-cover rounded-xl">
                 </div>
@@ -474,7 +475,7 @@
             </div>
         </div>   
     </div>
-
+</div>
 </section>
 <!-- Footer -->
 <footer
