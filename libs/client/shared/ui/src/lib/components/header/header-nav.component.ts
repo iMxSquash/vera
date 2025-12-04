@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header-nav',
@@ -22,11 +24,21 @@ import { RouterLink } from '@angular/router';
       </a>
       <a 
         routerLink="/vera" 
-        class="inline-block text-neutrals-50 bg-neutrals-900 text-[14px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        [class]="isVeraRoute() ? 'inline-block text-neutrals-900 bg-neutrals-50 text-[14px] rounded-full px-[24px] py-[8px] border border-neutrals-50 hover:opacity-90 transition-opacity' : 'inline-block text-neutrals-50 bg-neutrals-900 text-[14px] border border-neutrals-900 rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity'"
       >
         Parler à Vera
       </a>
     </nav>
   `,
 })
-export class HeaderNavComponent {}
+export class HeaderNavComponent {
+  private readonly router = inject(Router);
+  
+  isVeraRoute = toSignal(
+    this.router.events.pipe(
+      startWith(null),
+      map(() => this.router.url === '/vera')
+    ),
+    { initialValue: false }
+  );
+}

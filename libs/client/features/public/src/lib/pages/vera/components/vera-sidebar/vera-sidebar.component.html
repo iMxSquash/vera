@@ -25,7 +25,8 @@
             <div class="space-y-2 max-h-[calc(100vh-210px)] overflow-y-auto">
                 @for (chat of chats(); track chat.id) {
                 <div class="group relative border-b border-vera-primary">
-                    <button (click)="onSelectChat(chat)" [class.bg-neutrals-800]="selectedChat()?.id === chat.id"
+                    <button (click)="onSelectChat(chat)"
+                    [class]="selectedChat()?.id === chat.id ? 'bg-vera-primary/20' : ''"
                         class="w-full text-left px-3 py-2 rounded-t-lg text-sm text-neutrals-500 hover:bg-vera-primary/10 transition-colors break-words">
                         <!-- Media Preview or Icon -->
                         @if (chat.media) {
