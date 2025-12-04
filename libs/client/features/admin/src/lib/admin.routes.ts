@@ -10,11 +10,20 @@ export const routes: Route[] = [
     children: [
       {
         path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard',
+      },
+      {
+        path: 'dashboard',
         component: DashboardComponent,
       },
       {
         path: 'reference-images',
         component: ReferenceImagesComponent,
+      },
+      {
+        path: '**',
+        redirectTo: 'dashboard',
       },
     ],
   },

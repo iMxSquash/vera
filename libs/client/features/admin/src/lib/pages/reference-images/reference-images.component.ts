@@ -1,6 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { environment } from '@vera/client/shared/environments';
 
 interface ReferenceImage {
@@ -26,12 +27,20 @@ export class ReferenceImagesComponent implements OnInit {
 
   private readonly apiUrl = `${environment.serverUrl}/api/face-swap/reference-images`;
 
-  constructor(private http: HttpClient) {}
+  // 👉 Standalone = utilise plutôt inject()
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadImages();
   }
 
+  // === ROUTER ACTIVE UTILITY ===
+  isActive(route: string): boolean {
+    return this.router.url.startsWith(route);
+  }
+
+  // === API CALLS ===
   loadImages(): void {
     this.isLoading.set(true);
     this.error.set(null);
@@ -70,11 +79,11 @@ export class ReferenceImagesComponent implements OnInit {
     this.http.post<ReferenceImage>(this.apiUrl, formData).subscribe({
       next: () => {
         this.uploading.set(false);
-        this.loadImages(); // Reload the list
+        this.loadImages();
       },
       error: () => {
         this.uploading.set(false);
-        this.error.set('Erreur lors de l\'upload de l\'image');
+        this.error.set("Erreur lors de l'upload de l'image");
       },
     });
   }
@@ -85,23 +94,20 @@ export class ReferenceImagesComponent implements OnInit {
     }
 
     this.http.delete(`${this.apiUrl}/${id}`).subscribe({
-      next: () => {
-        this.loadImages(); // Reload the list
-      },
-      error: () => {
-        this.error.set('Erreur lors de la suppression de l\'image');
-      },
+      next: () => this.loadImages(),
+      error: () => this.error.set('Erreur lors de la suppression de l\'image'),
     });
   }
 
   toggleStatus(id: string): void {
     this.http.patch<ReferenceImage>(`${this.apiUrl}/${id}/toggle`, {}).subscribe({
-      next: () => {
-        this.loadImages(); // Reload the list
-      },
-      error: () => {
-        this.error.set('Erreur lors de la modification du statut');
-      },
+      next: () => this.loadImages(),
+      error: () => this.error.set('Erreur lors de la modification du statut'),
     });
   }
+
+  trackById(index: number, item: ReferenceImage) {
+    return item.id;
+  }
+
 }

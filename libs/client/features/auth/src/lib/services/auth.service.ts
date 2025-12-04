@@ -64,7 +64,7 @@ export class AuthService {
   logout(): void {
     this.removeToken();
     this.currentAdminSignal.set(null);
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/']);
   }
 
   private loadAdminProfile(): Observable<Admin> {
