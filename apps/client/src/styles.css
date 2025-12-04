@@ -9,7 +9,19 @@ html {
     @apply font-fustat;
 }
 
-h1, h2, h3{
-    @apply !font-lastik;
+/* Personnaliser la couleur de sélection du texte */
+::selection {
+    background-color: #DBF9BE;
+    color: #000000;
 }
 
+::-moz-selection {
+    background-color: #DBF9BE;
+    color: #000000;
+}
+
+h1,
+h2,
+h3 {
+    @apply !font-lastik;
+}
