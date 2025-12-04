@@ -1,9 +1,10 @@
-import { Injectable, OnModuleInit } from "@nestjs/common";
+import { Injectable, OnModuleInit, Logger } from "@nestjs/common";
 import { InjectBot } from "nestjs-telegraf";
 import { Telegraf, Context } from "telegraf";
 import axios from "axios";
 import * as dotenv from "dotenv";
 import { ContentsService } from "@vera/api/features/contents";
+import { FactCheckService } from "@vera/api/features/fact-check";
 
 dotenv.config();
 
@@ -24,21 +25,14 @@ interface TikTokAnalysisResult {
   videoUrl: string;
 }
 
-interface VeraSource {
-  title: string;
-  url: string;
-}
-
-interface VeraResult {
-  verdict: string;
-  sources: VeraSource[];
-}
-
 @Injectable()
 export class TelegramBotService implements OnModuleInit {
+  private readonly logger = new Logger(TelegramBotService.name);
+
   constructor(
     @InjectBot() private readonly bot: Telegraf<Context>,
-    private readonly contentsService: ContentsService
+    private readonly contentsService: ContentsService,
+    private readonly factCheckService: FactCheckService
   ) {}
 
   onModuleInit() {
@@ -111,7 +105,7 @@ export class TelegramBotService implements OnModuleInit {
 
   /**
    * ---------------------------------------------------
-   * 🔥 Analyse principale
+   * 🔥 Analyse principale avec FactCheckService
    * ---------------------------------------------------
    */
   private async handleClaim(
@@ -123,18 +117,12 @@ export class TelegramBotService implements OnModuleInit {
     await ctx.reply("🔄 Analyse en cours...");
 
     try {
+      const userId = ctx.from?.id?.toString() ?? "unknown_user";
       const matchArray = text.match(TIKTOK_REGEX);
       const platform = matchArray ? ContentPlatform.TIKTOK : ContentPlatform.TELEGRAM;
 
-      let tikTokAnalysis: TikTokAnalysisResult | null = null;
-
-      // 🔹 Si TikTok → analyse vidéo
-      if (matchArray) {
-        tikTokAnalysis = await this.analyseTikTokVideo(matchArray[0]);
-      }
-
-      // 🔹 Sauvegarde dans backend
-      await this.contentsService.create({
+      // 🔹 Sauvegarde du contenu
+      const content = await this.contentsService.create({
         platform,
         url: matchArray ? matchArray[0] : "",
         text,
@@ -142,18 +130,45 @@ export class TelegramBotService implements OnModuleInit {
         metadata: { source: `telegram_${type}`, userId: ctx.from?.id },
       });
 
-      // 🔹 Vérification Vera
-      const evidence = await this.searchWebForClaimWithVera(
-        text,
-        ctx.from?.id?.toString() ?? "unknown_user"
-      );
+      let tikTokAnalysis: TikTokAnalysisResult | null = null;
+      let mediaAnalysis: { mediaType: string; description: string } | null = null;
+      let veraResponse = "";
+
+      // 🔹 Si TikTok → analyse vidéo TikTok
+      if (matchArray) {
+        tikTokAnalysis = await this.analyseTikTokVideo(matchArray[0]);
+      }
+
+      // 🔹 Si média présent → analyse avec FactCheckService
+      if (fileId && (type === "photo" || type === "video")) {
+        try {
+          // Télécharger le fichier depuis Telegram et analyser avec FactCheckService
+          const file = await this.downloadTelegramFile(ctx, fileId, type);
+          mediaAnalysis = await this.factCheckService.uploadAndAnalyzeMedia(file);
+        } catch (mediaErr) {
+          this.logger.warn(`Erreur analyse média: ${mediaErr instanceof Error ? mediaErr.message : String(mediaErr)}`);
+        }
+      }
+
+      // 🔹 Vérification Vera avec FactCheckService
+      try {
+        const query = this.buildQuery(text, mediaAnalysis);
+        const result = await this.factCheckService.verifyFactExternal(userId, query);
+        veraResponse = result.result;
+      } catch (veraErr) {
+        this.logger.error(`Erreur FactCheckService: ${veraErr instanceof Error ? veraErr.message : String(veraErr)}`);
+        veraResponse = "Erreur lors de la vérification avec Vera.";
+      }
 
       // 🔹 Fusion finale
-      const response = this.formatFinalResponse(text, tikTokAnalysis, evidence);
+      const response = this.formatFinalResponse(text, tikTokAnalysis, veraResponse);
 
       await ctx.reply(response, { parse_mode: "Markdown" });
+
+      // 🔹 Marquer le contenu comme vérifié
+      await this.contentsService.markAsVerified(content.id, veraResponse);
     } catch (err) {
-      console.error("Erreur handleClaim :", err);
+      this.logger.error(`Erreur handleClaim: ${err instanceof Error ? err.message : String(err)}`);
       await ctx.reply("❌ Erreur lors de l'analyse.");
     }
   }
@@ -208,54 +223,73 @@ export class TelegramBotService implements OnModuleInit {
 
   /**
    * ------------------------------------------------
-   * 🔥 3. Appel API Vera
+   * 🔥 3. Construction de la requête
    * ------------------------------------------------
    */
-  private async searchWebForClaimWithVera(
-    claim: string,
-    userId: string
-  ): Promise<VeraResult | null> {
+  private buildQuery(
+    originalText: string,
+    mediaAnalysis?: { mediaType: string; description: string } | null
+  ): string {
+    if (!mediaAnalysis) {
+      return originalText;
+    }
+
+    return `${mediaAnalysis.mediaType.toUpperCase()} ANALYSIS: ${mediaAnalysis.description}\n\nORIGINAL QUERY: ${originalText}`;
+  }
+
+  /**
+   * ------------------------------------------------
+   * 🔥 4. Téléchargement de fichier Telegram
+   * ------------------------------------------------
+   */
+  private async downloadTelegramFile(
+    ctx: Context,
+    fileId: string,
+    type: "photo" | "video"
+  ): Promise<Express.Multer.File> {
     try {
-      if (!process.env["VERA_API_KEY"])
-        throw new Error("VERA_API_KEY non défini");
+      const file = await ctx.telegram.getFile(fileId);
+      // Utiliser la méthode officielle pour construire l'URL du fichier
+      const fileUrl = `https://api.telegram.org/file/bot${process.env['TELEGRAM_BOT_TOKEN']}/${file.file_path}`;
+      const response = await axios.get(fileUrl, { responseType: "arraybuffer" });
 
-      const res = await axios.post(
-        "https://feat-api-partner---api-ksrn3vjgma-od.a.run.app/api/v1/chat",
-        { userId, query: claim },
-        { headers: { "X-API-Key": process.env["VERA_API_KEY"] } }
-      );
+      // Déterminer le type MIME en fonction du type de média
+      const mimeType = type === "video" ? "video/mp4" : "image/jpeg";
+      const extension = type === "video" ? "mp4" : "jpg";
+      const fileName = `telegram_${fileId}.${extension}`;
 
-      const text = res.data?.toString?.() ?? "";
-      const sources: VeraSource[] = [];
-
-      const urlRegex = /(https?:\/\/[^\s]+)/g;
-      let match;
-      while ((match = urlRegex.exec(text)) !== null) {
-        sources.push({ title: "Lien source", url: match[0] });
-      }
-
-      return { verdict: text, sources };
+      return {
+        fieldname: "media",
+        originalname: fileName,
+        encoding: "7bit",
+        mimetype: mimeType,
+        size: response.data.length,
+        destination: "/tmp",
+        filename: fileName,
+        path: ``,
+        buffer: Buffer.from(response.data),
+      } as Express.Multer.File;
     } catch (err) {
-      console.error("Erreur API Vera :", err);
-      return null;
+      this.logger.error(`Erreur téléchargement fichier: ${err instanceof Error ? err.message : String(err)}`);
+      throw err;
     }
   }
 
   /**
    * ------------------------------------------------
-   * 🔥 4. Réponse finale Telegram
+   * 🔥 5. Réponse finale Telegram
    * ------------------------------------------------
    */
   private formatFinalResponse(
     claim: string,
     tikTokAnalysis: TikTokAnalysisResult | null,
-    evidence: VeraResult | null
+    veraResponse: string
   ): string {
-    let msg = `✅ Analyse terminée pour : "${claim}"\n\n`;
+    let msg = `✅ *Analyse terminée*\n\n`;
 
     if (tikTokAnalysis) {
       msg +=
-        "🎥 *Analyse de la vidéo TikTok*\n" +
+        "🎥 *Analyse TikTok*\n" +
         `Probabilité IA : *${tikTokAnalysis.aiAnalysis.probability}%*\n` +
         "Indicateurs :\n" +
         tikTokAnalysis.aiAnalysis.indicators
@@ -264,16 +298,11 @@ export class TelegramBotService implements OnModuleInit {
         "\n\n";
     }
 
-    if (evidence) {
-      msg += `🧠 *Vera dit :*\n${evidence.verdict}\n\n`;
-
-      if (evidence.sources.length) {
-        msg += "🔗 *Sources :*\n";
-        msg += evidence.sources
-          .map((s) => `- [${s.title}](${s.url})`)
-          .join("\n");
-      }
+    if (veraResponse) {
+      msg += `🧠 *Verdict Vera*\n${veraResponse}\n\n`;
     }
+
+    msg += `_Contenu analysé: "${claim.slice(0, 100)}${claim.length > 100 ? "..." : ""}"_`;
 
     return msg;
   }

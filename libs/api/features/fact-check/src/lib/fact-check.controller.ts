@@ -10,8 +10,8 @@ import {
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
-import { FactCheckService } from '../services/fact-check.service';
-import { VerifyExternalFactDto } from '../dto/verify-external-fact.dto';
+import { FactCheckService } from './fact-check.service';
+import { VerifyExternalFactDto } from './dto/verify-external-fact.dto';
 import { JwtAuthGuard } from '@vera/api/features/auth';
 
 @ApiTags('Fact Check')
