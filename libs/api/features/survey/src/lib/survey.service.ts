@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Survey } from './entities/survey.entity';
 import { GoogleSheetsService } from './google-sheets/google-sheets.services';
-import { error } from 'node:console';
 
 @Injectable()
 export class SurveyService {
