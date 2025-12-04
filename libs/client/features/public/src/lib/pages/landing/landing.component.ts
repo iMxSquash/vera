@@ -1,7 +1,7 @@
 
 import { Component, inject, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImageUploadPreviewComponent } from '@vera/client/shared/ui';
+import { ImageUploadPreviewComponent, IconComponent } from '@vera/client/shared/ui';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslationService } from '../../services/translation.service';
 
@@ -11,6 +11,7 @@ import { TranslationService } from '../../services/translation.service';
   imports:[
     CommonModule,
     ImageUploadPreviewComponent,
+    IconComponent,
     TranslateModule
   ],
   templateUrl: './landing.component.html',
