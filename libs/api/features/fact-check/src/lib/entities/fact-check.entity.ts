@@ -11,6 +11,9 @@ export enum FactCheckStatus {
   FAILED = 'failed',
 }
 
+/**
+ * FACT CHECK ENTITY
+ */
 @Entity('fact_checks')
 export class FactCheckEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -36,6 +39,9 @@ export class FactCheckEntity {
   createdAt!: Date;
 }
 
+/**
+ * IMAGE ENTITY
+ */
 @Entity('images')
 export class ImageEntity {
   @PrimaryGeneratedColumn('uuid')
