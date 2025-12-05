@@ -65,7 +65,11 @@
         "input": {
             "placeholder": "Ask a question",
             "upload": "Upload an image, video or audio",
-            "helper": "Press Ctrl+Enter to send"
+            "helper": "Press Ctrl+Enter to send",
+            "add_media": "Add media",
+            "add_photo": "Add photo",
+            "add_video": "Add video",
+            "add_audio": "Add audio"
         },
         "sidebar": {
             "new_chat": "New chat",

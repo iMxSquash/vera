@@ -3,3 +3,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+html {
+    @apply font-fustat;
+}
+
+/* Personnaliser la couleur de sélection du texte */
+::selection {
+    background-color: #DBF9BE;
+    color: #000000;
+}
+
+::-moz-selection {
+    background-color: #DBF9BE;
+    color: #000000;
+}
+
+h1,
+h2,
+h3 {
+    @apply !font-lastik;
+}

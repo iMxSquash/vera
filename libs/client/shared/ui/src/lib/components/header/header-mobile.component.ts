@@ -1,17 +1,19 @@
 import { Component, signal, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { IconComponent } from '../../icons/icon.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-header-mobile',
   standalone: true,
-  imports: [CommonModule, LanguageSwitcherComponent],
+  imports: [CommonModule, LanguageSwitcherComponent, RouterLink, TranslateModule],
   template: `
     <div class="md:hidden flex items-center gap-3 z-[100]">
       <button 
         (click)="toggleMenu()"
-        class="p-2 focus:outline-none"
+        class="focus:outline-none"
         [attr.aria-label]="isOpen() ? 'Fermer le menu' : 'Ouvrir le menu'"
         [attr.aria-expanded]="isOpen()"
       >
@@ -39,7 +41,7 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
       <!-- Croix pour fermer -->
       <button
         (click)="isOpen.set(false)"
-        class="absolute top-[20px] right-[20px] p-2 hover:opacity-70 transition-opacity focus:outline-none"
+        class="absolute top-[20px] right-[20px] hover:opacity-70 transition-opacity focus:outline-none"
         [attr.aria-label]="'Fermer le menu'"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,24 +54,25 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
         (click)="isOpen.set(false)"
         class="text-[24px] hover:opacity-80 transition-opacity"
       >
-        Accueil
+        {{ 'landing.footer.home' | translate }}
       </a>
       <a 
-        href="/vera"
+        routerLink="/vera"
         (click)="isOpen.set(false)"
-        class="flex inline-block gap-[10px] items-center text-[20px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        class="flex gap-[10px] items-center text-[20px] bg-vera-primary border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
-        Parler à Vera
+        {{ 'landing.footer.talk_vera' | translate }}
         <svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M4.38564 11.9022C4.54959 11.6226 8.64624 9.55394 10.8493 8.64083C14.7822 7.0007 15.1827 6.70248 14.946 5.60299C14.6365 4.16803 11.4684 2.49064 6.02425 0.86924C2.83797 -0.0812519 2.14615 -0.174435 1.38139 0.216935C1.03545 0.384668 0.92617 0.626899 0.889753 1.13019C0.889753 1.1488 0.361733 9.23713 0.161441 9.38614C-0.949207 10.2063 4.02152 12.4986 4.38564 11.9022ZM2.87447 9.59132C2.74693 9.46077 3.07474 2.0247 3.20213 2.0247C3.275 2.0247 11.5595 4.59659 11.5595 5.00656C11.5777 5.39787 3.11109 9.83349 2.87447 9.59132Z" fill="black"/>
         </svg>
       </a>
       <a 
-        href="/"
+        href="https://github.com/iMxSquash/vera-extension"
+        target="_blank" rel="noopener noreferrer"
         (click)="isOpen.set(false)"
-        class="inline-block text-vera-primary bg-neutrals-900 text-[20px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
+        class="flex text-vera-primary bg-neutrals-900 text-[20px] border border-black rounded-full px-[24px] py-[8px] hover:opacity-90 transition-opacity"
       >
-        Télécharger l'extension
+        {{ 'landing.hero.download_extension' | translate }}
       </a>
       <app-language-switcher></app-language-switcher>
     </nav>

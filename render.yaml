@@ -36,3 +36,5 @@ services:
         sync: false
       - key: PIAPI_BASE_URL
         sync: false
+      - key: GOOGLE_CREDENTIALS
+        sync: false

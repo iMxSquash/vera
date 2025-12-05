@@ -51,7 +51,7 @@ export class VeraChatWindowComponent {
   getFaviconUrl(url: string): string {
     try {
       const urlObj = new URL(url);
-      return `${urlObj.protocol}//${urlObj.hostname}/favicon.ico`;
+      return `${urlObj.protocol}//${urlObj.hostname}/favicon.svg`;
     } catch {
       return '';
     }

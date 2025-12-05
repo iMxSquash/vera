@@ -1,16 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { google } from 'googleapis';
-import * as path from 'path';
 
 @Injectable()
 export class GoogleSheetsService {
   private sheets;
 
-  constructor() {
-    const keyFile = path.join(process.cwd(), 'apps/server/google-credentials.json');
+  constructor(private readonly configService: ConfigService) {
+    // Récupérer et parser les credentials depuis la variable d'environnement
+    const credentialsJson = this.configService.get<string>('GOOGLE_CREDENTIALS');
+    
+    if (!credentialsJson) {
+      throw new Error('GOOGLE_CREDENTIALS environment variable is not set');
+    }
+
+    const credentials = JSON.parse(credentialsJson);
 
     const auth = new google.auth.GoogleAuth({
-      keyFile,
+      credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
 
